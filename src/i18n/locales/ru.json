@@ -96,8 +96,11 @@
   "content": {
     "typescript": {
       "title": "TypeScript",
-      "basic": { "title": "Основы" },
-      "generics": { "title": "Дженерики" }
+      "01-foundation": { "title": "Основы" },
+      "02-narrowing": { "title": "Сужение типов" },
+      "03-generics": { "title": "Дженерики" },
+      "04-advanced-types": { "title": "Продвинутые типы" },
+      "05-practical": { "title": "TypeScript на практике" }
     }
   }
 }

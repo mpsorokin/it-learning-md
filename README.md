@@ -15,9 +15,9 @@ The catalogue is the filesystem. Three levels, no index file to update:
 
 ```
 src/content/
-  typescript/          ← section
-    basic/             ← folder
-      01-types.md      ← lesson
+  typescript/              ← section
+    01-foundation/         ← folder
+      01-type-inference.md ← lesson
 ```
 
 A lesson starts with frontmatter:
@@ -26,7 +26,15 @@ A lesson starts with frontmatter:
 ---
 title: Primitive types
 titleRu: Примитивные типы
+slug: primitive-types
+section: foundation
 order: 1
+difficulty: beginner
+estimatedMinutes: 4
+tags:
+  - typescript
+  - types
+prerequisites: []
 ---
 
 # Primitive types
@@ -34,8 +42,12 @@ order: 1
 ```
 
 - `title` is required. `titleRu` is optional and falls back to `title`.
+- `slug` is the URL segment; keep it equal to the filename without its numeric prefix.
 - `order` is optional — the `NN-` filename prefix is used instead. Files with
   neither sort last, alphabetically.
+- `section`, `difficulty`, `estimatedMinutes`, `tags`, and `prerequisites`
+  describe the curriculum. Difficulty is `beginner`, `intermediate`, or
+  `advanced`; prerequisites are lesson slugs from the same curriculum.
 - Section and folder names come from `src/i18n/locales/*.json` under
   `content.<section>.title` and `content.<section>.<folder>.title`. Without a
   key the folder name is shown as-is, so a new folder is never a broken screen.

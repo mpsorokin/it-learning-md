@@ -5,6 +5,16 @@
  * that reads these shapes has to stay importable from plain Node tests.
  */
 
+export type LessonDifficulty = "beginner" | "intermediate" | "advanced";
+
+export interface LessonMetadata {
+  section: string;
+  difficulty: LessonDifficulty;
+  estimatedMinutes: number;
+  tags: string[];
+  prerequisites: string[];
+}
+
 export interface Lesson {
   /** `section/folder/slug` — stable across renames of the title. */
   id: string;
@@ -15,6 +25,7 @@ export interface Lesson {
   /** Optional per-locale title; falls back to `title`. */
   titleRu?: string;
   order: number;
+  metadata: LessonMetadata;
   body: string;
 }
 

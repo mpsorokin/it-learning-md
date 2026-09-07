@@ -75,7 +75,7 @@ export function LessonPage() {
 
       <div className="reader-scroll">
         <article className="reader-article">
-          <MarkdownViewer body={lesson.body} />
+          <MarkdownViewer key={lesson.id} body={lesson.body} />
         </article>
 
         <div className="reader-action">

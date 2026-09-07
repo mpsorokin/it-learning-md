@@ -1,5 +1,5 @@
-import { humanizeSlug, parseFrontmatter, resolveOrder } from "@/lib/frontmatter";
-import type { Folder, Lesson, Section } from "@/lib/content.types";
+import { frontmatterList, frontmatterString, humanizeSlug, parseFrontmatter, resolveOrder } from "@/lib/frontmatter";
+import type { Folder, Lesson, LessonDifficulty, Section } from "@/lib/content.types";
 
 /**
  * The whole catalogue is discovered from the filesystem at build time: dropping
@@ -30,16 +30,25 @@ function buildLessons(): Lesson[] {
       continue;
     }
 
-    const [, section, folder, slug] = match;
+    const [, section, folder, fileSlug] = match;
     const { data, body } = parseFrontmatter(source);
+    const slug = frontmatterString(data.slug) || fileSlug;
+    const difficulty = frontmatterString(data.difficulty) as LessonDifficulty | undefined;
     lessons.push({
       id: `${section}/${folder}/${slug}`,
       section,
       folder,
       slug,
-      title: data.title || humanizeSlug(slug),
-      titleRu: data.titleRu,
-      order: resolveOrder(data.order, slug),
+      title: frontmatterString(data.title) || humanizeSlug(slug),
+      titleRu: frontmatterString(data.titleRu),
+      order: resolveOrder(frontmatterString(data.order), fileSlug),
+      metadata: {
+        section: frontmatterString(data.section) || humanizeSlug(folder),
+        difficulty: difficulty || "beginner",
+        estimatedMinutes: Number.parseInt(frontmatterString(data.estimatedMinutes) || "0", 10),
+        tags: frontmatterList(data.tags),
+        prerequisites: frontmatterList(data.prerequisites),
+      },
       body,
     });
   }

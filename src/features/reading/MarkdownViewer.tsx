@@ -1,8 +1,10 @@
 import { memo, useCallback, useEffect, useState, type ReactNode } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import Markdown, { type Components } from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import type { Element, ElementContent } from "hast";
 import type { PluggableList } from "unified";
@@ -77,17 +79,20 @@ const components: Components = {
       <table>{children}</table>
     </div>
   ),
-  a: ({ href, children }) => (
-    <a href={href} target="_blank" rel="noreferrer noopener">
-      {children}
-    </a>
-  ),
+  a: ({ href = "", children }) =>
+    href.startsWith("#/") ? (
+      <Link to={href.slice(1)}>{children}</Link>
+    ) : (
+      <a href={href} target="_blank" rel="noreferrer noopener">
+        {children}
+      </a>
+    ),
 };
 
 const plugins: PluggableList = [remarkGfm];
 // `detect` covers fences with no language; `ignoreMissing` keeps an unknown one
 // from throwing rather than rendering plain.
-const rehypePlugins: PluggableList = [[rehypeHighlight, { detect: true, ignoreMissing: true }]];
+const rehypePlugins: PluggableList = [rehypeRaw, [rehypeHighlight, { detect: true, ignoreMissing: true }]];
 
 /**
  * Memoised: the lesson body never changes while the page is open, and re-parsing

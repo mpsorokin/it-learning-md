@@ -19,6 +19,19 @@ test("quoted values are unwrapped", () => {
   assert.equal(data.title, "Objects, interfaces");
 });
 
+test("string lists and empty lists are parsed", () => {
+  const parsed = parseFrontmatter(`---
+tags:
+  - typescript
+  - types
+prerequisites: []
+---
+Body`);
+
+  assert.deepEqual(parsed.data.tags, ["typescript", "types"]);
+  assert.deepEqual(parsed.data.prerequisites, []);
+});
+
 test("a file without frontmatter still yields its whole body", () => {
   const { data, body } = parseFrontmatter("# Just markdown\n");
   assert.deepEqual(data, {});

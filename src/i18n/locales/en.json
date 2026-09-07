@@ -90,8 +90,11 @@
   "content": {
     "typescript": {
       "title": "TypeScript",
-      "basic": { "title": "Basics" },
-      "generics": { "title": "Generics" }
+      "01-foundation": { "title": "Foundation" },
+      "02-narrowing": { "title": "Narrowing" },
+      "03-generics": { "title": "Generics" },
+      "04-advanced-types": { "title": "Advanced Types" },
+      "05-practical": { "title": "Practical TypeScript" }
     }
   }
 }
