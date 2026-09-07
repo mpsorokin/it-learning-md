@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "IT Theory",
+    "description": "IT theory as short markdown lessons, with progress kept in your browser."
+  },
+  "nav": {
+    "overview": "Overview",
+    "library": "Library",
+    "profile": "Profile",
+    "main": "Main navigation"
+  },
+  "common": {
+    "back": "Back",
+    "settings": "Settings",
+    "error": "Error",
+    "none": "None yet",
+    "doneOfTotal": "{{done}} / {{total}}"
+  },
+  "overview": {
+    "eyebrow": "Theory viewer",
+    "overall": "Overall progress",
+    "start": "Start here",
+    "continue": "Continue",
+    "sections": "Sections",
+    "allDone": "Everything here is done. Add more markdown to src/content.",
+    "noContent": "No lessons yet. Drop a markdown file into src/content/<section>/<folder>/."
+  },
+  "library": {
+    "folderCount_one": "{{count}} folder",
+    "folderCount_other": "{{count}} folders",
+    "lessonCount_one": "{{count}} lesson",
+    "lessonCount_other": "{{count}} lessons"
+  },
+  "section": {
+    "progress": "Progress"
+  },
+  "lesson": {
+    "complete": "Mark as done",
+    "completed": "Done",
+    "markUnread": "Mark as not done"
+  },
+  "reader": {
+    "position": "{{position}} of {{total}}",
+    "previous": "Previous",
+    "next": "Next",
+    "pager": "Lesson navigation",
+    "code": "code",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyCode": "Copy the code block"
+  },
+  "profile": {
+    "completed": "Lessons completed",
+    "remaining": "Left to read",
+    "bySection": "By section",
+    "details": "Details",
+    "lastCompleted": "Last completed",
+    "lessonsCompleted_one": "{{count}} lesson completed",
+    "lessonsCompleted_other": "{{count}} lessons completed"
+  },
+  "settings": {
+    "interface": "Interface",
+    "language": "Language",
+    "languageEn": "English",
+    "languageRu": "Русский",
+    "readerTheme": "Reading surface",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "data": "Your data",
+    "dataNote": "Progress lives in this browser only. Export a file to move it somewhere else.",
+    "exportProgress": "Export progress",
+    "importProgress": "Import progress",
+    "importConfirm": "Importing replaces all current progress. Continue?",
+    "importDone": "Progress imported.",
+    "importInvalid": "That file is not an IT Theory backup.",
+    "resetProgress": "Reset all progress",
+    "resetConfirm": "This clears every completed lesson. Continue?"
+  },
+  "errors": {
+    "notFound": "Nothing here",
+    "notFoundEyebrow": "404",
+    "notFoundDescription": "That page does not exist, or the lesson behind it was renamed.",
+    "backToOverview": "Back to the overview",
+    "somethingWrong": "Something broke",
+    "somethingWrongDescription": "The screen failed to render. Reloading usually clears it.",
+    "appUpdated": "A new version is live",
+    "appUpdatedDescription": "This tab is running an older build. Reload to pick up the new one.",
+    "reload": "Reload"
+  },
+  "content": {
+    "typescript": {
+      "title": "TypeScript",
+      "basic": { "title": "Basics" },
+      "generics": { "title": "Generics" }
+    }
+  }
+}

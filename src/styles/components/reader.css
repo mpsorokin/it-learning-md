@@ -1,0 +1,275 @@
+/*
+ * Reader: frame, header, markdown typography and the completion action.
+ * Colours come from the `--r-*` aliases so the paper and dark themes share one
+ * set of rules; the aliases themselves live in `base.css`.
+ */
+
+.reader-shell {
+  max-width: 100%;
+  color: var(--r-text);
+  background: var(--r-bg);
+}
+
+.reader-header {
+  min-height: 66px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--r-line);
+  flex-shrink: 0;
+}
+
+.reader-header .icon-button {
+  color: var(--r-muted);
+}
+
+.reader-header .icon-button:hover {
+  background: color-mix(in srgb, var(--r-text) 8%, transparent);
+  color: var(--r-text);
+}
+
+.reader-header__title {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: center;
+}
+
+.reader-header__title .eyebrow {
+  overflow: hidden;
+  color: var(--r-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reader-header__title strong {
+  overflow: hidden;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reader-done-mark {
+  width: 26px;
+  height: 26px;
+  display: inline-grid;
+  place-items: center;
+  justify-self: end;
+  border-radius: 50%;
+  background: #343127;
+  color: var(--color-gold-dim);
+}
+
+.reader-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--r-scroll-thumb) transparent;
+}
+
+.reader-article,
+.reader-action,
+.reader-pager {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.reader-article {
+  padding: 48px 42px 25px;
+  font-family: var(--font-serif);
+  font-size: var(--reader-size);
+  line-height: var(--reader-line-height);
+}
+
+.reader-action {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 42px 6px;
+}
+
+.reader-secondary-button {
+  min-height: 44px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border: 1px solid var(--r-line);
+  border-radius: 11px;
+  background: transparent;
+  color: var(--r-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.reader-secondary-button:hover {
+  border-color: var(--color-gold);
+  color: var(--r-text);
+}
+
+.reader-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 20px 42px 40px;
+  font-family: var(--font-sans);
+}
+
+.reader-pager__link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 14px;
+  border: 1px solid var(--r-line);
+  border-radius: 11px;
+  color: var(--r-muted);
+  font-size: 12px;
+  line-height: 1.35;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.reader-pager__link:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold-bright);
+}
+
+.reader-pager__link--next {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.reader-pager__link em {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--color-gold);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* --- markdown --- */
+
+.markdown-viewer > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-viewer h1,
+.markdown-viewer h2,
+.markdown-viewer h3 {
+  color: inherit;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.markdown-viewer h1 {
+  margin: 0 0 22px;
+  font-size: 1.55em;
+}
+
+.markdown-viewer h2 {
+  margin: 1.65em 0 22px;
+  font-size: 1.2em;
+}
+
+.markdown-viewer h3 {
+  margin: 1.55em 0 22px;
+  font-size: 1.05em;
+}
+
+.markdown-viewer p {
+  margin: 0 0 1.2em;
+}
+
+.markdown-viewer ul,
+.markdown-viewer ol {
+  margin: 0 0 1.25em;
+  padding-left: 1.3em;
+}
+
+.markdown-viewer li {
+  margin: 0.35em 0;
+  padding-left: 0.2em;
+}
+
+.markdown-viewer strong {
+  color: var(--r-text);
+  font-weight: 600;
+}
+
+.markdown-viewer a {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown-viewer blockquote {
+  margin: 1.35em 0;
+  padding: 0.2em 0 0.2em 1em;
+  border-left: 2px solid var(--color-gold);
+  color: var(--r-muted);
+}
+
+.markdown-viewer hr {
+  margin: 2.1em 0;
+  border: 0;
+  border-top: 1px solid var(--r-line);
+}
+
+/* Inline code only — the block variant lives in code.css. */
+.markdown-viewer :not(pre) > code {
+  padding: 0.1em 0.25em;
+  border-radius: 4px;
+  background: var(--color-code-bg);
+  color: var(--r-text);
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+}
+
+.table-scroll {
+  margin: 1.35em 0;
+  overflow-x: auto;
+  border: 1px solid var(--r-line);
+  border-radius: 11px;
+  scrollbar-width: thin;
+}
+
+.table-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 0.62em;
+  line-height: 1.45;
+}
+
+.table-scroll th,
+.table-scroll td {
+  padding: 8px 7px;
+  border-bottom: 1px solid var(--r-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table-scroll th {
+  color: var(--r-text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table-scroll tr:last-child td {
+  border-bottom: 0;
+}

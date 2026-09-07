@@ -1,0 +1,103 @@
+/* Settings: segmented toggles and the data actions. */
+
+.settings-card {
+  padding: 0 16px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 19px;
+  background: var(--color-surface);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 53px;
+  border-bottom: 1px solid var(--color-hairline);
+  font-size: 11px;
+}
+
+.settings-row:last-child {
+  border-bottom: 0;
+}
+
+.settings-row > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+  font-size: 12px;
+}
+
+.settings-row svg {
+  color: var(--color-icon-dim);
+}
+
+.settings-note {
+  margin: 0 0 10px;
+  color: var(--color-muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.segmented {
+  display: inline-flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.segmented button {
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 11px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.segmented button:hover {
+  color: var(--color-text);
+}
+
+.segmented button.active {
+  border-color: var(--color-gold-dim);
+  color: var(--color-gold-bright);
+}
+
+.settings-action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 53px;
+  border-bottom: 1px solid var(--color-hairline);
+  background: transparent;
+  color: var(--color-text);
+  font-size: 12px;
+  text-align: left;
+  transition: color 0.15s ease;
+}
+
+.settings-action:last-of-type {
+  border-bottom: 0;
+}
+
+.settings-action svg {
+  color: var(--color-icon-dim);
+}
+
+.settings-action:hover {
+  color: var(--color-gold-bright);
+}
+
+.settings-action--danger,
+.settings-action--danger svg {
+  color: var(--color-danger);
+}
+
+.settings-action--danger:hover {
+  color: var(--color-danger);
+  opacity: 0.8;
+}

@@ -1,0 +1,27 @@
+/*
+ * Layer order is declared before anything is imported, so the cascade does not
+ * depend on import order. Everything this project owns lands in `components`,
+ * which keeps Tailwind utilities able to override a semantic class rather than
+ * losing to it.
+ */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "./theme.css" layer(theme);
+@import "./base.css" layer(base);
+
+@import "./components/shell.css" layer(components);
+@import "./components/overview.css" layer(components);
+@import "./components/library.css" layer(components);
+@import "./components/reader.css" layer(components);
+@import "./components/code.css" layer(components);
+@import "./components/profile.css" layer(components);
+@import "./components/settings.css" layer(components);
+@import "./components/feedback.css" layer(components);
+@import "./responsive.css" layer(components);
+
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+/* Only the app source is scanned: default detection would crawl src/content/**.md
+   and turn every word of prose into a candidate class name. */
+@source "../**/*.{ts,tsx}";

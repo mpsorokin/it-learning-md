@@ -1,0 +1,106 @@
+/*
+ * Every media query in the app, in one file imported last. Media queries add no
+ * specificity of their own, so rules that override a base rule from another file
+ * have to share a single, late point in the cascade to win reliably.
+ */
+
+/* Above the phone width the column becomes a floating card. */
+@media (min-width: 700px) {
+  .app-background {
+    align-items: center;
+    padding: 20px;
+  }
+
+  .app-shell,
+  .reader-shell {
+    height: calc(100dvh - 40px);
+    max-height: calc(100dvh - 40px);
+    border: 1px solid;
+    border-radius: 23px;
+  }
+
+  .app-shell {
+    border-color: var(--color-shell);
+    box-shadow: var(--shadow-app);
+  }
+
+  .reader-shell {
+    border-color: var(--color-paper-line);
+    box-shadow: var(--shadow-reader);
+  }
+}
+
+/* A narrow phone cannot carry two pager cards side by side. */
+@media (max-width: 520px) {
+  .shell-main {
+    padding-inline: 18px;
+  }
+
+  .bottom-nav a {
+    font-size: 9px;
+  }
+
+  .reader-article,
+  .reader-action,
+  .reader-pager {
+    padding-inline: 24px;
+  }
+
+  .reader-pager {
+    grid-template-columns: 1fr;
+  }
+
+  .reader-pager__link--next {
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+    text-align: left;
+  }
+
+  .lesson-row {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 370px) {
+  .shell-main {
+    padding-inline: 15px;
+  }
+
+  .reader-article,
+  .reader-action,
+  .reader-pager {
+    padding-inline: 17px;
+  }
+
+  .bottom-nav a {
+    gap: 3px;
+    font-size: 8px;
+  }
+
+  .bottom-nav a svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .content-row__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .profile-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

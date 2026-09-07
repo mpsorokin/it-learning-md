@@ -1,0 +1,148 @@
+/*
+ * Code blocks and the syntax palette.
+ *
+ * The token colours are written against our own theme rather than imported from
+ * a highlight.js stylesheet: a ready-made theme brings its own background and
+ * greys, which then disagree with everything around them. Only the token
+ * classes rehype-highlight actually emits are styled here.
+ *
+ * The block keeps a dark surface in both reader themes — a light background
+ * under this palette would be unreadable, and code reads as an inset panel.
+ */
+
+.code-block {
+  margin: 1.5em 0;
+  overflow: hidden;
+  border: 1px solid var(--color-subtle);
+  border-radius: 11px;
+  background: var(--r-code-bg);
+}
+
+.code-block__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 9px 7px 13px;
+  border-bottom: 1px solid var(--color-hairline);
+  background: color-mix(in srgb, #ffffff 3%, var(--r-code-bg));
+}
+
+.code-block__lang {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 11px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.code-block__copy:hover {
+  background: color-mix(in srgb, #ffffff 7%, transparent);
+  color: var(--color-text);
+}
+
+.code-block__copy--done,
+.code-block__copy--done:hover {
+  color: var(--color-gold-dim);
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 13px 14px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-track) transparent;
+}
+
+.code-block code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--color-soft);
+  tab-size: 2;
+}
+
+/* --- highlight.js token classes --- */
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--color-code-comment);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-doctag,
+.hljs-meta .hljs-keyword {
+  color: var(--color-code-keyword);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta .hljs-string {
+  color: var(--color-code-string);
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link {
+  color: var(--color-code-number);
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id {
+  color: var(--color-code-function);
+}
+
+.hljs-type,
+.hljs-title.class_,
+.hljs-built_in,
+.hljs-class .hljs-title,
+.hljs-selector-class {
+  color: var(--color-code-type);
+}
+
+.hljs-tag,
+.hljs-deletion,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: var(--color-code-tag);
+}
+
+.hljs-params,
+.hljs-punctuation,
+.hljs-operator,
+.hljs-property,
+.hljs-attr {
+  color: var(--color-code-punctuation);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 600;
+}

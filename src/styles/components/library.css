@@ -1,0 +1,111 @@
+/* Section, folder and lesson lists. */
+
+.content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.content-row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 34px 16px 16px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 17px;
+  background: var(--color-surface);
+  transition: border-color 0.15s ease;
+}
+
+.content-row:hover {
+  border-color: var(--color-accent);
+}
+
+.content-row:hover .content-row__head strong {
+  color: var(--color-gold-bright);
+}
+
+.content-row__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.content-row__head strong {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.content-row__count {
+  color: var(--color-dim);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.content-row__meta {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.content-row__caret {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  color: var(--color-gold);
+}
+
+.lesson-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 57px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.lesson-row:hover .lesson-row__title {
+  color: var(--color-gold-bright);
+}
+
+/* The marker is the whole status indicator: an index, or a tick once done. */
+.lesson-row__mark {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--color-dimmer);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lesson-row--done .lesson-row__mark {
+  background: #343127;
+  color: var(--color-gold-dim);
+}
+
+.lesson-row__title {
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.lesson-row--done .lesson-row__title {
+  color: var(--color-muted);
+}

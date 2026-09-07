@@ -1,0 +1,110 @@
+/*
+ * Hand-written reset — Tailwind's Preflight is deliberately not imported, so
+ * the element defaults this app relies on are all visible here.
+ *
+ * The `--r-*` aliases are what every reader rule reads. This app's reader is
+ * dark by default and `.reader-shell--light` is the variant, which is the
+ * mirror image of Calea's naming — the values on each side are Calea's.
+ */
+:root {
+  /* Dark reader — Calea's `.reader-shell--dark` block. */
+  --r-bg: var(--color-app);
+  --r-text: var(--color-text);
+  --r-muted: var(--color-muted);
+  --r-line: var(--color-hairline);
+  --r-scroll-thumb: var(--color-subtle);
+  --r-code-bg: var(--color-reader-frame);
+
+  --btn-bg: var(--color-paper-btn);
+  --btn-bg-hover: var(--color-paper-btn-hover);
+  --btn-fg: var(--color-ink);
+  --btn-done-bg: #343127;
+  --btn-done-fg: var(--color-gold-dim);
+
+  /* Reader typography */
+  --reader-size: 20px;
+  --reader-line-height: 1.65;
+
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.reader-shell--light {
+  /* Paper reader — Calea's `:root` block. */
+  --r-bg: var(--color-paper);
+  --r-text: var(--color-paper-text);
+  --r-muted: var(--color-paper-muted);
+  --r-line: var(--color-paper-line);
+  --r-scroll-thumb: var(--color-paper-scroll-thumb);
+  --r-code-bg: var(--color-reader-frame);
+
+  --btn-bg: var(--color-ink);
+  --btn-bg-hover: #2a2923;
+  --btn-fg: #f5f0e5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-app);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-bright);
+  outline-offset: 3px;
+}

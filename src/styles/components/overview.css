@@ -1,0 +1,67 @@
+/* Overview: the headline number, the resume card and the section index. */
+
+.stat-card,
+.continue-card {
+  border: 1px solid var(--color-hairline);
+  border-radius: 19px;
+  background: var(--color-surface);
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding: 17px 16px 15px;
+}
+
+.stat-card__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stat-card__label {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.stat-card__value {
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.continue-card {
+  position: relative;
+  display: block;
+  margin-top: 12px;
+  padding: 18px 46px 14px 16px;
+  transition: border-color 0.15s ease;
+}
+
+.continue-card:hover {
+  border-color: var(--color-accent);
+}
+
+.continue-card strong {
+  display: block;
+  margin: 7px 0 3px;
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.continue-card__path {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.continue-card__arrow {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  color: var(--color-gold);
+}

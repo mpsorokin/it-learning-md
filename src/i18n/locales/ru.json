@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "title": "IT-теория",
+    "description": "IT-теория короткими markdown-уроками, прогресс хранится в браузере."
+  },
+  "nav": {
+    "overview": "Обзор",
+    "library": "Библиотека",
+    "profile": "Профиль",
+    "main": "Основная навигация"
+  },
+  "common": {
+    "back": "Назад",
+    "settings": "Настройки",
+    "error": "Ошибка",
+    "none": "Пока нет",
+    "doneOfTotal": "{{done}} / {{total}}"
+  },
+  "overview": {
+    "eyebrow": "Просмотрщик теории",
+    "overall": "Общий прогресс",
+    "start": "Начать отсюда",
+    "continue": "Продолжить",
+    "sections": "Разделы",
+    "allDone": "Здесь всё пройдено. Добавьте новые файлы в src/content.",
+    "noContent": "Уроков пока нет. Положите markdown-файл в src/content/<раздел>/<папка>/."
+  },
+  "library": {
+    "folderCount_one": "{{count}} папка",
+    "folderCount_few": "{{count}} папки",
+    "folderCount_many": "{{count}} папок",
+    "folderCount_other": "{{count}} папок",
+    "lessonCount_one": "{{count}} урок",
+    "lessonCount_few": "{{count}} урока",
+    "lessonCount_many": "{{count}} уроков",
+    "lessonCount_other": "{{count}} уроков"
+  },
+  "section": {
+    "progress": "Прогресс"
+  },
+  "lesson": {
+    "complete": "Отметить пройденным",
+    "completed": "Пройдено",
+    "markUnread": "Снять отметку"
+  },
+  "reader": {
+    "position": "{{position}} из {{total}}",
+    "previous": "Предыдущий",
+    "next": "Следующий",
+    "pager": "Навигация по урокам",
+    "code": "код",
+    "copy": "Копировать",
+    "copied": "Скопировано",
+    "copyCode": "Скопировать блок кода"
+  },
+  "profile": {
+    "completed": "Уроков пройдено",
+    "remaining": "Осталось прочитать",
+    "bySection": "По разделам",
+    "details": "Подробности",
+    "lastCompleted": "Последний пройденный",
+    "lessonsCompleted_one": "пройден {{count}} урок",
+    "lessonsCompleted_few": "пройдено {{count}} урока",
+    "lessonsCompleted_many": "пройдено {{count}} уроков",
+    "lessonsCompleted_other": "пройдено {{count}} уроков"
+  },
+  "settings": {
+    "interface": "Интерфейс",
+    "language": "Язык",
+    "languageEn": "English",
+    "languageRu": "Русский",
+    "readerTheme": "Фон читалки",
+    "themeDark": "Тёмный",
+    "themeLight": "Светлый",
+    "data": "Ваши данные",
+    "dataNote": "Прогресс хранится только в этом браузере. Выгрузите файл, чтобы перенести его.",
+    "exportProgress": "Выгрузить прогресс",
+    "importProgress": "Загрузить прогресс",
+    "importConfirm": "Импорт заменит весь текущий прогресс. Продолжить?",
+    "importDone": "Прогресс загружен.",
+    "importInvalid": "Это не файл резервной копии IT-теории.",
+    "resetProgress": "Сбросить весь прогресс",
+    "resetConfirm": "Все отметки о пройденных уроках будут удалены. Продолжить?"
+  },
+  "errors": {
+    "notFound": "Здесь ничего нет",
+    "notFoundEyebrow": "404",
+    "notFoundDescription": "Такой страницы нет, или урок за ней переименовали.",
+    "backToOverview": "Вернуться к обзору",
+    "somethingWrong": "Что-то сломалось",
+    "somethingWrongDescription": "Экран не отрисовался. Обычно помогает перезагрузка.",
+    "appUpdated": "Вышла новая версия",
+    "appUpdatedDescription": "Во вкладке открыта старая сборка. Перезагрузите страницу.",
+    "reload": "Перезагрузить"
+  },
+  "content": {
+    "typescript": {
+      "title": "TypeScript",
+      "basic": { "title": "Основы" },
+      "generics": { "title": "Дженерики" }
+    }
+  }
+}

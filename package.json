@@ -1,0 +1,39 @@
+{
+  "name": "it-theory-learn",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "IT Theory — a markdown theory viewer with per-lesson progress",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test:unit && npm run test:content && npm run test:i18n",
+    "test:unit": "node --import ./tests/support/ts-alias-hooks.mjs --test \"tests/unit/*.test.mjs\"",
+    "test:content": "node --test tests/content.test.mjs",
+    "test:i18n": "node --test tests/i18n.test.mjs"
+  },
+  "dependencies": {
+    "@fontsource/lora": "5.3.0",
+    "@phosphor-icons/react": "2.1.10",
+    "@vitejs/plugin-react": "6.1.0",
+    "highlight.js": "11.11.1",
+    "i18next": "^26.4.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-i18next": "^17.0.12",
+    "react-markdown": "10.1.0",
+    "rehype-highlight": "7.0.2",
+    "remark-gfm": "4.0.1",
+    "react-router-dom": "7.18.2",
+    "vite": "8.2.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "7.0.2"
+  }
+}

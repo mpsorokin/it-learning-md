@@ -1,0 +1,90 @@
+/*
+ * The single source of design tokens. Names use Tailwind's namespaces, so
+ * `--color-surface` also yields `bg-surface`/`text-surface` and `--font-serif`
+ * yields `font-serif` — the utility layer stays usable without a second table.
+ *
+ * The palette is Calea's and must not drift: it is copied verbatim from
+ * `romanian_learn/src/styles/theme.css`. The only addition is the syntax block,
+ * which has no counterpart there and is derived from these same values.
+ */
+@theme {
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: Lora, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Surfaces */
+  --color-page: #0e0f0d;
+  --color-app: #111210;
+  --color-surface: #1b1b17;
+  --color-nav: rgba(17, 18, 16, 0.97);
+  --color-reader-frame: #151613;
+  --color-reader-frame-paper: #181915;
+
+  /* Lines */
+  --color-hairline: rgba(214, 205, 187, 0.11);
+  --color-subtle: #4a463d;
+  --color-shell: #3f3c34;
+  --color-accent: #5b5140;
+  --color-accent-strong: #715e3d;
+  --color-selected: #ae8a57;
+  --color-track: #37362f;
+
+  /* Text */
+  --color-text: #f1eee6;
+  --color-muted: #aaa59a;
+  --color-soft: #d8d2c6;
+  --color-soft-alt: #d6d0c2;
+  --color-dim: #c4bfb4;
+  --color-dimmer: #b5afa3;
+  --color-faint: #8e8a82;
+  --color-ink: #171714;
+
+  /* Accent */
+  --color-gold: #c5a064;
+  --color-gold-bright: #e0bc79;
+  --color-gold-icon: #d7c4a0;
+  --color-gold-dim: #d7c6a8;
+  --color-gold-pill: #ceb98f;
+  --color-gold-progress: #b68e4d;
+  --color-icon-dim: #9f957f;
+  --color-icon-dimmer: #968b77;
+  --color-danger: #d67e6d;
+
+  /* Paper */
+  --color-paper: #f4efe5;
+  --color-paper-soft: #eee8dc;
+  --color-paper-text: #1c1b17;
+  --color-paper-muted: #777268;
+  --color-paper-line: #d8d0c1;
+  --color-paper-scroll-thumb: #bcb3a3;
+  --color-paper-btn: #efebe2;
+  --color-paper-btn-hover: #fffaf0;
+  --color-track-paper: #dcd3c3;
+  --color-swatch-border-paper: #e2d7c5;
+  --color-swatch-dark: #1a1b18;
+  --color-code-bg: rgba(111, 96, 70, 0.12);
+
+  /*
+   * Syntax — the one thing Calea has no equivalent for, so every value here is
+   * an existing palette entry re-used: warm golds carry the code, and the only
+   * cool note is the danger red on tags.
+   */
+  --color-code-keyword: #e0bc79;
+  --color-code-string: #d8d2c6;
+  --color-code-number: #ceb98f;
+  --color-code-function: #d7c4a0;
+  --color-code-type: #c5a064;
+  --color-code-comment: #8e8a82;
+  --color-code-punctuation: #aaa59a;
+  --color-code-tag: #d67e6d;
+
+  /* Elevation */
+  --shadow-app: 0 16px 60px rgba(0, 0, 0, 0.28);
+  --shadow-reader: 0 16px 60px rgba(0, 0, 0, 0.24);
+
+  /* Breakpoints — the three widths this layout actually reacts to. */
+  --breakpoint-tiny: 370px;
+  --breakpoint-narrow: 520px;
+  --breakpoint-frame: 700px;
+}
