@@ -5,7 +5,7 @@ slug: type-annotations
 section: foundation
 order: 2
 difficulty: beginner
-estimatedMinutes: 4
+estimatedMinutes: 6
 tags:
   - typescript
   - annotations
@@ -15,113 +15,253 @@ prerequisites:
 
 # Type Annotations
 
-## TL;DR
+Type annotation — это явное указание типа в месте, где мы хотим **зафиксировать ограничение или контракт**, а не просто повторить то, что TypeScript и так способен вывести.
 
-Аннотация явно задаёт контракт там, где TypeScript не может его вывести или где намерение важнее текущего значения. Она проверяет код, но не преобразует данные во время выполнения.
+```ts
+let retries: number = 3;
 
-## Mental model
+function findUser(id: string): User | null {
+  // ...
+}
+```
+
+В первом случае мы говорим: `retries` должна оставаться `number`.
+
+Во втором задаём сразу два контракта:
+
+* функция принимает `string`;
+* функция возвращает `User | null`.
+
+## Когда annotation не нужна
+
+Такой код обычно избыточен:
+
+```ts
+const port: number = 3000;
+const enabled: boolean = true;
+const name: string = "Alex";
+```
+
+TypeScript и так выводит эти типы:
+
+```ts
+const port = 3000;
+const enabled = true;
+const name = "Alex";
+```
+
+То же относится к результатам уже типизированных функций:
+
+```ts
+const users: User[] = await repository.find();
+```
+
+Если `repository.find()` уже возвращает:
+
+```ts
+Promise<User[]>
+```
+
+то annotation ничего не добавляет:
+
+```ts
+const users = await repository.find();
+```
+
+Хороший TypeScript-код обычно не стремится аннотировать каждую переменную. Иначе появляется много дублирования, которое ухудшает readability, но почти не увеличивает type safety.
+
+---
+
+## Annotation может намеренно расширять тип
+
+Иногда annotation нужна именно потому, что inferred type слишком конкретный.
+
+```ts
+const environment = "production";
+// "production"
+
+const configuredEnvironment: string = "production";
+// string
+```
+
+В первом случае значение известно точно: `"production"`.
+
+Во втором мы сознательно говорим:
+
+> здесь может быть любой `string`, текущее значение просто `"production"`.
+
+Это полезно, например, когда переменная должна позже изменяться или участвовать в более широком API.
+
+```ts
+let environment: "development" | "production" = "development";
+
+environment = "production"; // OK
+environment = "test";       // Error
+```
+
+Здесь annotation уже задаёт полезное ограничение.
+
+---
+
+## Parameters почти всегда требуют явного контракта
+
+Возьмём функцию:
+
+```ts
+function calculateDiscount(price, percent) {
+  return price * (1 - percent);
+}
+```
+
+TypeScript не может догадаться, что caller должен иметь право передавать.
+
+Мы должны это определить:
+
+```ts
+function calculateDiscount(
+  price: number,
+  percent: number
+) {
+  return price * (1 - percent);
+}
+```
+
+Return type при этом TypeScript спокойно выведет как `number`.
+
+Это важное различие:
 
 ```text
-const value: ExpectedType = expression
-             ↑ контракт для проверки
+parameters
+→ описывают входной контракт
+→ чаще требуют explicit type
+
+return value
+→ часто можно вывести из implementation
 ```
 
-После компиляции аннотация исчезает; runtime получает обычный JavaScript.
+---
 
-## Core idea
+## Когда стоит явно писать return type
 
-- Аннотируются переменные, параметры, возвращаемые значения и свойства.
-- Параметры функций без аннотации запрещены при `noImplicitAny`.
-- Возвращаемый тип экспортируемой функции фиксирует публичный контракт.
-- Аннотация не валидирует JSON, форму или ответ API.
-
-## Example 1 — Basic
+Для небольшого helper-а:
 
 ```ts
-function formatPrice(amount: number, currency: string): string {
-  return `${amount.toFixed(2)} ${currency}`;
+function calculateTotal(orders: Order[]) {
+  return orders.reduce(
+    (sum, order) => sum + order.price,
+    0
+  );
 }
 ```
 
-Параметры требуют контракт, а возвращаемый тип документирует обещание функции.
+`number` очевидно выводится автоматически.
 
-## Example 2 — Real-world
+Но на важной границе приложения explicit return type может быть полезен:
 
 ```ts
-interface CreateUserDto {
-  email: string;
-  role: "admin" | "member";
-}
-
-async function createUser(input: CreateUserDto): Promise<User> {
-  return repository.insert(input);
+function toPublicUser(user: User): PublicUserDto {
+  return {
+    id: user.id,
+    name: user.name,
+  };
 }
 ```
 
-Граница service слоя явно говорит, что принимает и что асинхронно возвращает.
+Здесь `PublicUserDto` — не подсказка compiler-у.
 
-## Common mistake
+Это контракт:
 
-```ts
-// problematic
-const user = JSON.parse(payload) as User;
+> независимо от того, как меняется implementation, наружу должна выходить структура `PublicUserDto`.
 
-// better
-const user: unknown = JSON.parse(payload);
-if (!isUser(user)) throw new Error("Invalid user payload");
-```
-
-Аннотация или assertion не проверяет внешние данные. На runtime-границе нужна валидация.
-
-## Interview answer
-
-> **What is a type annotation in TypeScript?**
-
-A type annotation explicitly states the type expected for a variable, parameter, property, or return value. The compiler uses it to check assignments and usage, then removes it from the emitted JavaScript. I use annotations for API boundaries and places where inference lacks context, but avoid repeating types that are already obvious from local values.
-
-## Interview follow-ups
-
-- Are annotations available at runtime?
-- When is a return type annotation valuable?
-- How does an annotation differ from a type assertion?
-
-## Recall
-
-- Почему аннотация не защищает от неверного JSON?
-- Какие параметры требуют аннотаций при `noImplicitAny`?
-- Где явный return type предотвращает случайные изменения API?
-
-## Mini challenge
-
-Добавь минимальные аннотации так, чтобы функция была совместима со strict mode:
+Представим, что кто-то случайно изменил код:
 
 ```ts
-function findUser(users, id) {
-  return users.find((user) => user.id === id);
+function toPublicUser(user: User): PublicUserDto {
+  return {
+    id: user.id,
+    name: user.name,
+    passwordHash: user.passwordHash,
+  };
 }
 ```
 
-<details>
-<summary>Solution</summary>
+Явная boundary заставляет TypeScript проверить implementation относительно ожидаемой публичной структуры.
+
+Поэтому вопрос не должен звучать:
+
+> Нужно ли всегда писать return types?
+
+Правильнее:
+
+> Есть ли здесь контракт, который стоит зафиксировать независимо от реализации?
+
+---
+
+## Annotation и assertion — не одно и то же
+
+Это annotation:
 
 ```ts
-function findUser(users: User[], id: string): User | undefined {
-  return users.find((user) => user.id === id);
+const user: User = value;
+```
+
+TypeScript проверяет:
+
+> совместимо ли `value` с `User`?
+
+А это assertion:
+
+```ts
+const user = value as User;
+```
+
+Здесь разработчик говорит compiler-у:
+
+> считай это `User`.
+
+Assertion потенциально гораздо опаснее, потому что может использоваться для обхода части проверок.
+
+Поэтому если задача — **проверить соответствие контракту**, annotation обычно сильнее и честнее.
+
+---
+
+## Практическое правило
+
+Используй inference, когда тип очевидно следует из кода:
+
+```ts
+const total = 100;
+const users = await repository.find();
+```
+
+Используй annotation, когда она добавляет новую информацию:
+
+```ts
+let status: "pending" | "completed" = "pending";
+
+function save(user: User): Promise<void> {
+  // ...
 }
 ```
 
-</details>
+И особенно там, где ты сознательно устанавливаешь boundary:
 
-## Remember
-
-```text
-annotation → compile-time contract
-annotation ≠ runtime validation
-public boundary → make intent explicit
+```ts
+export function getUser(id: string): PublicUserDto {
+  // ...
+}
 ```
 
-## Related topics
+## Interview questions
 
-- [Type inference](#/s/typescript/01-foundation/type-inference)
-- [Unknown](#/s/typescript/01-foundation/unknown)
-- [tsconfig and strict mode](#/s/typescript/05-practical/tsconfig-strict-mode)
+### Should you explicitly type every variable?
+
+No. If TypeScript already infers the type unambiguously, an annotation usually just duplicates information. Explicit types are more useful where they add a constraint, a contract, or an important domain abstraction.
+
+### Should you always annotate a function's return type?
+
+No. For internal implementation functions, inference is often cleaner. On public APIs, domain boundaries, or exported functions, an explicit return type is useful because it locks the contract independently of how the implementation changes.
+
+### How does an annotation differ from `as`?
+
+An annotation asks TypeScript to check a value against the given type. `as` is an assertion: the developer tells the compiler how to treat the value. That means an assertion can hide a problem that a normal annotation would have caught.

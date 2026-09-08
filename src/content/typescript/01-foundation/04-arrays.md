@@ -5,7 +5,7 @@ slug: arrays
 section: foundation
 order: 4
 difficulty: beginner
-estimatedMinutes: 4
+estimatedMinutes: 6
 tags:
   - typescript
   - arrays
@@ -15,108 +15,419 @@ prerequisites:
 
 # Arrays
 
-## TL;DR
+В TypeScript массив обычно описывается как:
 
-`T[]` описывает массив элементов одного типа `T`; `Array<T>` означает то же самое. Readonly-массив позволяет читать элементы, но запрещает изменяющие операции через данный контракт.
+```ts
+string[]
+User[]
+Order[]
+```
 
-## Mental model
+или через generic syntax:
+
+```ts
+Array<string>
+Array<User>
+```
+
+Для обычных случаев:
+
+```ts
+User[]
+```
+
+и:
+
+```ts
+Array<User>
+```
+
+означают одно и то же.
+
+`T[]` обычно компактнее, поэтому чаще используется в application code.
+
+---
+
+## Element type распространяется на весь API массива
+
+```ts
+const users: User[] = [];
+```
+
+TypeScript знает, что элементы должны быть `User`.
+
+```ts
+users.push({
+  id: "u-1",
+  name: "Alex",
+});
+```
+
+Но:
+
+```ts
+users.push("Alex");
+// Error
+```
+
+Эта информация используется и методами массива:
+
+```ts
+const names = users.map(user => user.name);
+```
+
+TypeScript выводит:
+
+```ts
+string[]
+```
+
+Параметр `user` тоже не нужно аннотировать вручную:
+
+```ts
+users.map((user: User) => user.name);
+```
+
+Annotation здесь избыточна, потому что callback получает contextual type из `User[]`.
+
+---
+
+## Inference массива
+
+TypeScript может вывести element type автоматически:
+
+```ts
+const ids = [1, 2, 3];
+// number[]
+```
+
+Если элементы разных типов:
+
+```ts
+const values = [
+  1,
+  "pending",
+  2,
+];
+```
+
+получится тип вроде:
+
+```ts
+(number | string)[]
+```
+
+Это означает:
+
+> каждый элемент массива может быть `number` или `string`.
+
+Например:
+
+```ts
+values.push("completed"); // OK
+values.push(10);          // OK
+```
+
+Но это не значит:
 
 ```text
-T[] → любое количество значений T
+index 0 → number
+index 1 → string
+index 2 → number
 ```
 
-Длина массива не входит в тип; если важны позиции и длина, нужна tuple.
+Для positional typing существуют tuples.
 
-## Core idea
+---
 
-- `string[]` и `Array<string>` эквивалентны.
-- Union ставится в скобки: `(string | number)[]`.
-- `readonly T[]` и `ReadonlyArray<T>` не имеют `push` или `splice`.
-- Индексирование обычно даёт `T`; `noUncheckedIndexedAccess` добавляет `undefined`.
+## Не делай union array без необходимости
 
-## Example 1 — Basic
+Иногда разработчик видит:
 
 ```ts
-const ids: string[] = ["u1", "u2"];
-const values: Array<string | number> = ["ready", 200];
-const first = ids[0];
+(User | Admin | Guest)[]
 ```
 
-Обе формы записи одинаковы; выбирай принятую в проекте.
+и думает, что это уже плохо.
 
-## Example 2 — Real-world
+Сам по себе union array вполне нормальный:
 
 ```ts
-function visibleProducts(products: readonly Product[]): Product[] {
-  return products.filter((product) => product.isVisible);
-}
+type SearchResult =
+  | UserResult
+  | ProductResult;
 
-const result = visibleProducts(catalog);
+const results: SearchResult[] = [];
 ```
 
-Readonly-вход показывает, что функция не должна менять переданную коллекцию.
-
-## Common mistake
+Проблема появляется, если downstream code постоянно вынужден гадать, что лежит внутри:
 
 ```ts
-// problematic
-const permissions = [];
-
-// better
-const permissions: Permission[] = [];
-```
-
-Для пустого массива контекста часто недостаточно или вывод оказывается слишком узким. Задай тип элемента на границе создания коллекции.
-
-## Interview answer
-
-> **What is the difference between an array and a readonly array in TypeScript?**
-
-A regular `T[]` supports both reading and mutation. A `readonly T[]` exposes only non-mutating operations through that reference, so consumers cannot call `push`, `pop`, or assign an element. It is a compile-time contract rather than runtime immutability, and nested objects inside the array remain mutable unless they are also readonly.
-
-## Interview follow-ups
-
-- Are `T[]` and `Array<T>` equivalent?
-- What does `noUncheckedIndexedAccess` change?
-- Is a readonly array deeply immutable?
-
-## Recall
-
-- Когда нужен `(A | B)[]`, а не `A | B[]`?
-- Почему readonly-массив полезен в параметре функции?
-- Что TypeScript знает о длине обычного массива?
-
-## Mini challenge
-
-Исправь сигнатуру так, чтобы функция принимала readonly-массив и не меняла исходные данные:
-
-```ts
-function newest(items: Product[]) {
-  return items.sort((a, b) => b.createdAt - a.createdAt)[0];
+for (const item of results) {
+  if ("email" in item) {
+    // ...
+  } else {
+    // ...
+  }
 }
 ```
 
-<details>
-<summary>Solution</summary>
+Тогда стоит посмотреть, соответствует ли такой массив реальной domain model или данные лучше разделить.
+
+TypeScript не может решить архитектуру за тебя — он только корректно моделирует выбранную структуру.
+
+---
+
+## `readonly T[]` — очень полезный API design tool
+
+Рассмотрим:
 
 ```ts
-function newest(items: readonly Product[]) {
-  return [...items].sort((a, b) => b.createdAt - a.createdAt)[0];
+function calculateTotal(orders: Order[]) {
+  return orders.reduce(
+    (sum, order) => sum + order.total,
+    0
+  );
 }
 ```
 
-</details>
+Функция не изменяет массив, но её type разрешает mutation:
 
-## Remember
+```ts
+function calculateTotal(orders: Order[]) {
+  orders.sort(...);
+  orders.pop();
+
+  // technically allowed
+}
+```
+
+Если mutation функции не нужна:
+
+```ts
+function calculateTotal(
+  orders: readonly Order[]
+) {
+  return orders.reduce(
+    (sum, order) => sum + order.total,
+    0
+  );
+}
+```
+
+Теперь:
+
+```ts
+orders.push(newOrder);
+// Error
+
+orders.pop();
+// Error
+```
+
+При этом обычный mutable array всё равно можно передать:
+
+```ts
+const orders: Order[] = [];
+
+calculateTotal(orders);
+```
+
+Это сильная идея:
+
+> параметр функции должен давать implementation только те permissions, которые ей действительно нужны.
+
+Если функция только читает коллекцию, `readonly T[]` часто точнее, чем `T[]`.
+
+---
+
+## `readonly` не делает элементы immutable
+
+Важно не перепутать:
+
+```ts
+const users: readonly User[] = [];
+```
+
+Это запрещает изменение структуры массива:
+
+```ts
+users.push(...); // Error
+users.pop();     // Error
+```
+
+Но если сам `User` mutable:
+
+```ts
+users[0].name = "Maria";
+```
+
+может быть разрешено.
+
+`readonly User[]` означает:
+
+> нельзя мутировать массив через этот reference.
+
+Он не превращает каждый `User` в `Readonly<User>`.
+
+---
+
+## Индексация массива не гарантирует существование элемента
+
+```ts
+const users: User[] = [];
+
+const user = users[0];
+```
+
+Runtime результат здесь очевиден:
+
+```ts
+undefined
+```
+
+Но обычная типизация массива исторически довольно permissive относительно index access.
+
+Поэтому код:
+
+```ts
+users[0].name
+```
+
+может выглядеть безопаснее на уровне типов, чем он является runtime.
+
+Для более строгого поведения существует:
+
+```json
+{
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true
+  }
+}
+```
+
+Тогда index access учитывает отсутствие элемента:
+
+```ts
+const user = users[0];
+// User | undefined
+```
+
+и требуется явная проверка:
+
+```ts
+const user = users[0];
+
+if (user) {
+  console.log(user.name);
+}
+```
+
+Для backend/application code это довольно полезная настройка, потому что она делает реальный runtime risk видимым в type system.
+
+---
+
+## `map`, `filter` и типы
+
+`map()` преобразует element type:
+
+```ts
+const users: User[] = getUsers();
+
+const ids = users.map(user => user.id);
+// string[]
+```
+
+`filter()` интереснее.
+
+Например:
+
+```ts
+const users: Array<User | null> = getUsers();
+
+const filtered = users.filter(user => user !== null);
+```
+
+Современный TypeScript умеет во многих подобных случаях narrowing результата, поэтому `filtered` может стать `User[]`.
+
+Но при более сложной логике может потребоваться explicit type guard.
+
+Это важно понимать концептуально:
 
 ```text
-T[] → homogeneous collection
-readonly T[] → no mutation through this reference
-fixed positions → tuple
+map
+→ меняет element type через transformation
+
+filter
+→ может сужать element type
 ```
 
-## Related topics
+---
 
-- [Tuples](#/s/typescript/01-foundation/tuples)
-- [Unions](#/s/typescript/01-foundation/unions)
-- [Generics](#/s/typescript/03-generics/generics)
+## Массив vs tuple
+
+Если ты пишешь:
+
+```ts
+const result: (string | number)[] = [
+  "Alex",
+  10,
+];
+```
+
+TypeScript не гарантирует meaning конкретной позиции.
+
+Можно сделать:
+
+```ts
+result.push(20);
+result.push("Maria");
+```
+
+Если смысл именно такой:
+
+```text
+index 0 → user name
+index 1 → age
+```
+
+нужен tuple:
+
+```ts
+const result: [string, number] = [
+  "Alex",
+  10,
+];
+```
+
+То есть:
+
+```text
+array
+→ collection
+
+tuple
+→ positional structure
+```
+
+## Interview questions
+
+### Is there a difference between `T[]` and `Array<T>`?
+
+For a normal array, practically no. They are two syntaxes for the same array model. `T[]` is shorter; `Array<T>` is sometimes easier to read inside complex generic types.
+
+### Why use `readonly T[]`?
+
+To make it explicit that a function or API must not mutate the collection. That reduces the implementation's permissions and makes the contract stronger. A mutable `T[]` can still be passed where `readonly T[]` is expected.
+
+### Does `readonly User[]` make the `User` objects immutable?
+
+No. It forbids mutating the collection itself through that reference. To forbid changing element properties, you have to model an immutable or readonly element type separately.
+
+### Why is `users[0]` potentially unsafe?
+
+Because the array's element type does not guarantee that a given index exists. At runtime the result can be `undefined`. `noUncheckedIndexedAccess` lets TypeScript surface that risk in the type as `User | undefined`.
+
+### How does `(string | number)[]` differ from `[string, number]`?
+
+The first is an array where every element may be a `string` or a `number`. The second is a tuple: the first position is always expected to be a `string`, and the second a `number`.

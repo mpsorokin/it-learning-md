@@ -1,119 +1,140 @@
----
-title: Type Inference
-titleRu: Вывод типов
-slug: type-inference
-section: foundation
-order: 1
-difficulty: beginner
-estimatedMinutes: 4
-tags:
-  - typescript
-  - inference
-prerequisites: []
----
-
 # Type Inference
 
-## TL;DR
-
-TypeScript часто вычисляет тип сам по значению и контексту. Явная аннотация нужна не везде: хороший вывод типов сокращает шум, не ослабляя проверку.
-
-## Mental model
-
-```text
-значение + контекст → наиболее полезный тип
-```
-
-Компилятор идёт от известного к неизвестному: от литерала, возвращаемого значения или ожидаемого типа к типу выражения.
-
-## Core idea
-
-- `let` обычно расширяет строковый литерал до `string`, а `const` сохраняет литеральный тип.
-- Тип возвращаемого значения выводится из всех ветвей функции.
-- Контекст задаёт тип параметров callback.
-- Вывод не проверяет бизнес-смысл: корректные аннотации на границах всё ещё важны.
-
-## Example 1 — Basic
+Type inference — это способность TypeScript определить тип из уже доступной информации, без explicit annotation.
 
 ```ts
-let status = "draft";   // string
-const role = "admin";   // "admin"
-const attempts = 3;     // 3
-```
+const count = 10;             // number
+const environment = "prod";  // "prod"
 
-Изменяемая переменная должна принимать другие строки, а неизменяемая константа может сохранить точное значение.
-
-## Example 2 — Real-world
-
-```ts
-const users = [{ id: 1, name: "Marta" }];
-
-const names = users.map((user) => user.name);
-// user: { id: number; name: string }
-// names: string[]
-```
-
-Тип параметра `user` приходит из сигнатуры `map`, поэтому повторять его не нужно.
-
-## Common mistake
-
-```ts
-// problematic
-const total: number = orders.reduce((sum: number, order: Order) => sum + order.amount, 0);
-
-// better
-const total = orders.reduce((sum, order) => sum + order.amount, 0);
-```
-
-Лишние аннотации затрудняют чтение и могут разойтись с реальным типом. Аннотируй публичную границу, а локальные очевидные значения оставляй выводу.
-
-## Interview answer
-
-> **When should you rely on type inference in TypeScript?**
-
-I rely on inference for local variables, callbacks, and straightforward return values because the compiler already has enough context. I add annotations at public boundaries such as exported functions, DTOs, and variables whose intended type is wider than their initializer. This keeps code concise while making contracts explicit and prevents accidental API changes during refactoring.
-
-## Interview follow-ups
-
-- How does `const` affect inferred literal types?
-- What is contextual typing?
-- Why annotate exported function return types?
-
-## Recall
-
-- Почему `let status = "draft"` обычно имеет тип `string`?
-- Откуда callback получает тип параметра?
-- На каких границах аннотация полезнее вывода?
-
-## Mini challenge
-
-Предскажи тип `result`:
-
-```ts
-function normalize(active: boolean) {
-  return active ? "enabled" : null;
+function double(value: number) {
+  return value * 2;           // return type: number
 }
-
-const result = normalize(true);
 ```
 
-<details>
-<summary>Solution</summary>
+В локальном коде inference обычно предпочтительнее явных типов:
 
-Тип `result` — `string | null`: возвращаемые ветви объединяются, а строковый литерал расширяется для обычной функции.
+```ts
+const users: User[] = await repository.find();
+```
 
-</details>
+Если `repository.find()` уже возвращает `Promise<User[]>`, annotation ничего не добавляет:
 
-## Remember
+```ts
+const users = await repository.find();
+```
+
+Это важный принцип TypeScript: **явный тип полезен, когда он задаёт constraint или contract, а не когда просто повторяет то, что compiler уже знает.**
+
+## Inference can widen types
+
+TypeScript не всегда сохраняет максимально узкий literal type.
+
+```ts
+const status = "success";
+// "success"
+
+const response = {
+  status: "success",
+};
+// response.status: string
+```
+
+`status` нельзя переназначить, поэтому `"success"` можно сохранить как literal type.
+
+Но `response.status` остаётся mutable:
+
+```ts
+response.status = "error";
+```
+
+поэтому TypeScript выводит `string`.
+
+Если нужны именно literal values:
+
+```ts
+const response = {
+  status: "success",
+} as const;
+
+// readonly status: "success"
+```
+
+То есть inference учитывает не только текущее значение, но и то, **как значение может использоваться дальше**.
+
+## Contextual typing
+
+Inference может работать и в обратную сторону — тип приходит из контекста.
+
+```ts
+const numbers = [1, 2, 3];
+
+numbers.map(value => value.toFixed(2));
+//          ^ number
+```
+
+Мы не объявляли `value: number`.
+
+TypeScript знает, что `numbers` — `number[]`, а `map()` ожидает callback, принимающий `number`. Поэтому parameter type выводится из signature `map()`.
+
+То же самое постоянно происходит с:
+
+* React event handlers;
+* array callbacks;
+* Promise callbacks;
+* framework APIs.
+
+## When should you write the type explicitly?
+
+Для implementation details чаще оставляй inference:
+
+```ts
+const total = orders.reduce(
+  (sum, order) => sum + order.price,
+  0
+);
+```
+
+Но explicit type полезен на важных boundaries:
+
+```ts
+function getUser(id: string): PublicUserDto {
+  // ...
+}
+```
+
+Здесь `PublicUserDto` нужен не потому, что TypeScript не способен вывести return type.
+
+Он фиксирует **контракт функции**.
+
+Если implementation случайно начнёт возвращать внутренние данные, compiler сможет это поймать.
+
+Практическое правило:
 
 ```text
-очевидное локальное значение → inference
-публичный контракт → annotation
-const → чаще сохраняет literal type
+local implementation → prefer inference
+
+public/domain boundary → consider explicit type
 ```
 
-## Related topics
+Не стоит пытаться аннотировать всё. Но и не стоит ожидать, что inference сам выразит архитектурное намерение разработчика.
 
-- [Type annotations](#/s/typescript/01-foundation/type-annotations)
-- [Literal types](#/s/typescript/01-foundation/literal-types)
-- [Type-level typeof](#/s/typescript/03-generics/type-level-typeof)
+## Interview questions
+
+### What is type inference?
+
+Type inference is TypeScript's ability to derive types from values and surrounding type information. I usually rely on it for local implementation details because explicit annotations would only duplicate information. I use explicit types when I want to establish a contract or architectural boundary.
+
+### What is contextual typing?
+
+Contextual typing means TypeScript can infer an expression's type from where that expression is used.
+
+```ts
+["a", "b"].map(value => value.toUpperCase());
+//                  ^ string
+```
+
+The callback parameter is inferred from the `map()` signature.
+
+### Should you always annotate function return types?
+
+No. For internal functions, inferred return types usually reduce duplication. Explicit return types are more useful for exported APIs, domain boundaries, or anywhere you intentionally want to prevent implementation changes from silently changing the contract.
