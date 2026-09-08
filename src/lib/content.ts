@@ -1,5 +1,5 @@
-import { frontmatterList, frontmatterString, humanizeSlug, parseFrontmatter, resolveOrder } from "@/lib/frontmatter";
-import type { Folder, Lesson, LessonDifficulty, Section } from "@/lib/content.types";
+import { resolveOrder, slugFromFilename, titleFromMarkdown } from "@/lib/names";
+import type { Folder, Lesson, Section } from "@/lib/content.types";
 
 /**
  * The whole catalogue is discovered from the filesystem at build time: dropping
@@ -8,8 +8,7 @@ import type { Folder, Lesson, LessonDifficulty, Section } from "@/lib/content.ty
  *
  * The glob is eager, so lesson bodies are part of the main bundle. That is the
  * price of the zero-ceremony authoring above and it is fine at this size; past
- * roughly a megabyte of markdown, switch the bodies to a second lazy glob and
- * keep only the frontmatter here.
+ * roughly a megabyte of markdown, switch the bodies to a lazy glob.
  */
 const files = import.meta.glob("../content/**/*.md", {
   query: "?raw",
@@ -31,25 +30,15 @@ function buildLessons(): Lesson[] {
     }
 
     const [, section, folder, fileSlug] = match;
-    const { data, body } = parseFrontmatter(source);
-    const slug = frontmatterString(data.slug) || fileSlug;
-    const difficulty = frontmatterString(data.difficulty) as LessonDifficulty | undefined;
+    const slug = slugFromFilename(fileSlug);
     lessons.push({
       id: `${section}/${folder}/${slug}`,
       section,
       folder,
       slug,
-      title: frontmatterString(data.title) || humanizeSlug(slug),
-      titleRu: frontmatterString(data.titleRu),
-      order: resolveOrder(frontmatterString(data.order), fileSlug),
-      metadata: {
-        section: frontmatterString(data.section) || humanizeSlug(folder),
-        difficulty: difficulty || "beginner",
-        estimatedMinutes: Number.parseInt(frontmatterString(data.estimatedMinutes) || "0", 10),
-        tags: frontmatterList(data.tags),
-        prerequisites: frontmatterList(data.prerequisites),
-      },
-      body,
+      title: titleFromMarkdown(source, slug),
+      order: resolveOrder(fileSlug),
+      body: source,
     });
   }
 

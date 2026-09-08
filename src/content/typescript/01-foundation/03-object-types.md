@@ -1,18 +1,3 @@
----
-title: Object Types
-titleRu: Объектные типы
-slug: object-types
-section: foundation
-order: 3
-difficulty: beginner
-estimatedMinutes: 6
-tags:
-  - typescript
-  - objects
-prerequisites:
-  - type-annotations
----
-
 # Object Types
 
 Object type описывает **структуру объекта**, которую TypeScript ожидает увидеть.
@@ -346,18 +331,18 @@ type User = {
 
 ## Interview questions
 
-### What does an object type describe in TypeScript?
+### Что описывает object type в TypeScript?
 
-The shape of a value: which properties exist, what types they have, and which of them are optional or readonly. TypeScript mainly checks structural compatibility, not the nominal identity of the object.
+Структуру значения: какие properties существуют, какие у них типы и какие из них optional или readonly. TypeScript в основном проверяет структурную совместимость, а не nominal identity объекта.
 
-### What is the difference between an optional property and `string | undefined`?
+### В чём разница между optional property и `string | undefined`?
 
-An optional property can be missing entirely. A property typed as `string | undefined` must be present, but its value may be `undefined`.
+Optional property может вообще отсутствовать. Property типа `string | undefined` обязана присутствовать, но её значением может быть `undefined`.
 
-### Does `readonly` make an object immutable?
+### Делает ли `readonly` объект immutable?
 
-No. `readonly` forbids certain assignments at the type-checker level and by default applies only to that specific property. It does not give you deep immutability and does not freeze the object at runtime.
+Нет. `readonly` запрещает определённые присваивания на уровне type checker и по умолчанию действует только на конкретный property. Он не обеспечивает deep immutability и не замораживает объект runtime.
 
-### Does TypeScript validate JSON from an API?
+### Валидирует ли TypeScript JSON от API?
 
-No. Types are erased at compile time and do not exist at runtime. External data has to be validated separately if you cannot trust its shape.
+Нет. Types удаляются при компиляции и не существуют runtime. Внешние данные необходимо валидировать отдельно, если их структуре нельзя доверять.

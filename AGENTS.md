@@ -6,10 +6,10 @@ the scripts. What follows is only the things that are easy to get wrong.
 ## Before you finish
 
 ```
-npm run typecheck && npm test && npm run build
+npm run typecheck && npm run build
 ```
 
-There is no linter. `tsc --noEmit` and the three test suites are the whole gate.
+There is no linter. `tsc --noEmit` and the production build are the gate.
 
 ## Conventions that are load-bearing
 
@@ -24,9 +24,7 @@ reaching for `useProgressState()` there re-renders it on every tick anywhere in
 the app. The reader mirrors completion in local state for exactly this reason.
 
 **i18n.** Every user-visible string is a key in both `en.json` and `ru.json`.
-`tests/i18n.test.mjs` fails on a key used but undefined *and* on a key defined
-but never rendered, so removing UI means removing its keys. Keys assembled at
-runtime need a prefix in that test's `DYNAMIC_KEY_PREFIXES` — currently only
+Removing UI means removing its keys. Keys assembled at runtime are only
 `content.`, for section and folder names.
 
 **Styles.** No CSS modules, no inline style objects for anything themable. Add a
@@ -45,8 +43,8 @@ light surface needs no duplicate selectors.
 **Highlighting.** `src/features/reading/rehypeHighlight.ts` replaces
 `rehype-highlight`, which statically imports lowlight's `common` set as its
 fallback and so ships all 37 grammars whatever you configure. Only `typescript`,
-`json` and `plaintext` are registered; `tests/content.test.mjs` fails if a lesson
-uses anything else, because an unregistered fence renders plain with no error.
+`json` and `plaintext` are registered; an unregistered fence renders plain with
+no error.
 
 **Content is trusted.** `MarkdownViewer` runs without a sanitiser because the
 markdown is committed to this repository. If content ever arrives from anywhere

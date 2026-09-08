@@ -1,19 +1,8 @@
 /**
  * The content tree is three levels deep and no deeper: section → folder →
  * lesson. Kept separate from `content.ts` because that module runs
- * `import.meta.glob`, which only exists inside the bundler — the pure logic
- * that reads these shapes has to stay importable from plain Node tests.
+ * `import.meta.glob`, which only exists inside the bundler.
  */
-
-export type LessonDifficulty = "beginner" | "intermediate" | "advanced";
-
-export interface LessonMetadata {
-  section: string;
-  difficulty: LessonDifficulty;
-  estimatedMinutes: number;
-  tags: string[];
-  prerequisites: string[];
-}
 
 export interface Lesson {
   /** `section/folder/slug` — stable across renames of the title. */
@@ -22,10 +11,7 @@ export interface Lesson {
   folder: string;
   slug: string;
   title: string;
-  /** Optional per-locale title; falls back to `title`. */
-  titleRu?: string;
   order: number;
-  metadata: LessonMetadata;
   body: string;
 }
 

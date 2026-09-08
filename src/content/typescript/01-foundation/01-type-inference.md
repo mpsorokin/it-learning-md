@@ -120,21 +120,21 @@ public/domain boundary → consider explicit type
 
 ## Interview questions
 
-### What is type inference?
+### Что такое type inference?
 
-Type inference is TypeScript's ability to derive types from values and surrounding type information. I usually rely on it for local implementation details because explicit annotations would only duplicate information. I use explicit types when I want to establish a contract or architectural boundary.
+Type inference — это способность TypeScript вывести типы из значений и окружающего контекста. Для локальных implementation details я обычно полагаюсь на него, потому что явные аннотации только дублировали бы информацию. Явные типы я пишу, когда хочу зафиксировать контракт или архитектурную границу.
 
-### What is contextual typing?
+### Что такое contextual typing?
 
-Contextual typing means TypeScript can infer an expression's type from where that expression is used.
+Contextual typing означает, что TypeScript может вывести тип выражения из места, где это выражение используется.
 
 ```ts
 ["a", "b"].map(value => value.toUpperCase());
 //                  ^ string
 ```
 
-The callback parameter is inferred from the `map()` signature.
+Параметр callback выводится из signature `map()`.
 
-### Should you always annotate function return types?
+### Нужно ли всегда аннотировать return type функции?
 
-No. For internal functions, inferred return types usually reduce duplication. Explicit return types are more useful for exported APIs, domain boundaries, or anywhere you intentionally want to prevent implementation changes from silently changing the contract.
+Нет. Для внутренних функций inferred return types обычно уменьшают дублирование. Explicit return types полезнее для экспортируемых API, domain boundaries или там, где ты сознательно не хочешь, чтобы изменения implementation молча меняли контракт.

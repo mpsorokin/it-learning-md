@@ -1,18 +1,3 @@
----
-title: Type Annotations
-titleRu: Аннотации типов
-slug: type-annotations
-section: foundation
-order: 2
-difficulty: beginner
-estimatedMinutes: 6
-tags:
-  - typescript
-  - annotations
-prerequisites:
-  - type-inference
----
-
 # Type Annotations
 
 Type annotation — это явное указание типа в месте, где мы хотим **зафиксировать ограничение или контракт**, а не просто повторить то, что TypeScript и так способен вывести.
@@ -254,14 +239,14 @@ export function getUser(id: string): PublicUserDto {
 
 ## Interview questions
 
-### Should you explicitly type every variable?
+### Нужно ли явно типизировать каждую переменную?
 
-No. If TypeScript already infers the type unambiguously, an annotation usually just duplicates information. Explicit types are more useful where they add a constraint, a contract, or an important domain abstraction.
+Нет. Если TypeScript уже однозначно выводит тип, annotation обычно только дублирует информацию. Явные типы полезнее там, где они задают constraint, contract или важную domain abstraction.
 
-### Should you always annotate a function's return type?
+### Нужно ли всегда указывать return type функции?
 
-No. For internal implementation functions, inference is often cleaner. On public APIs, domain boundaries, or exported functions, an explicit return type is useful because it locks the contract independently of how the implementation changes.
+Нет. Для внутренних implementation functions inference часто удобнее. На публичных API, domain boundaries или экспортируемых функциях explicit return type может быть полезен, потому что фиксирует контракт независимо от изменений implementation.
 
-### How does an annotation differ from `as`?
+### Чем annotation отличается от `as`?
 
-An annotation asks TypeScript to check a value against the given type. `as` is an assertion: the developer tells the compiler how to treat the value. That means an assertion can hide a problem that a normal annotation would have caught.
+Annotation просит TypeScript проверить значение относительно указанного типа. `as` — это assertion: разработчик сообщает compiler-у, как значение следует трактовать. Поэтому assertion может скрыть проблему, которую обычная annotation поймала бы.

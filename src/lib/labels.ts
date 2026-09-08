@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { humanizeSlug } from "@/lib/frontmatter";
+import { humanizeSlug } from "@/lib/names";
 import type { Folder, Lesson, Section } from "@/lib/content.types";
 
 /**
@@ -28,8 +28,7 @@ export function useContentLabels() {
     const folderLabel = (folder: Folder) =>
       translate(`content.${folder.section}.${folder.slug}.title`) ?? humanizeSlug(folder.slug);
 
-    const lessonLabel = (lesson: Lesson) =>
-      (i18n.language === "ru" && lesson.titleRu) || lesson.title;
+    const lessonLabel = (lesson: Lesson) => lesson.title;
 
     return { sectionLabel, folderLabel, lessonLabel };
   }, [t, i18n]);

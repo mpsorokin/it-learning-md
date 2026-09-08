@@ -1,18 +1,3 @@
----
-title: Arrays
-titleRu: Массивы
-slug: arrays
-section: foundation
-order: 4
-difficulty: beginner
-estimatedMinutes: 6
-tags:
-  - typescript
-  - arrays
-prerequisites:
-  - object-types
----
-
 # Arrays
 
 В TypeScript массив обычно описывается как:
@@ -412,22 +397,22 @@ tuple
 
 ## Interview questions
 
-### Is there a difference between `T[]` and `Array<T>`?
+### Есть ли разница между `T[]` и `Array<T>`?
 
-For a normal array, practically no. They are two syntaxes for the same array model. `T[]` is shorter; `Array<T>` is sometimes easier to read inside complex generic types.
+Для обычного массива — практически нет. Это два синтаксиса одной модели массива. `T[]` короче, а `Array<T>` иногда удобнее читать внутри сложных generic types.
 
-### Why use `readonly T[]`?
+### Зачем использовать `readonly T[]`?
 
-To make it explicit that a function or API must not mutate the collection. That reduces the implementation's permissions and makes the contract stronger. A mutable `T[]` can still be passed where `readonly T[]` is expected.
+Чтобы явно показать, что функция или API не должны изменять коллекцию. Это уменьшает permissions implementation и делает контракт сильнее. При этом обычный mutable `T[]` можно передать туда, где ожидается `readonly T[]`.
 
-### Does `readonly User[]` make the `User` objects immutable?
+### Делает ли `readonly User[]` объекты `User` immutable?
 
-No. It forbids mutating the collection itself through that reference. To forbid changing element properties, you have to model an immutable or readonly element type separately.
+Нет. Он запрещает mutation самой коллекции через данный reference. Чтобы запретить изменение properties элементов, нужно отдельно моделировать immutable/readonly element type.
 
-### Why is `users[0]` potentially unsafe?
+### Почему `users[0]` потенциально опасен?
 
-Because the array's element type does not guarantee that a given index exists. At runtime the result can be `undefined`. `noUncheckedIndexedAccess` lets TypeScript surface that risk in the type as `User | undefined`.
+Потому что тип элемента массива не гарантирует существование конкретного index. Runtime результат может быть `undefined`. `noUncheckedIndexedAccess` позволяет TypeScript отражать этот риск в типе как `User | undefined`.
 
-### How does `(string | number)[]` differ from `[string, number]`?
+### Чем `(string | number)[]` отличается от `[string, number]`?
 
-The first is an array where every element may be a `string` or a `number`. The second is a tuple: the first position is always expected to be a `string`, and the second a `number`.
+Первое — массив, каждый элемент которого может быть `string` или `number`. Второе — tuple: на первой позиции всегда ожидается `string`, а на второй — `number`.

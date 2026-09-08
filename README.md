@@ -20,51 +20,25 @@ src/content/
       01-type-inference.md ← lesson
 ```
 
-A lesson starts with frontmatter:
+Drop a `.md` file in the folder. Slug and order come from the filename
+(`01-type-inference.md` → slug `type-inference`, order `1`). The catalogue
+title is the first `# heading`, or a humanized slug if there isn't one.
+Files with no numeric prefix sort last, alphabetically.
 
-```markdown
----
-title: Primitive types
-titleRu: Примитивные типы
-slug: primitive-types
-section: foundation
-order: 1
-difficulty: beginner
-estimatedMinutes: 4
-tags:
-  - typescript
-  - types
-prerequisites: []
----
-
-# Primitive types
-…
-```
-
-- `title` is required. `titleRu` is optional and falls back to `title`.
-- `slug` is the URL segment; keep it equal to the filename without its numeric prefix.
-- `order` is optional — the `NN-` filename prefix is used instead. Files with
-  neither sort last, alphabetically.
-- `section`, `difficulty`, `estimatedMinutes`, `tags`, and `prerequisites`
-  describe the curriculum. Difficulty is `beginner`, `intermediate`, or
-  `advanced`; prerequisites are lesson slugs from the same curriculum.
-- Section and folder names come from `src/i18n/locales/*.json` under
-  `content.<section>.title` and `content.<section>.<folder>.title`. Without a
-  key the folder name is shown as-is, so a new folder is never a broken screen.
+Section and folder names come from `src/i18n/locales/*.json` under
+`content.<section>.title` and `content.<section>.<folder>.title`. Without a
+key the folder name is shown as-is, so a new folder is never a broken screen.
 
 Code fences must be `ts`, `text` or `json`. The reader registers only those
 three grammars — the other 34 that ship with highlight.js were most of the
 markdown chunk — so a fence in any other language renders unstyled.
-`tests/content.test.mjs` fails on one, and adding a language is two lines in
-`src/features/reading/rehypeHighlight.ts`.
+Adding a language is two lines in `src/features/reading/rehypeHighlight.ts`.
 
 Drop a file in with `npm run dev` running and it appears immediately.
-`npm run test:content` checks depth, titles, fence languages and duplicate orders.
 
 Lesson bodies ship inside the main bundle (`import.meta.glob` with `eager: true`
 in `src/lib/content.ts`). That is what makes authoring this cheap. Past roughly a
-megabyte of markdown, move the bodies to a lazy glob and keep only the
-frontmatter eager.
+megabyte of markdown, switch the bodies to a lazy glob.
 
 ## Progress
 
@@ -86,7 +60,6 @@ importing replaces rather than merges, and validates through the same parser.
 | `npm run build` | production build into `dist/` |
 | `npm run preview` | serve the build |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | unit + content + i18n + PWA suites |
 
 ## Installing as an app
 
@@ -95,11 +68,6 @@ IT Theory as a standalone app. Open the deployed HTTPS site, choose **Install IT
 Theory** from the browser menu (or the install icon in the address bar), and the
 app will appear in the desktop app list or on the desktop. The app currently has
 no offline cache, so its lessons still require the site to be reachable.
-
-Tests run on `node --test` against the TypeScript sources directly — no test
-framework, no build step (`tests/support/ts-alias-hooks.mjs` resolves the `@/`
-alias). `tests/i18n.test.mjs` checks both directions: no key used in the source
-is missing from the locales, and no key in the locales goes unrendered.
 
 ## Layout
 
@@ -111,7 +79,7 @@ src/
     progress/ the store, its metrics, its provider, export / import
     reading/  markdown viewer, reader theme
   i18n/       i18next setup and locales
-  lib/        content index, frontmatter parser, storage
+  lib/        content index, storage
   pages/      every screen, one file each
   styles/     tokens, base, one file per component area
   content/    the lessons

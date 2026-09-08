@@ -14,9 +14,8 @@ import type { Element, ElementContent, Root } from "hast";
  * markdown chunk for languages no lesson uses.
  *
  * `typescript` also covers `ts`; `plaintext` registers `text` and `txt`. Adding
- * a language is one import and one entry here — and `tests/content.test.mjs`
- * fails if a lesson uses a fence language that is missing, so a gap is a red
- * test rather than a block that quietly renders unstyled.
+ * a language is one import and one entry here. An unregistered fence renders
+ * unstyled, with no error.
  */
 export const LANGUAGES = { json, plaintext, typescript };
 
