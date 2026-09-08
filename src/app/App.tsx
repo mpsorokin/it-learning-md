@@ -12,6 +12,8 @@ const SectionPage = lazy(() => import("@/pages/SectionPage").then((m) => ({ defa
 const FolderPage = lazy(() => import("@/pages/FolderPage").then((m) => ({ default: m.FolderPage })));
 const LessonPage = lazy(() => import("@/pages/LessonPage").then((m) => ({ default: m.LessonPage })));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage").then((m) => ({ default: m.ProfilePage })));
+const PracticePage = lazy(() => import("@/pages/PracticePage").then((m) => ({ default: m.PracticePage })));
+const StatsPage = lazy(() => import("@/pages/StatsPage").then((m) => ({ default: m.StatsPage })));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage").then((m) => ({ default: m.SettingsPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
 
@@ -27,6 +29,8 @@ export function App() {
           <Route path="/s/:section/:folder" element={<FolderPage />} />
           <Route path="/s/:section/:folder/:lesson" element={<LessonPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/practice" element={<PracticePage />} />
+          <Route path="/stats" element={<StatsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/not-found" element={<NotFoundPage />} />
           <Route path="*" element={<Navigate to="/not-found" replace />} />

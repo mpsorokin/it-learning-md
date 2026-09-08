@@ -1,23 +1,27 @@
 import { isRecord } from "@/lib/storage";
 import { parseProgressState } from "@/features/progress/progress.storage";
 import type { ProgressState } from "@/features/progress/progress.types";
+import { parsePracticeState } from "@/features/practice/practice.storage";
+import { emptyPractice, type PracticeState } from "@/features/practice/practice.types";
 
 export const PROGRESS_BACKUP_KIND = "ittheory-progress";
-export const PROGRESS_BACKUP_VERSION = 1;
+export const PROGRESS_BACKUP_VERSION = 2;
 
 export interface ProgressBackup {
   kind: typeof PROGRESS_BACKUP_KIND;
   version: typeof PROGRESS_BACKUP_VERSION;
   exportedAt: string;
   progress: ProgressState;
+  practice: PracticeState;
 }
 
-export function createProgressBackup(progress: ProgressState): ProgressBackup {
+export function createProgressBackup(progress: ProgressState, practice: PracticeState): ProgressBackup {
   return {
     kind: PROGRESS_BACKUP_KIND,
     version: PROGRESS_BACKUP_VERSION,
     exportedAt: new Date().toISOString(),
     progress,
+    practice,
   };
 }
 
@@ -29,17 +33,21 @@ export function createProgressBackup(progress: ProgressState): ProgressBackup {
 export function parseProgressBackup(value: unknown): ProgressBackup | null {
   if (!isRecord(value)) return null;
   if (value.kind !== PROGRESS_BACKUP_KIND) return null;
-  if (value.version !== PROGRESS_BACKUP_VERSION) return null;
+  if (value.version !== 1 && value.version !== PROGRESS_BACKUP_VERSION) return null;
   if (typeof value.exportedAt !== "string" || value.exportedAt.length === 0) return null;
 
   const progress = parseProgressState(value.progress);
   if (!progress) return null;
+
+  const practice = value.version === 1 ? emptyPractice() : parsePracticeState(value.practice);
+  if (!practice) return null;
 
   return {
     kind: PROGRESS_BACKUP_KIND,
     version: PROGRESS_BACKUP_VERSION,
     exportedAt: value.exportedAt,
     progress,
+    practice,
   };
 }
 

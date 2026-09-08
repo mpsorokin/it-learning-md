@@ -10,18 +10,22 @@ import {
 import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
 import { READER_THEMES, type ReaderTheme } from "@/features/reading/readerTheme";
 import { useProgressActions } from "@/features/progress/useProgress";
+import { usePracticeActions, usePracticeState } from "@/features/practice/usePractice";
+import type { PracticeDailyGoal } from "@/features/practice/practice.types";
 import { DEFAULT_LOCALE, isAppLocale, SUPPORTED_LOCALES } from "@/i18n/locale.types";
 
 export function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useReaderTheme();
   const { getProgressSnapshot, replaceProgress, resetAll } = useProgressActions();
+  const practice = usePracticeState();
+  const { getPracticeSnapshot, replacePractice, resetPractice, setDailyGoal } = usePracticeActions();
   const fileInput = useRef<HTMLInputElement>(null);
 
   const currentLocale = isAppLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE;
 
   const handleExport = () => {
-    downloadProgressBackup(createProgressBackup(getProgressSnapshot()));
+    downloadProgressBackup(createProgressBackup(getProgressSnapshot(), getPracticeSnapshot()));
   };
 
   const handleImport = async (file: File) => {
@@ -38,11 +42,15 @@ export function SettingsPage() {
     // Importing replaces rather than merges, so it needs an explicit yes.
     if (!window.confirm(t("settings.importConfirm"))) return;
     replaceProgress(backup.progress);
+    replacePractice(backup.practice);
     window.alert(t("settings.importDone"));
   };
 
   const handleReset = () => {
-    if (window.confirm(t("settings.resetConfirm"))) resetAll();
+    if (window.confirm(t("settings.resetConfirm"))) {
+      resetAll();
+      resetPractice();
+    }
   };
 
   return (
@@ -113,6 +121,25 @@ export function SettingsPage() {
           <Trash size={17} aria-hidden="true" />
           {t("settings.resetProgress")}
         </button>
+      </div>
+
+      <h2 className="section-heading">{t("settings.practice")}</h2>
+      <div className="settings-card">
+        <div className="settings-row">
+          <span>{t("settings.dailyGoal")}</span>
+          <div className="segmented" role="group" aria-label={t("settings.dailyGoal")}>
+            {[3, 5, 10].map((goal) => (
+              <button
+                key={goal}
+                type="button"
+                className={practice.dailyGoal === goal ? "active" : undefined}
+                onClick={() => setDailyGoal(goal as PracticeDailyGoal)}
+              >
+                {goal}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </AppShell>
   );

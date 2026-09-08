@@ -14,6 +14,26 @@ export interface Tally {
   ratio: number;
 }
 
+export interface ReadingHistoryRow {
+  date: string;
+  count: number;
+  cumulative: number;
+}
+
+const localDayKey = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const shiftLocalDay = (dateString: string, days: number): string => {
+  const [year, month, day] = dateString.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() + days);
+  return localDayKey(date);
+};
+
 const tally = (lessons: Lesson[], progress: ProgressState): Tally => {
   const done = lessons.reduce((count, lesson) => (progress.lessons[lesson.id] ? count + 1 : count), 0);
   return { done, total: lessons.length, ratio: lessons.length === 0 ? 1 : done / lessons.length };
@@ -27,6 +47,41 @@ export const folderProgress = (progress: ProgressState, folder: Folder): Tally =
 export const sectionProgress = (progress: ProgressState, section: Section): Tally => tally(section.lessons, progress);
 
 export const overallProgress = (progress: ProgressState, lessons: Lesson[]): Tally => tally(lessons, progress);
+
+/**
+ * Returns active reading days in the last 28 local calendar days, newest first.
+ * The cumulative value is the all-time completed-lesson count as of that day.
+ */
+export function readingHistory(
+  progress: ProgressState,
+  lessons: Lesson[],
+  now = new Date(),
+): ReadingHistoryRow[] {
+  const today = localDayKey(now);
+  const firstDay = shiftLocalDay(today, -27);
+  const completedDates = lessons.flatMap((lesson) => {
+    const completed = progress.lessons[lesson.id];
+    if (!completed) return [];
+    return [{ date: localDayKey(new Date(completed.completedAt)) }];
+  });
+  const counts = new Map<string, number>();
+
+  for (const { date } of completedDates) {
+    counts.set(date, (counts.get(date) ?? 0) + 1);
+  }
+
+  const activeDates = [...counts.keys()]
+    .filter((date) => date >= firstDay && date <= today && (counts.get(date) ?? 0) > 0)
+    .sort();
+  let cumulative = completedDates.filter(({ date }) => date < firstDay).length;
+
+  const rows = activeDates.map((date) => {
+    cumulative += completedDates.filter(({ date: completedDate }) => completedDate === date).length;
+    return { date, count: counts.get(date) ?? 0, cumulative };
+  });
+
+  return rows.reverse();
+}
 
 /**
  * Where "continue" points: the first unfinished lesson in reading order. Nothing

@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from "react";
 import { ErrorBoundary } from "@/components/feedback/ErrorBoundary";
 import { ProgressProvider } from "@/features/progress/ProgressProvider";
+import { PracticeProvider } from "@/features/practice/PracticeProvider";
 import { ReaderThemeProvider } from "@/features/reading/ReaderThemeProvider";
 
 /** Paints the page colour so a lazy route does not flash the body background. */
@@ -15,11 +16,13 @@ function RouteFallback() {
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ProgressProvider>
-      <ReaderThemeProvider>
-        <ErrorBoundary>
-          <Suspense fallback={<RouteFallback />}>{children}</Suspense>
-        </ErrorBoundary>
-      </ReaderThemeProvider>
+      <PracticeProvider>
+        <ReaderThemeProvider>
+          <ErrorBoundary>
+            <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+          </ErrorBoundary>
+        </ReaderThemeProvider>
+      </PracticeProvider>
     </ProgressProvider>
   );
 }

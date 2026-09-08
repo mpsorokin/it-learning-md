@@ -6,17 +6,22 @@ import { ContentRow } from "@/components/ui/ContentRow";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { getNextLesson, overallProgress, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
+import { interviewQuestions } from "@/features/practice/questions";
+import { practiceSummary } from "@/features/practice/practice.metrics";
+import { usePracticeState } from "@/features/practice/usePractice";
 import { findFolder, lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
 export function OverviewPage() {
   const { t } = useTranslation();
   const progress = useProgressState();
+  const practice = usePracticeState();
   const { sectionLabel, lessonLabel, folderLabel } = useContentLabels();
 
   const overall = overallProgress(progress, orderedLessons);
   const next = getNextLesson(progress, orderedLessons);
   const nextFolder = next && findFolder(next.section, next.folder);
+  const practiceStats = practiceSummary(progress, practice, interviewQuestions);
 
   return (
     <AppShell>
@@ -28,6 +33,17 @@ export function OverviewPage() {
         value={t("common.doneOfTotal", { done: overall.done, total: overall.total })}
         ratio={overall.ratio}
       />
+
+      <Link className="practice-summary-card" to="/practice">
+        <div className="practice-summary-card__top">
+          <span>{t("practice.today")}</span>
+          <strong>{practiceStats.today} / {practice.dailyGoal}</strong>
+        </div>
+        <div className="practice-summary-card__bottom">
+          <span>{t("practice.dueCount", { count: practiceStats.due })}</span>
+          <strong>{t("practice.streak", { count: practiceStats.currentStreak })}</strong>
+        </div>
+      </Link>
 
       {next && nextFolder ? (
         <Link className="continue-card" to={lessonPath(next)}>
