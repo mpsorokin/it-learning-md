@@ -29,6 +29,8 @@
   --color-accent-strong: #715e3d;
   --color-selected: #ae8a57;
   --color-track: #37362f;
+  /* The "done" marker: the reader's tick, the lesson-row tick, the finished button. */
+  --color-done: #343127;
 
   /* Text */
   --color-text: #f1eee6;
@@ -60,31 +62,49 @@
   --color-paper-scroll-thumb: #bcb3a3;
   --color-paper-btn: #efebe2;
   --color-paper-btn-hover: #fffaf0;
+  --color-ink-hover: #2a2923;
+  --color-paper-fg: #f5f0e5;
   --color-track-paper: #dcd3c3;
   --color-swatch-border-paper: #e2d7c5;
   --color-swatch-dark: #1a1b18;
   --color-code-bg: rgba(111, 96, 70, 0.12);
 
   /*
-   * Syntax — the one thing Calea has no equivalent for, so every value here is
-   * an existing palette entry re-used: warm golds carry the code, and the only
-   * cool note is the danger red on tags.
+   * Syntax — "Ember". The one block that does not re-use existing palette
+   * entries, and deliberately so: built only from Calea's warm golds, four of
+   * the roles landed within ΔE 5 of each other and `string` was byte-identical
+   * to plain code text, which made strings invisible as a category. These stay
+   * inside the app's warm world — the keyword keeps the brand gold — but each
+   * role sits at its own point on the hue circle. Closest meaningful pair is
+   * now ΔE 16.9, and every value clears 4.8:1 against the block background.
+   *
+   * Changing the reading theme is these eight values and nothing else;
+   * `components/code.css` maps them onto highlight.js classes.
    */
-  --color-code-keyword: #e0bc79;
-  --color-code-string: #d8d2c6;
-  --color-code-number: #ceb98f;
-  --color-code-function: #d7c4a0;
-  --color-code-type: #c5a064;
-  --color-code-comment: #8e8a82;
-  --color-code-punctuation: #aaa59a;
+  --color-code-keyword: #e5b563;
+  --color-code-string: #b3c08a;
+  --color-code-number: #e0a17c;
+  --color-code-function: #e8d5a8;
+  --color-code-type: #cfa9c4;
+  --color-code-comment: #8b8779;
+  --color-code-punctuation: #aaa398;
   --color-code-tag: #d67e6d;
 
   /* Elevation */
   --shadow-app: 0 16px 60px rgba(0, 0, 0, 0.28);
   --shadow-reader: 0 16px 60px rgba(0, 0, 0, 0.24);
 
-  /* Breakpoints — the three widths this layout actually reacts to. */
-  --breakpoint-tiny: 370px;
-  --breakpoint-narrow: 520px;
-  --breakpoint-frame: 700px;
+  /*
+   * Geometry. Only the values that repeat get a name — a token used once hides
+   * its number without buying anything. The one-off radii (4px inline code,
+   * 7px copy button, 9px details, 23px shell frame) stay literal, and so does
+   * `50%`, which is a shape rather than a scale step.
+   */
+  --radius-card: 19px;
+  --radius-row: 17px;
+  --radius-control: 11px;
+  --radius-pill: 999px;
+
+  /* Duration only: the timing function stays written out where it is used. */
+  --duration-fast: 0.15s;
 }

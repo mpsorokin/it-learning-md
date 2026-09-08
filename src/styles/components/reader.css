@@ -61,7 +61,7 @@
   place-items: center;
   justify-self: end;
   border-radius: 50%;
-  background: #343127;
+  background: var(--color-done);
   color: var(--color-gold-dim);
 }
 
@@ -105,12 +105,12 @@
   gap: 7px;
   padding: 10px 16px;
   border: 1px solid var(--r-line);
-  border-radius: 11px;
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--r-muted);
   font-family: var(--font-sans);
   font-size: 12px;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
 }
 
 .reader-secondary-button:hover {
@@ -132,11 +132,11 @@
   gap: 9px;
   padding: 13px 14px;
   border: 1px solid var(--r-line);
-  border-radius: 11px;
+  border-radius: var(--radius-control);
   color: var(--r-muted);
   font-size: 12px;
   line-height: 1.35;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
 }
 
 .reader-pager__link:hover {
@@ -268,7 +268,7 @@
   margin: 1.35em 0;
   overflow-x: auto;
   border: 1px solid var(--r-line);
-  border-radius: 11px;
+  border-radius: var(--radius-control);
   scrollbar-width: thin;
 }
 

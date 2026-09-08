@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { basename, join, relative, sep } from "node:path";
 import test from "node:test";
 import assert from "node:assert/strict";
+import { isSupportedLanguage } from "@/features/reading/rehypeHighlight";
 
 const CONTENT_ROOT = join(process.cwd(), "src", "content");
 const EXPECTED_FOLDERS = new Map([
@@ -123,5 +124,23 @@ test("prerequisites and related-topic links resolve to curriculum lessons", () =
     const links = [...sectionBody(lesson.body, "Related topics").matchAll(/\(#\/s\/([^/]+\/[^/]+\/[^)]+)\)/g)];
     assert.ok(links.length >= 2 && links.length <= 5, `${lesson.file}: related-topic count`);
     for (const [, id] of links) assert.ok(ids.has(id), `${lesson.file}: broken related link ${id}`);
+  }
+});
+
+/**
+ * A fence labelled with a language the reader does not register renders as
+ * plain text — no error, no warning, just a block that quietly looks wrong.
+ * The grammar set is deliberately small (see `rehypeHighlight.ts`), so this is
+ * the check that turns "add a language" into a red test instead of a silent
+ * regression.
+ */
+test("every code fence uses a language the reader can highlight", () => {
+  for (const { file, body } of lessons) {
+    for (const [, language] of body.matchAll(/^```([A-Za-z0-9+#-]+)\s*$/gm)) {
+      assert.ok(
+        isSupportedLanguage(language),
+        `${file}: fence language "${language}" is not registered in rehypeHighlight.ts`,
+      );
+    }
   }
 });

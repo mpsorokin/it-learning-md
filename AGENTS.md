@@ -31,12 +31,22 @@ runtime need a prefix in that test's `DYNAMIC_KEY_PREFIXES` — currently only
 
 **Styles.** No CSS modules, no inline style objects for anything themable. Add a
 class in the matching `src/styles/components/*.css` and a token in `theme.css`
-if a new colour is genuinely needed. Rules shared by several screens live in the
-file named for the *thing* (`cards.css`), not for the screen that happened to
-need them first. Media queries go in `responsive.css`, all
+if a new colour is genuinely needed — no raw hex outside `theme.css`. Rules
+shared by several screens live in the file named for the *thing* (`cards.css`),
+not for the screen that happened to need them first: the card frame is one
+grouped selector there, so a new card is a selector added to it rather than
+three declarations copied again. Radii use `--radius-*`; a value that appears
+once stays a literal. The three widths in `responsive.css` are written as
+numbers on purpose — a custom property cannot be read inside `@media`. Media queries go in `responsive.css`, all
 of them, because they add no specificity and need one late cascade point.
 Reader rules read the `--r-*` aliases rather than the palette directly, so the
 light surface needs no duplicate selectors.
+
+**Highlighting.** `src/features/reading/rehypeHighlight.ts` replaces
+`rehype-highlight`, which statically imports lowlight's `common` set as its
+fallback and so ships all 37 grammars whatever you configure. Only `typescript`,
+`json` and `plaintext` are registered; `tests/content.test.mjs` fails if a lesson
+uses anything else, because an unregistered fence renders plain with no error.
 
 **Content is trusted.** `MarkdownViewer` runs without a sanitiser because the
 markdown is committed to this repository. If content ever arrives from anywhere

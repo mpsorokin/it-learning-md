@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --import ./tests/support/ts-alias-hooks.mjs --test \"tests/**/*.test.mjs\"",
     "test:unit": "node --import ./tests/support/ts-alias-hooks.mjs --test \"tests/unit/*.test.mjs\"",
-    "test:content": "node --test tests/content.test.mjs",
+    "test:content": "node --import ./tests/support/ts-alias-hooks.mjs --test tests/content.test.mjs",
     "test:i18n": "node --test tests/i18n.test.mjs",
     "test:pwa": "node --test tests/pwa.test.mjs"
   },
@@ -20,14 +20,15 @@
     "@phosphor-icons/react": "2.1.10",
     "highlight.js": "11.11.1",
     "i18next": "26.4.2",
+    "lowlight": "3.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-i18next": "17.0.13",
     "react-markdown": "10.1.0",
     "react-router-dom": "7.18.2",
-    "rehype-highlight": "7.0.2",
     "rehype-raw": "7.0.0",
-    "remark-gfm": "4.0.1"
+    "remark-gfm": "4.0.1",
+    "unist-util-visit": "5.1.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",

@@ -7,7 +7,12 @@
  * mirror image of Calea's naming — the values on each side are Calea's.
  */
 :root {
-  /* Dark reader — Calea's `.reader-shell--dark` block. */
+  /*
+   * Dark reader — Calea's `.reader-shell--dark` block. `ReaderShell` does emit
+   * `reader-shell--dark`, but there is deliberately no rule for it: dark is
+   * what `:root` already says, and `.reader-shell--light` below is the only
+   * variant that has to change anything.
+   */
   --r-bg: var(--color-app);
   --r-text: var(--color-text);
   --r-muted: var(--color-muted);
@@ -18,7 +23,7 @@
   --btn-bg: var(--color-paper-btn);
   --btn-bg-hover: var(--color-paper-btn-hover);
   --btn-fg: var(--color-ink);
-  --btn-done-bg: #343127;
+  --btn-done-bg: var(--color-done);
   --btn-done-fg: var(--color-gold-dim);
 
   /* Reader typography */
@@ -42,8 +47,8 @@
   --r-code-bg: var(--color-reader-frame);
 
   --btn-bg: var(--color-ink);
-  --btn-bg-hover: #2a2923;
-  --btn-fg: #f5f0e5;
+  --btn-bg-hover: var(--color-ink-hover);
+  --btn-fg: var(--color-paper-fg);
 }
 
 * {

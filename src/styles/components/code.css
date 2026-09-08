@@ -4,7 +4,7 @@
  * The token colours are written against our own theme rather than imported from
  * a highlight.js stylesheet: a ready-made theme brings its own background and
  * greys, which then disagree with everything around them. Only the token
- * classes rehype-highlight actually emits are styled here.
+ * classes the highlighter actually emits are styled here.
  *
  * The block keeps a dark surface in both reader themes — a light background
  * under this palette would be unreadable, and code reads as an inset panel.
@@ -14,7 +14,7 @@
   margin: 1.5em 0;
   overflow: hidden;
   border: 1px solid var(--color-subtle);
-  border-radius: 11px;
+  border-radius: var(--radius-control);
   background: var(--r-code-bg);
 }
 
@@ -45,7 +45,7 @@
   background: transparent;
   color: var(--color-muted);
   font-size: 11px;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
 }
 
 .code-block__copy:hover {

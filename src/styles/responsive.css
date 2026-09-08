@@ -2,6 +2,10 @@
  * Every media query in the app, in one file imported last. Media queries add no
  * specificity of their own, so rules that override a base rule from another file
  * have to share a single, late point in the cascade to win reliably.
+ *
+ * The three widths below are the only place they are written down. A custom
+ * property cannot be used in a `@media` condition, so a token would be a second
+ * copy that nothing keeps in step with these — better to have one.
  */
 
 /* Above the phone width the column becomes a floating card. */

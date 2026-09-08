@@ -2,9 +2,6 @@
 
 .settings-card {
   padding: 0 16px;
-  border: 1px solid var(--color-hairline);
-  border-radius: 19px;
-  background: var(--color-surface);
 }
 
 .settings-row {
@@ -50,11 +47,11 @@
   min-height: 30px;
   padding: 0 12px;
   border: 1px solid var(--color-hairline);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-muted);
   font-size: 11px;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
 }
 
 .segmented button:hover {
@@ -77,9 +74,13 @@
   color: var(--color-text);
   font-size: 12px;
   text-align: left;
-  transition: color 0.15s ease;
+  transition: color var(--duration-fast) ease;
 }
 
+/*
+ * `:last-of-type`, not `:last-child`: the hidden file input for "import" sits
+ * between these buttons, so the last button is not the card's last child.
+ */
 .settings-action:last-of-type {
   border-bottom: 0;
 }

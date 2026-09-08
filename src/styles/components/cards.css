@@ -4,10 +4,22 @@
  * to the overview alone but shares the frame, which is why they sit together.
  */
 
+/*
+ * Every raised surface in the app shares one frame. Collected here rather than
+ * repeated in each screen's file — it was copied verbatim seven times. The
+ * individual files still own their layout, and this file is imported before
+ * them, so a screen that needs a different radius simply says so.
+ */
 .stat-card,
-.continue-card {
+.continue-card,
+.content-row,
+.profile-hero,
+.stat-rows,
+.stat-list,
+.detail-card,
+.settings-card {
   border: 1px solid var(--color-hairline);
-  border-radius: 19px;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
 }
 
@@ -42,7 +54,7 @@
   display: block;
   margin-top: 12px;
   padding: 18px 46px 14px 16px;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--duration-fast) ease;
 }
 
 .continue-card:hover {

@@ -1,10 +1,4 @@
-/*
- * The shared empty / missing / crashed screen.
- *
- * Must stay after `reader.css` and `shell.css`: `.route-fallback` sets a
- * background at the same specificity as `.app-background`, so the later rule is
- * what makes the route fallback use the app surface.
- */
+/* The shared empty / missing / crashed screen. */
 
 .not-found-shell .shell-main {
   display: grid;

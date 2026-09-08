@@ -52,8 +52,14 @@ prerequisites: []
   `content.<section>.title` and `content.<section>.<folder>.title`. Without a
   key the folder name is shown as-is, so a new folder is never a broken screen.
 
+Code fences must be `ts`, `text` or `json`. The reader registers only those
+three grammars — the other 34 that ship with highlight.js were most of the
+markdown chunk — so a fence in any other language renders unstyled.
+`tests/content.test.mjs` fails on one, and adding a language is two lines in
+`src/features/reading/rehypeHighlight.ts`.
+
 Drop a file in with `npm run dev` running and it appears immediately.
-`npm run test:content` checks depth, titles, and duplicate orders.
+`npm run test:content` checks depth, titles, fence languages and duplicate orders.
 
 Lesson bodies ship inside the main bundle (`import.meta.glob` with `eager: true`
 in `src/lib/content.ts`). That is what makes authoring this cheap. Past roughly a
@@ -112,5 +118,7 @@ src/
 ```
 
 Styles are plain CSS in cascade layers; Tailwind contributes its `@theme` token
-system and utility layer, with Preflight left out. Every colour is a token in
-`src/styles/theme.css` — change the palette there and the whole app follows.
+system and utility layer, with Preflight left out. Colours, radii and the shared
+transition duration are tokens in `src/styles/theme.css` — change them there and
+the whole app follows. The frame every raised surface shares (border, radius,
+background) is one rule in `components/cards.css`, not a copy per screen.

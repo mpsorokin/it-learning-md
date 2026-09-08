@@ -5,9 +5,6 @@
   align-items: center;
   gap: 18px;
   padding: 17px 16px;
-  border: 1px solid var(--color-hairline);
-  border-radius: 19px;
-  background: var(--color-surface);
 }
 
 .profile-hero > div:not(.progress-ring) {
@@ -65,9 +62,6 @@
   flex-direction: column;
   margin-top: 12px;
   padding: 0 16px;
-  border: 1px solid var(--color-hairline);
-  border-radius: 19px;
-  background: var(--color-surface);
   list-style: none;
   overflow: hidden;
 }
@@ -107,9 +101,6 @@
   flex-direction: column;
   gap: 15px;
   padding: 17px 16px;
-  border: 1px solid var(--color-hairline);
-  border-radius: 19px;
-  background: var(--color-surface);
   list-style: none;
 }
 
@@ -121,9 +112,6 @@
 
 .detail-card {
   padding: 0 16px;
-  border: 1px solid var(--color-hairline);
-  border-radius: 19px;
-  background: var(--color-surface);
 }
 
 .detail-card__row {
