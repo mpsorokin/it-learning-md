@@ -7,6 +7,11 @@
   list-style: none;
 }
 
+.stat-card + .content-list,
+.stat-card + .lesson-list {
+  margin-top: 12px;
+}
+
 .content-row {
   position: relative;
   display: flex;
