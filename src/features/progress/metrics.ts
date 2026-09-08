@@ -49,9 +49,17 @@ export function getLastCompleted(progress: ProgressState, lessons: Lesson[]): Le
   return best;
 }
 
-/** Neighbours inside the same folder — the reader's prev/next footer. */
-export function lessonNeighbours(folder: Folder, lesson: Lesson): { previous?: Lesson; next?: Lesson } {
+/**
+ * Neighbours inside the same folder — the reader's prev/next footer. `index` is
+ * returned alongside them because the reader also shows "n of m" and would
+ * otherwise scan the same list a second time; it is `-1` when the lesson does
+ * not belong to the folder.
+ */
+export function lessonNeighbours(
+  folder: Folder,
+  lesson: Lesson,
+): { index: number; previous?: Lesson; next?: Lesson } {
   const index = folder.lessons.findIndex((candidate) => candidate.id === lesson.id);
-  if (index === -1) return {};
-  return { previous: folder.lessons[index - 1], next: folder.lessons[index + 1] };
+  if (index === -1) return { index };
+  return { index, previous: folder.lessons[index - 1], next: folder.lessons[index + 1] };
 }

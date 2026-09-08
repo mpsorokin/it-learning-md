@@ -31,7 +31,9 @@ runtime need a prefix in that test's `DYNAMIC_KEY_PREFIXES` — currently only
 
 **Styles.** No CSS modules, no inline style objects for anything themable. Add a
 class in the matching `src/styles/components/*.css` and a token in `theme.css`
-if a new colour is genuinely needed. Media queries go in `responsive.css`, all
+if a new colour is genuinely needed. Rules shared by several screens live in the
+file named for the *thing* (`cards.css`), not for the screen that happened to
+need them first. Media queries go in `responsive.css`, all
 of them, because they add no specificity and need one late cascade point.
 Reader rules read the `--r-*` aliases rather than the palette directly, so the
 light surface needs no duplicate selectors.
@@ -39,6 +41,11 @@ light surface needs no duplicate selectors.
 **Content is trusted.** `MarkdownViewer` runs without a sanitiser because the
 markdown is committed to this repository. If content ever arrives from anywhere
 else, that assumption has to be revisited before anything else.
+
+**Screens.** Every screen is one file in `src/pages/`, and the repeated pieces of
+the catalogue are components — `ContentRow` for a section/folder row, `TallyCard`
+for a progress card. A new screen that copies either of those blocks inline is a
+review comment, not a shortcut.
 
 **Routes.** `HashRouter`, and `base: "./"` in the Vite config — the app is
 deployed as static files with no server rewrites. Neither can change without

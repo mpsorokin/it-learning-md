@@ -69,12 +69,20 @@ test("the last completed lesson is the newest completedAt, not the last in order
 });
 
 test("neighbours stop at the folder edges", () => {
-  assert.deepEqual(lessonNeighbours(basic, basic.lessons[0]), { previous: undefined, next: basic.lessons[1] });
-  assert.deepEqual(lessonNeighbours(basic, basic.lessons[1]), { previous: basic.lessons[0], next: undefined });
+  assert.deepEqual(lessonNeighbours(basic, basic.lessons[0]), {
+    index: 0,
+    previous: undefined,
+    next: basic.lessons[1],
+  });
+  assert.deepEqual(lessonNeighbours(basic, basic.lessons[1]), {
+    index: 1,
+    previous: basic.lessons[0],
+    next: undefined,
+  });
 });
 
 test("a lesson from another folder has no neighbours here", () => {
-  assert.deepEqual(lessonNeighbours(basic, generics.lessons[0]), {});
+  assert.deepEqual(lessonNeighbours(basic, generics.lessons[0]), { index: -1 });
 });
 
 test("isCompleted reads a single lesson", () => {

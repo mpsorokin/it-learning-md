@@ -80,7 +80,15 @@ importing replaces rather than merges, and validates through the same parser.
 | `npm run build` | production build into `dist/` |
 | `npm run preview` | serve the build |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | unit + content + i18n suites |
+| `npm test` | unit + content + i18n + PWA suites |
+
+## Installing as an app
+
+The production site includes a Web App Manifest, so Chrome and Edge can install
+IT Theory as a standalone app. Open the deployed HTTPS site, choose **Install IT
+Theory** from the browser menu (or the install icon in the address bar), and the
+app will appear in the desktop app list or on the desktop. The app currently has
+no offline cache, so its lessons still require the site to be reachable.
 
 Tests run on `node --test` against the TypeScript sources directly — no test
 framework, no build step (`tests/support/ts-alias-hooks.mjs` resolves the `@/`
@@ -94,11 +102,11 @@ src/
   app/        routes and providers
   components/ layout, ui, feedback
   features/
-    progress/ the store, its metrics, its provider
-    reading/  markdown viewer, lesson page, reader theme
-    backup/   export / import
+    progress/ the store, its metrics, its provider, export / import
+    reading/  markdown viewer, reader theme
   i18n/       i18next setup and locales
   lib/        content index, frontmatter parser, storage
+  pages/      every screen, one file each
   styles/     tokens, base, one file per component area
   content/    the lessons
 ```

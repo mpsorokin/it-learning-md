@@ -10,9 +10,7 @@ import { OverviewPage } from "@/pages/OverviewPage";
 const LibraryPage = lazy(() => import("@/pages/LibraryPage").then((m) => ({ default: m.LibraryPage })));
 const SectionPage = lazy(() => import("@/pages/SectionPage").then((m) => ({ default: m.SectionPage })));
 const FolderPage = lazy(() => import("@/pages/FolderPage").then((m) => ({ default: m.FolderPage })));
-const LessonPage = lazy(() =>
-  import("@/features/reading/pages/LessonPage").then((m) => ({ default: m.LessonPage })),
-);
+const LessonPage = lazy(() => import("@/pages/LessonPage").then((m) => ({ default: m.LessonPage })));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage").then((m) => ({ default: m.ProfilePage })));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage").then((m) => ({ default: m.SettingsPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));

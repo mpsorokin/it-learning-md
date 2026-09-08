@@ -89,7 +89,7 @@ function buildSections(lessons: Lesson[]): Section[] {
     .sort((a, b) => a.slug.localeCompare(b.slug));
 }
 
-export const allLessons: Lesson[] = buildLessons();
+const allLessons: Lesson[] = buildLessons();
 export const sections: Section[] = buildSections(allLessons);
 
 /** Reading order across the whole catalogue, used by "continue" and prev/next. */
@@ -103,9 +103,6 @@ export const findSection = (slug: string): Section | undefined => sectionsBySlug
 export const findFolder = (section: string, folder: string): Folder | undefined => foldersById.get(`${section}/${folder}`);
 export const findLesson = (section: string, folder: string, slug: string): Lesson | undefined =>
   lessonsById.get(`${section}/${folder}/${slug}`);
-export const lessonById = (id: string): Lesson | undefined => lessonsById.get(id);
-
-export const totalLessonCount = allLessons.length;
 
 /** `{ section, folder, lesson }` params for the route that renders `lesson`. */
 export const lessonPath = (lesson: Lesson): string =>

@@ -1,3 +1,5 @@
+import { clamp01 } from "@/lib/num";
+
 interface ProgressBarProps {
   value: number;
   className?: string;
@@ -15,7 +17,7 @@ interface ProgressBarProps {
  * just to produce a generic fallback name.
  */
 export function ProgressBar({ value, className = "", label }: ProgressBarProps) {
-  const normalized = Math.min(1, Math.max(0, value));
+  const normalized = clamp01(value);
   const semantics = label
     ? ({
         role: "progressbar",

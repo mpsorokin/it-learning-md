@@ -11,7 +11,7 @@
 @import "./base.css" layer(base);
 
 @import "./components/shell.css" layer(components);
-@import "./components/overview.css" layer(components);
+@import "./components/cards.css" layer(components);
 @import "./components/library.css" layer(components);
 @import "./components/reader.css" layer(components);
 @import "./components/code.css" layer(components);

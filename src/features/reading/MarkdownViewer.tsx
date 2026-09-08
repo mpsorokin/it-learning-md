@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState, type ReactNode } from "react";
+import { memo, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import type { Element, ElementContent } from "hast";
 import type { PluggableList } from "unified";
 
 /** Flattens a highlighted subtree back to the source the reader would copy. */
-function collectText(node: ElementContent | Element): string {
+function collectText(node: ElementContent): string {
   if (node.type === "text") return node.value;
   if (node.type === "element") return node.children.map(collectText).join("");
   return "";
@@ -32,7 +32,7 @@ function CodeBlock({ node, children }: { node?: Element; children?: ReactNode })
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const language = languageOf(node);
-  const source = node ? node.children.map(collectText).join("") : "";
+  const source = useMemo(() => (node ? node.children.map(collectText).join("") : ""), [node]);
 
   // The confirmation is a timer, so it has to be cleared if the reader
   // navigates away between the click and the reset.

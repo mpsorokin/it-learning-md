@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>IT Theory</title>
+  <rect width="512" height="512" fill="#111210"/>
+  <path d="M130 156 286 256 130 356" fill="none" stroke="#e0bc79" stroke-width="42" stroke-linecap="square" stroke-linejoin="miter"/>
+  <rect x="314" y="314" width="92" height="42" fill="#e0bc79"/>
+</svg>

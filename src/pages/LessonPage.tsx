@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
@@ -33,14 +33,15 @@ export function LessonPage() {
 
   // The scroll container is a new element per lesson only in spirit — React
   // reuses it across a prev/next navigation, so the reset has to be explicit.
+  const scroller = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    document.querySelector(".reader-scroll")?.scrollTo({ top: 0 });
+    scroller.current?.scrollTo({ top: 0 });
   }, [slug, folder, section]);
 
   if (!lesson || !parent) return <Navigate to="/not-found" replace />;
 
-  const { previous, next } = lessonNeighbours(parent, lesson);
-  const position = parent.lessons.indexOf(lesson) + 1;
+  const { index, previous, next } = lessonNeighbours(parent, lesson);
+  const position = index + 1;
 
   const handleComplete = () => {
     completeLesson(lesson.id);
@@ -73,7 +74,7 @@ export function LessonPage() {
         )}
       </header>
 
-      <div className="reader-scroll">
+      <div className="reader-scroll" ref={scroller}>
         <article className="reader-article">
           <MarkdownViewer key={lesson.id} body={lesson.body} />
         </article>

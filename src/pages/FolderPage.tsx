@@ -2,7 +2,7 @@ import { Check } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
-import { ProgressBar } from "@/components/ui/ProgressBar";
+import { TallyCard } from "@/components/ui/TallyCard";
 import { folderProgress, isCompleted } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
 import { findFolder, lessonPath } from "@/lib/content";
@@ -22,13 +22,11 @@ export function FolderPage() {
 
   return (
     <AppShell title={folderLabel(folder)} backTo={`/s/${section}`}>
-      <section className="stat-card">
-        <div className="stat-card__row">
-          <span className="stat-card__label">{t("section.progress")}</span>
-          <span className="stat-card__value">{t("common.doneOfTotal", { done: tally.done, total: tally.total })}</span>
-        </div>
-        <ProgressBar value={tally.ratio} />
-      </section>
+      <TallyCard
+        label={t("section.progress")}
+        value={t("common.doneOfTotal", { done: tally.done, total: tally.total })}
+        ratio={tally.ratio}
+      />
 
       <ol className="lesson-list">
         {folder.lessons.map((lesson, index) => {

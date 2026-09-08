@@ -1,8 +1,9 @@
 import type { CSSProperties } from "react";
+import { clamp01 } from "@/lib/num";
 
 /** Conic-gradient ring; the sweep is passed to CSS as `--progress-angle`. */
 export function ProgressRing({ value, label }: { value: number; label: string }) {
-  const normalized = Math.min(1, Math.max(0, value));
+  const normalized = clamp01(value);
   return (
     <div
       className="progress-ring"

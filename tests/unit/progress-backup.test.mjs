@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createProgressBackup, parseProgressBackup, progressBackupFilename } from "@/features/backup/progressBackup";
+import { createProgressBackup, parseProgressBackup, progressBackupFilename } from "@/features/progress/progressBackup";
 
 const progress = {
   version: 1,

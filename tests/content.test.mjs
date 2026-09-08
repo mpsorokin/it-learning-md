@@ -25,6 +25,13 @@ async function markdownFiles(dir) {
   return nested.flat();
 }
 
+/**
+ * A second, independent frontmatter reader — deliberately *not*
+ * `src/lib/frontmatter.ts`. This suite guards the lesson files; if it parsed
+ * them with the app's parser it would agree with that parser's bugs and the
+ * content would look valid precisely when it renders wrong. Keep the two in
+ * step by hand, and keep this one dumb.
+ */
 function parse(source) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(source);
   if (!match) return { data: null, body: source };

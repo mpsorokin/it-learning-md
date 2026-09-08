@@ -1,8 +1,8 @@
-import { CaretRight } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
-import { ProgressBar } from "@/components/ui/ProgressBar";
+import { ContentRow } from "@/components/ui/ContentRow";
+import { TallyCard } from "@/components/ui/TallyCard";
 import { folderProgress, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
 import { findSection } from "@/lib/content";
@@ -22,30 +22,24 @@ export function SectionPage() {
 
   return (
     <AppShell title={sectionLabel(section)} backTo="/library">
-      <section className="stat-card">
-        <div className="stat-card__row">
-          <span className="stat-card__label">{t("section.progress")}</span>
-          <span className="stat-card__value">{t("common.doneOfTotal", { done: tally.done, total: tally.total })}</span>
-        </div>
-        <ProgressBar value={tally.ratio} />
-      </section>
+      <TallyCard
+        label={t("section.progress")}
+        value={t("common.doneOfTotal", { done: tally.done, total: tally.total })}
+        ratio={tally.ratio}
+      />
 
       <ul className="content-list">
         {section.folders.map((folder) => {
           const folderTally = folderProgress(progress, folder);
           return (
             <li key={folder.id}>
-              <Link className="content-row" to={`/s/${section.slug}/${folder.slug}`}>
-                <div className="content-row__head">
-                  <strong>{folderLabel(folder)}</strong>
-                  <span className="content-row__count">
-                    {t("common.doneOfTotal", { done: folderTally.done, total: folderTally.total })}
-                  </span>
-                </div>
-                <ProgressBar value={folderTally.ratio} />
-                <span className="content-row__meta">{t("library.lessonCount", { count: folder.lessons.length })}</span>
-                <CaretRight className="content-row__caret" size={15} aria-hidden="true" />
-              </Link>
+              <ContentRow
+                to={`/s/${section.slug}/${folder.slug}`}
+                title={folderLabel(folder)}
+                count={t("common.doneOfTotal", { done: folderTally.done, total: folderTally.total })}
+                ratio={folderTally.ratio}
+                meta={t("library.lessonCount", { count: folder.lessons.length })}
+              />
             </li>
           );
         })}

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ProgressRing } from "@/components/ui/ProgressRing";
+import { TallyRow } from "@/components/ui/TallyCard";
 import { getLastCompleted, overallProgress, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
 import { lessonPath, orderedLessons, sections } from "@/lib/content";
@@ -54,12 +55,10 @@ export function ProfilePage() {
           const tally = sectionProgress(progress, section);
           return (
             <li key={section.slug}>
-              <div className="stat-card__row">
-                <span className="stat-card__label">{sectionLabel(section)}</span>
-                <span className="stat-card__value">
-                  {t("common.doneOfTotal", { done: tally.done, total: tally.total })}
-                </span>
-              </div>
+              <TallyRow
+                label={sectionLabel(section)}
+                value={t("common.doneOfTotal", { done: tally.done, total: tally.total })}
+              />
               <ProgressBar value={tally.ratio} />
             </li>
           );

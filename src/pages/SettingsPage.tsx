@@ -6,11 +6,11 @@ import {
   createProgressBackup,
   downloadProgressBackup,
   parseProgressBackup,
-} from "@/features/backup/progressBackup";
+} from "@/features/progress/progressBackup";
 import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
 import { READER_THEMES, type ReaderTheme } from "@/features/reading/readerTheme";
 import { useProgressActions } from "@/features/progress/useProgress";
-import { SUPPORTED_LOCALES, type AppLocale } from "@/i18n/locale.types";
+import { DEFAULT_LOCALE, isAppLocale, SUPPORTED_LOCALES } from "@/i18n/locale.types";
 
 export function SettingsPage() {
   const { t, i18n } = useTranslation();
@@ -18,7 +18,7 @@ export function SettingsPage() {
   const { getProgressSnapshot, replaceProgress, resetAll } = useProgressActions();
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const currentLocale = i18n.language as AppLocale;
+  const currentLocale = isAppLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE;
 
   const handleExport = () => {
     downloadProgressBackup(createProgressBackup(getProgressSnapshot()));

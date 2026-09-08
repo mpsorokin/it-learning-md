@@ -1,4 +1,8 @@
-/* Overview: the headline number, the resume card and the section index. */
+/*
+ * The two surface cards. `.stat-card` is shared — overview, section, folder and
+ * (as a bare `.stat-card__row`) profile all render it; `.continue-card` belongs
+ * to the overview alone but shares the frame, which is why they sit together.
+ */
 
 .stat-card,
 .continue-card {
