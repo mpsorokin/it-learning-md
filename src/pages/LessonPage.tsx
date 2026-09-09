@@ -5,7 +5,8 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ReaderShell } from "@/components/layout/ReaderShell";
 import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
 import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
-import { lessonNeighbours } from "@/features/progress/metrics";
+import { useReadingScroll } from "@/features/reading/useReadingScroll";
+import { lessonNeighbours, lessonScrollRatio } from "@/features/progress/metrics";
 import { useProgressActions } from "@/features/progress/useProgress";
 import { findFolder, findLesson, lessonPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
@@ -15,7 +16,7 @@ export function LessonPage() {
   const { t } = useTranslation();
   const { theme } = useReaderTheme();
   const { lessonLabel, folderLabel } = useContentLabels();
-  const { completeLesson, resetLesson, getProgressSnapshot } = useProgressActions();
+  const { completeLesson, resetLesson, getProgressSnapshot, setLessonScroll } = useProgressActions();
 
   const lesson = findLesson(section, folder, slug);
   const parent = findFolder(section, folder);
@@ -28,15 +29,17 @@ export function LessonPage() {
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    if (lesson) setCompleted(Boolean(getProgressSnapshot().lessons[lesson.id]));
+    if (lesson) setCompleted(Boolean(getProgressSnapshot().lessons[lesson.id]?.completedAt));
   }, [lesson, getProgressSnapshot]);
 
-  // The scroll container is a new element per lesson only in spirit — React
-  // reuses it across a prev/next navigation, so the reset has to be explicit.
   const scroller = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    scroller.current?.scrollTo({ top: 0 });
-  }, [slug, folder, section]);
+  const savedRatio = lesson ? lessonScrollRatio(getProgressSnapshot(), lesson.id) : 0;
+
+  useReadingScroll(scroller, {
+    lessonId: lesson?.id ?? "",
+    scrollRatio: savedRatio,
+    setLessonScroll,
+  });
 
   if (!lesson || !parent) return <Navigate to="/not-found" replace />;
 

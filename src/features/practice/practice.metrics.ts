@@ -1,3 +1,4 @@
+import { isCompleted } from "@/features/progress/metrics";
 import type { Lesson } from "@/lib/content.types";
 import type { ProgressState } from "@/features/progress/progress.types";
 import type { InterviewQuestion } from "@/features/practice/questions";
@@ -71,7 +72,7 @@ export function questionStatus(state: PracticeState, questionId: string): Questi
 function completedQuestionIds(progress: ProgressState, questions: InterviewQuestion[]): Set<string> {
   return new Set(
     questions
-      .filter((question) => Boolean(progress.lessons[question.lessonId]))
+      .filter((question) => isCompleted(progress, question.lessonId))
       .map((question) => question.id),
   );
 }
@@ -127,7 +128,7 @@ export function practiceSummary(
 ): PracticeSummary {
   const today = dayKey(now);
   const tomorrow = shiftDay(today, 1);
-  const available = questions.filter((question) => Boolean(progress.lessons[question.lessonId]));
+  const available = questions.filter((question) => isCompleted(progress, question.lessonId));
   const statuses = available.map((question) => ({ question, status: questionStatus(state, question.id) }));
   const todayAttempts = Object.values(state.attempts).filter((attempt) => attempt.studyDate === today).length;
   const due = statuses.filter(({ status }) => status.attempts > 0 && Boolean(status.dueDate && status.dueDate <= today)).length;
@@ -161,7 +162,7 @@ export const lessonDateActivity = (progress: ProgressState, lessons: Lesson[], n
   const counts = new Map<string, number>();
   for (const lesson of lessons) {
     const completed = progress.lessons[lesson.id];
-    if (!completed) continue;
+    if (!completed?.completedAt) continue;
     const date = dayKey(new Date(completed.completedAt));
     counts.set(date, (counts.get(date) ?? 0) + 1);
   }

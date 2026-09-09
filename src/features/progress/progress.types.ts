@@ -1,11 +1,11 @@
 /**
- * A lesson is either done or not — there is no partial state to track, which is
- * the whole difference between this viewer and a reader that remembers where
- * you stopped. `updatedAt` exists only so two tabs can be reconciled.
+ * A lesson may be unread, in progress (scroll position saved) or done. `updatedAt`
+ * exists so two tabs can be reconciled; `scrollRatio` is 0..1 of the reader scroll.
  */
 export interface LessonProgress {
-  completedAt: string;
+  completedAt: string | null;
   updatedAt: string;
+  scrollRatio: number;
 }
 
 export interface ProgressState {

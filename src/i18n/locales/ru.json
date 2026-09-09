@@ -67,7 +67,8 @@
   "lesson": {
     "complete": "Отметить пройденным",
     "completed": "Пройдено",
-    "markUnread": "Снять отметку"
+    "markUnread": "Снять отметку",
+    "readingProgress": "Прогресс чтения: {{title}}"
   },
   "reader": {
     "position": "{{position}} из {{total}}",

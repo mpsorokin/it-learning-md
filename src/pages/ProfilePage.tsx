@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { TallyRow } from "@/components/ui/TallyCard";
-import { getLastCompleted, overallProgress, sectionProgress } from "@/features/progress/metrics";
+import { getLastCompleted, isCompleted, overallProgress, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
 import { interviewQuestions } from "@/features/practice/questions";
 import { practiceSummary } from "@/features/practice/practice.metrics";
@@ -58,7 +58,7 @@ export function ProfilePage() {
       <Link className="practice-profile-card" to="/practice">
         <div className="practice-profile-card__header">
           <span><Cards size={18} aria-hidden="true" /> {t("profile.questionsLearned")}</span>
-          <strong>{practiceStats.mastered} / {interviewQuestions.filter((question) => Boolean(progress.lessons[question.lessonId])).length}</strong>
+          <strong>{practiceStats.mastered} / {interviewQuestions.filter((question) => isCompleted(progress, question.lessonId)).length}</strong>
         </div>
         <div className="practice-profile-card__stats">
           <span><Fire size={16} aria-hidden="true" /> {t("profile.currentStreak")}</span>

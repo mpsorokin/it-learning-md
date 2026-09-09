@@ -67,17 +67,21 @@
 .lesson-list {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   list-style: none;
-  border-top: 1px solid var(--color-hairline);
 }
 
 .lesson-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 11px;
-  min-height: 57px;
-  padding: 11px 2px;
-  border-bottom: 1px solid var(--color-hairline);
+  padding: 16px;
+  border-radius: var(--radius-row);
+  transition: border-color var(--duration-fast) ease;
+}
+
+.lesson-row:hover {
+  border-color: var(--color-accent);
 }
 
 .lesson-row:hover .lesson-row__title {
@@ -101,6 +105,14 @@
 .lesson-row--done .lesson-row__mark {
   background: var(--color-done);
   color: var(--color-gold-dim);
+}
+
+.lesson-row__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
 }
 
 .lesson-row__title {

@@ -1,11 +1,20 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { mergeRecords, subscribeToStorage } from "@/lib/storage";
-import { clearProgress, parseProgressState, PROGRESS_STORAGE_KEY, readProgress, writeProgress } from "@/features/progress/progress.storage";
+import { clamp01 } from "@/lib/num";
+import { subscribeToStorage } from "@/lib/storage";
+import {
+  clearProgress,
+  mergeProgressLessons,
+  parseProgressState,
+  PROGRESS_STORAGE_KEY,
+  readProgress,
+  writeProgress,
+} from "@/features/progress/progress.storage";
 import { emptyProgress, type ProgressState } from "@/features/progress/progress.types";
 
 export interface ProgressActions {
   completeLesson: (id: string) => void;
   resetLesson: (id: string) => void;
+  setLessonScroll: (id: string, ratio: number) => void;
   replaceProgress: (state: ProgressState) => void;
   resetAll: () => void;
   /** The live value without subscribing — used by the reader to seed local state. */
@@ -37,16 +46,54 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     () => ({
       completeLesson: (id) => {
         const now = new Date().toISOString();
+        const existing = ref.current.lessons[id];
         // Re-ticking an already-finished lesson must not move its completedAt:
         // "last completed" would otherwise jump around on a re-read.
-        if (ref.current.lessons[id]) return;
-        commit({ ...ref.current, lessons: { ...ref.current.lessons, [id]: { completedAt: now, updatedAt: now } } });
+        if (existing?.completedAt) return;
+        commit({
+          ...ref.current,
+          lessons: {
+            ...ref.current.lessons,
+            [id]: {
+              completedAt: now,
+              updatedAt: now,
+              scrollRatio: 1,
+            },
+          },
+        });
       },
       resetLesson: (id) => {
-        if (!ref.current.lessons[id]) return;
-        const lessons = { ...ref.current.lessons };
-        delete lessons[id];
-        commit({ ...ref.current, lessons });
+        const existing = ref.current.lessons[id];
+        if (!existing?.completedAt) return;
+        const now = new Date().toISOString();
+        commit({
+          ...ref.current,
+          lessons: {
+            ...ref.current.lessons,
+            [id]: {
+              completedAt: null,
+              updatedAt: now,
+              scrollRatio: existing.scrollRatio,
+            },
+          },
+        });
+      },
+      setLessonScroll: (id, ratio) => {
+        const existing = ref.current.lessons[id];
+        if (existing?.completedAt) return;
+        const now = new Date().toISOString();
+        const scrollRatio = clamp01(ratio);
+        commit({
+          ...ref.current,
+          lessons: {
+            ...ref.current.lessons,
+            [id]: {
+              completedAt: null,
+              updatedAt: now,
+              scrollRatio,
+            },
+          },
+        });
       },
       replaceProgress: (next) => commit(next),
       resetAll: () => {
@@ -74,7 +121,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
           if (!incoming) return;
           const merged: ProgressState = {
             version: 1,
-            lessons: mergeRecords(ref.current.lessons, incoming.lessons),
+            lessons: mergeProgressLessons(ref.current.lessons, incoming.lessons),
           };
           ref.current = merged;
           setState(merged);

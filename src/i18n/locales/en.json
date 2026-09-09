@@ -63,7 +63,8 @@
   "lesson": {
     "complete": "Mark as done",
     "completed": "Done",
-    "markUnread": "Mark as not done"
+    "markUnread": "Mark as not done",
+    "readingProgress": "Reading progress for {{title}}"
   },
   "reader": {
     "position": "{{position}} of {{total}}",

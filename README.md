@@ -42,9 +42,11 @@ megabyte of markdown, switch the bodies to a lazy glob.
 
 ## Progress
 
-A lesson is done or not done — there is no partial state. Pressing **Mark as
-done** in the reader writes to `localStorage` under `ittheory:progress:v1`;
-folder and section bars are counted from that.
+Each lesson tracks reading position (scroll ratio) and completion separately.
+Opening a lesson saves where you stopped; the folder screen shows a bar on each
+lesson card. Pressing **Mark as done** in the reader marks it finished. All of
+this lives in `localStorage` under `ittheory:progress:v1`; folder and section
+bars count completed lessons only.
 
 `src/lib/storage.ts` is deliberately paranoid: the browser is the only place
 this data lives, so a blob it cannot parse — a future schema, a bad write from

@@ -1,5 +1,5 @@
 import type { Folder, Lesson, Section } from "@/lib/content.types";
-import type { ProgressState } from "@/features/progress/progress.types";
+import type { LessonProgress, ProgressState } from "@/features/progress/progress.types";
 
 /**
  * Pure functions over `(progress, content)`. Nothing here touches storage or
@@ -34,13 +34,23 @@ const shiftLocalDay = (dateString: string, days: number): string => {
   return localDayKey(date);
 };
 
+const lessonEntry = (progress: ProgressState, lessonId: string): LessonProgress | undefined =>
+  progress.lessons[lessonId];
+
 const tally = (lessons: Lesson[], progress: ProgressState): Tally => {
-  const done = lessons.reduce((count, lesson) => (progress.lessons[lesson.id] ? count + 1 : count), 0);
+  const done = lessons.reduce((count, lesson) => (isCompleted(progress, lesson.id) ? count + 1 : count), 0);
   return { done, total: lessons.length, ratio: lessons.length === 0 ? 1 : done / lessons.length };
 };
 
 export const isCompleted = (progress: ProgressState, lessonId: string): boolean =>
-  Boolean(progress.lessons[lessonId]);
+  Boolean(lessonEntry(progress, lessonId)?.completedAt);
+
+export const lessonScrollRatio = (progress: ProgressState, lessonId: string): number => {
+  const entry = lessonEntry(progress, lessonId);
+  if (!entry) return 0;
+  if (entry.completedAt) return 1;
+  return entry.scrollRatio;
+};
 
 export const folderProgress = (progress: ProgressState, folder: Folder): Tally => tally(folder.lessons, progress);
 
@@ -60,8 +70,8 @@ export function readingHistory(
   const today = localDayKey(now);
   const firstDay = shiftLocalDay(today, -27);
   const completedDates = lessons.flatMap((lesson) => {
-    const completed = progress.lessons[lesson.id];
-    if (!completed) return [];
+    const completed = lessonEntry(progress, lesson.id);
+    if (!completed?.completedAt) return [];
     return [{ date: localDayKey(new Date(completed.completedAt)) }];
   });
   const counts = new Map<string, number>();
@@ -88,15 +98,15 @@ export function readingHistory(
  * is left over once every lesson is done, so callers hide the entry point.
  */
 export const getNextLesson = (progress: ProgressState, lessons: Lesson[]): Lesson | undefined =>
-  lessons.find((lesson) => !progress.lessons[lesson.id]);
+  lessons.find((lesson) => !isCompleted(progress, lesson.id));
 
 /** The most recently ticked lesson, by `completedAt`. */
 export function getLastCompleted(progress: ProgressState, lessons: Lesson[]): Lesson | undefined {
   let best: Lesson | undefined;
   let bestAt = "";
   for (const lesson of lessons) {
-    const entry = progress.lessons[lesson.id];
-    if (entry && entry.completedAt > bestAt) {
+    const entry = lessonEntry(progress, lesson.id);
+    if (entry?.completedAt && entry.completedAt > bestAt) {
       best = lesson;
       bestAt = entry.completedAt;
     }

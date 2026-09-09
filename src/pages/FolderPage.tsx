@@ -1,14 +1,14 @@
-import { Check } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
+import { LessonRow } from "@/components/ui/LessonRow";
 import { TallyCard } from "@/components/ui/TallyCard";
-import { folderProgress, isCompleted } from "@/features/progress/metrics";
+import { folderProgress, isCompleted, lessonScrollRatio } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
 import { findFolder, lessonPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
-/** The lessons inside one folder — a flat, ticked list. */
+/** The lessons inside one folder — one card per lesson with reading progress. */
 export function FolderPage() {
   const { section = "", folder: slug = "" } = useParams();
   const { t } = useTranslation();
@@ -31,15 +31,18 @@ export function FolderPage() {
       <ol className="lesson-list">
         {folder.lessons.map((lesson, index) => {
           const done = isCompleted(progress, lesson.id);
+          const ratio = lessonScrollRatio(progress, lesson.id);
           return (
             <li key={lesson.id}>
-              <Link className={`lesson-row ${done ? "lesson-row--done" : ""}`} to={lessonPath(lesson)}>
-                <span className="lesson-row__mark" aria-hidden="true">
-                  {done ? <Check size={13} weight="bold" /> : String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="lesson-row__title">{lessonLabel(lesson)}</span>
-                {done && <span className="visually-hidden">{t("lesson.completed")}</span>}
-              </Link>
+              <LessonRow
+                to={lessonPath(lesson)}
+                title={lessonLabel(lesson)}
+                index={index}
+                done={done}
+                ratio={ratio}
+                progressLabel={t("lesson.readingProgress", { title: lessonLabel(lesson) })}
+                completedLabel={t("lesson.completed")}
+              />
             </li>
           );
         })}
