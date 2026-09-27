@@ -12,7 +12,24 @@ export interface Lesson {
   slug: string;
   title: string;
   order: number;
-  body: string;
+  /** Source path for the lazy Vite glob, not a URL. */
+  sourcePath: string;
+  questionCount: number;
+}
+
+export interface SearchIndexEntry {
+  lessonId: string;
+  text: string;
+}
+
+export interface InterviewQuestionMeta {
+  id: string;
+  lessonId: string;
+  section: string;
+  folder: string;
+  prompt: string;
+  promptBody: string;
+  hasAnswer: boolean;
 }
 
 export interface Folder {

@@ -1,4 +1,4 @@
-import { ArrowRight } from "@phosphor-icons/react";
+import { ArrowRight } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
@@ -6,11 +6,11 @@ import { ContentRow } from "@/components/ui/ContentRow";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { getNextLesson, overallProgress, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
-import { interviewQuestions } from "@/features/practice/questions";
-import { practiceSummary } from "@/features/practice/practice.metrics";
+import { practiceOverviewSummary } from "@/features/practice/practice.metrics";
 import { usePracticeState } from "@/features/practice/usePractice";
 import { findFolder, lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
+import { fullstackInterviewFlow } from "@/features/flows/flow";
 
 export function OverviewPage() {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ export function OverviewPage() {
   const overall = overallProgress(progress, orderedLessons);
   const next = getNextLesson(progress, orderedLessons);
   const nextFolder = next && findFolder(next.section, next.folder);
-  const practiceStats = practiceSummary(progress, practice, interviewQuestions);
+  const practiceStats = practiceOverviewSummary(progress, practice);
 
   return (
     <AppShell>
@@ -65,7 +65,7 @@ export function OverviewPage() {
           return (
             <li key={section.slug}>
               <ContentRow
-                to={`/s/${section.slug}`}
+                to={section.slug === fullstackInterviewFlow.section ? `/flows/${fullstackInterviewFlow.id}` : `/s/${section.slug}`}
                 title={sectionLabel(section)}
                 count={t("common.doneOfTotal", { done: tally.done, total: tally.total })}
                 ratio={tally.ratio}

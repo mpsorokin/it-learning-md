@@ -1,0 +1,64 @@
+.flow-topic-summary {
+  margin: 9px 2px 14px;
+  color: var(--color-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.flow-continue-card {
+  margin-top: 0;
+}
+
+.flow-groups {
+  margin-top: 9px;
+}
+
+.flow-group + .flow-group {
+  margin-top: 27px;
+}
+
+.flow-group .section-heading {
+  margin-top: 20px;
+}
+
+.flow-topic-group {
+  margin: 0 2px 10px;
+  text-align: center;
+}
+
+.flow-lesson-list {
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.flow-lesson-list__item {
+  min-width: 0;
+}
+
+.flow-lesson-list__meta {
+  display: block;
+  margin: -4px 12px 2px 53px;
+  color: var(--color-muted);
+  font-size: 10px;
+}
+
+.flow-question + .flow-question {
+  margin-top: 28px;
+  padding-top: 26px;
+  border-top: 1px solid var(--r-line);
+}
+
+.flow-question__answer-heading {
+  margin: 18px 0 8px;
+  color: var(--r-muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.flow-question__empty-answer {
+  margin: 0;
+  color: var(--r-muted);
+  font-size: 12px;
+  font-style: italic;
+}

@@ -1146,3 +1146,13 @@ cache[(user_id, action)] = value
 И главное отличие от TypeScript:
 
 > Python tuple — отдельный immutable runtime object, а TypeScript tuple в runtime остаётся обычным JavaScript Array.
+
+## Interview questions
+
+### Чем tuple полезен помимо хранения нескольких значений?
+
+Tuple подходит для фиксированной позиционной структуры: например, пары координат или набора значений, возвращаемых функцией. Его элементы можно распаковать по позициям, а сам tuple нельзя менять после создания.
+
+### Всегда ли tuple можно использовать как dictionary key?
+
+Нет. Tuple hashable только если hashable все его элементы. Tuple, содержащий list, например, нельзя использовать как key или элемент set.

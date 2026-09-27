@@ -1,4 +1,9 @@
-import { Cards, ChartBar, CheckCircle, Fire, Gear, Stack } from "@phosphor-icons/react";
+import { Cards } from "@phosphor-icons/react/dist/csr/Cards";
+import { ChartBar } from "@phosphor-icons/react/dist/csr/ChartBar";
+import { CheckCircle } from "@phosphor-icons/react/dist/csr/CheckCircle";
+import { Fire } from "@phosphor-icons/react/dist/csr/Fire";
+import { Gear } from "@phosphor-icons/react/dist/csr/Gear";
+import { Stack } from "@phosphor-icons/react/dist/csr/Stack";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";

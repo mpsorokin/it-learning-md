@@ -16,6 +16,7 @@
   --r-bg: var(--color-app);
   --r-text: var(--color-text);
   --r-muted: var(--color-muted);
+  --r-accent: var(--color-gold);
   --r-line: var(--color-hairline);
   --r-scroll-thumb: var(--color-subtle);
   --r-code-bg: var(--color-reader-frame);

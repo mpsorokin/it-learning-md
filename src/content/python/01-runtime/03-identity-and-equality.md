@@ -1502,3 +1502,13 @@ value is None
 ```
 
 И не нужно делать выводы из того, что CPython иногда reuse integers или strings — caching и interning являются runtime optimizations, а не заменой normal equality semantics.
+
+## Interview questions
+
+### Чем отличаются `==` и `is`?
+
+`==` проверяет equality значений согласно реализации сравнения objects. `is` проверяет identity: ссылаются ли оба выражения на один и тот же object.
+
+### Когда обычно следует использовать `is`?
+
+Типичный случай — сравнение с singleton `None`: `value is None`. Для сравнения обычных значений используй `==`; не полагайся на interning или повторное использование объектов в CPython.

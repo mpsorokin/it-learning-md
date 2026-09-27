@@ -72,6 +72,17 @@
   line-height: 1.08;
 }
 
+.practice-question-card__prompt-body {
+  margin-top: 16px;
+  color: var(--color-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.practice-question-card__prompt-body .markdown-viewer > *:first-child {
+  margin-top: 0;
+}
+
 .practice-question-card__hint {
   margin-top: auto;
   color: var(--color-faint);

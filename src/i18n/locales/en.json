@@ -49,13 +49,38 @@
     "emptyEyebrow": "Practice unlocks after reading",
     "emptyTitle": "No questions yet",
     "emptyDescription": "Finish a lesson to add its interview questions to your practice queue.",
-    "openLibrary": "Open library"
+    "openLibrary": "Open library",
+    "retryAnswer": "Try loading the answer again"
   },
   "library": {
+    "filters": "Library view",
+    "allContent": "All content",
     "folderCount_one": "{{count}} folder",
     "folderCount_other": "{{count}} folders",
     "lessonCount_one": "{{count}} lesson",
     "lessonCount_other": "{{count}} lessons"
+  },
+  "search": {
+    "title": "Search lessons",
+    "open": "Search lessons",
+    "label": "Search lesson text",
+    "placeholder": "Search lessons and code…",
+    "hint": "Search across lesson text and code examples.",
+    "resultCount_one": "{{count}} lesson found",
+    "resultCount_other": "{{count}} lessons found",
+    "noResults": "No lessons match this search.",
+    "loadError": "Search could not be loaded. Check your connection and try again."
+  },
+  "study": {
+    "addBookmark": "Add bookmark",
+    "removeBookmark": "Remove bookmark",
+    "bookmarks": "Bookmarked lessons",
+    "noBookmarks": "Bookmarked lessons will appear here.",
+    "noteTitle": "My notes",
+    "notePlaceholder": "Write a note for this lesson…",
+    "noteSaved": "Saved in this browser",
+    "noteSaving": "Saving…",
+    "noteError": "Could not save. Free up browser storage and try again."
   },
   "section": {
     "progress": "Progress"
@@ -74,7 +99,10 @@
     "code": "code",
     "copy": "Copy",
     "copied": "Copied",
-    "copyCode": "Copy the code block"
+    "copyCode": "Copy the code block",
+    "loading": "Loading lesson…",
+    "loadError": "This lesson could not be loaded.",
+    "retry": "Try again"
   },
   "profile": {
     "completed": "Lessons completed",
@@ -157,6 +185,42 @@
     "appUpdatedDescription": "This tab is running an older build. Reload to pick up the new one.",
     "reload": "Reload"
   },
+  "offline": {
+    "ready": "This app is ready to work offline.",
+    "updateAvailable": "An update is ready to install.",
+    "installUpdate": "Update now",
+    "dismiss": "Later"
+  },
+  "flows": {
+      "progress": "Route progress",
+      "subtopicsDoneOfTotal": "Completed {{done}} of {{total}} subtopics",
+    "topicsDoneOfTotal": "Topics completed: {{done}} / {{total}}",
+    "continue": "Continue",
+    "answer": "Answer",
+    "answerNotAdded": "Answer not added yet.",
+    "topicProgress": "Subtopics completed in this topic",
+    "topicMeta": "{{subtopics}} subtopics · {{questions}} questions",
+    "topicCount_one": "{{count}} topic",
+    "topicCount_other": "{{count}} topics",
+    "questionCount_one": "{{count}} question",
+    "questionCount_other": "{{count}} questions",
+    "noTopics": "No topics are available yet.",
+    "noSubtopics": "No subtopics are available yet.",
+      "state": {
+        "notStarted": "Not started",
+        "inProgress": "In progress",
+        "completed": "Completed"
+      },
+    "groups": {
+      "jsTs": "JavaScript and TypeScript",
+      "browser": "Browser",
+      "react": "React",
+      "next": "Next.js",
+      "backendSecurity": "Backend and security",
+      "dataSystemDesign": "Data and system design",
+      "deliverySeniorPractice": "Delivery and senior practice"
+    }
+  },
   "content": {
     "typescript": {
       "title": "TypeScript",
@@ -165,6 +229,57 @@
       "03-generics": { "title": "Generics" },
       "04-advanced-types": { "title": "Advanced Types" },
       "05-practical": { "title": "Practical TypeScript" }
+    },
+    "python": {
+      "title": "Python",
+      "01-runtime": { "title": "Runtime" },
+      "02-collectiions-and-data-structures": { "title": "Collections and data structures" },
+      "03-control-flow": { "title": "Control flow" }
+    },
+    "fullstack-interview": {
+      "title": "Full-stack Interview",
+      "01-js-runtime": { "title": "JavaScript Runtime and Execution Model" },
+      "02-js-objects-prototypes-oop": { "title": "JavaScript Objects, Prototypes, and OOP" },
+      "03-typescript-core": { "title": "TypeScript Core" },
+      "04-typescript-advanced": { "title": "Advanced TypeScript" },
+      "05-typescript-runtime-boundary": { "title": "TypeScript Runtime Boundary" },
+      "06-browser-internals": { "title": "Browser Internals" },
+      "07-browser-performance-web-vitals": { "title": "Browser Performance and Web Vitals" },
+      "08-react-rendering-model": { "title": "React Rendering Model" },
+      "09-react-state": { "title": "React State" },
+      "10-react-effects": { "title": "React Effects" },
+      "11-react-closures": { "title": "React Closures" },
+      "12-react-hooks-mechanics": { "title": "React Hooks Mechanics" },
+      "13-react-memoization-performance": { "title": "React Memoization and Performance" },
+      "14-context": { "title": "React Context" },
+      "15-react-portals": { "title": "React Portals" },
+      "16-react-concurrent-rendering": { "title": "React Concurrent Rendering" },
+      "17-data-fetching-react": { "title": "Data Fetching in React" },
+      "18-code-review": { "title": "Code Review" },
+      "19-react-application-architecture": { "title": "React Application Architecture" },
+      "20-next-rendering": { "title": "Next.js Rendering" },
+      "21-next-data-fetching-cache": { "title": "Next.js Data Fetching and Cache" },
+      "22-next-server-actions": { "title": "Next.js Server Actions" },
+      "23-next-routing": { "title": "Next.js Routing" },
+      "24-nodejs-runtime": { "title": "Node.js Runtime" },
+      "25-nestjs-architecture": { "title": "NestJS Architecture" },
+      "26-nestjs-request-lifecycle": { "title": "NestJS Request Lifecycle" },
+      "27-nestjs-authentication-authorization": { "title": "NestJS Authentication and Authorization" },
+      "28-http-rest-api-design": { "title": "HTTP and REST API Design" },
+      "29-websocket-sse": { "title": "WebSocket and SSE" },
+      "30-web-security": { "title": "Web Security" },
+      "31-databases-sql-postgresql": { "title": "Databases, SQL, and PostgreSQL" },
+      "32-orm-typeorm": { "title": "ORM and TypeORM" },
+      "33-redis": { "title": "Redis" },
+      "34-ddd": { "title": "Domain-Driven Design" },
+      "35-cqrs": { "title": "CQRS" },
+      "36-microservices": { "title": "Microservices" },
+      "37-system-design": { "title": "System Design" },
+      "38-docker": { "title": "Docker" },
+      "39-ci-cd": { "title": "CI/CD" },
+      "40-full-stack-machine-coding": { "title": "Full-stack Machine Coding" },
+      "41-production-debugging": { "title": "Production Debugging" },
+      "42-architecture-engineering-judgment": { "title": "Architecture and Engineering Judgment" }
     }
   }
 }

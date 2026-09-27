@@ -1447,3 +1447,13 @@ equality
 И главное отличие после JavaScript:
 
 > Python dictionary — не просто JS Object с другим syntax. Его keys являются полноценными hashable Python objects, поэтому `10` и `"10"` могут быть разными keys, а tuple может использоваться как composite key.
+
+## Interview questions
+
+### Какие объекты можно использовать как keys в `dict`?
+
+Keys должны быть hashable. Для корректного поведения dictionary равные keys должны иметь одинаковый hash; поэтому lookup опирается на hash и equality.
+
+### Сохраняет ли Python dictionary порядок добавления keys?
+
+Да, современные Python dictionaries сохраняют insertion order. При повторном присваивании существующему key его позиция не перемещается, а значение обновляется.

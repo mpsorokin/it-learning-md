@@ -2273,3 +2273,13 @@ Indentation является частью syntax.
 И самое важное:
 
 > Python стоит воспринимать не как упрощённый JavaScript, а как отдельный runtime и object model со своими правилами.
+
+## Interview questions
+
+### Как CPython исполняет Python-код?
+
+CPython сначала разбирает source code и строит AST, затем компилирует его в Python bytecode и исполняет этот bytecode своей virtual machine. Это точнее, чем просто называть Python interpreted language.
+
+### Является ли `.pyc` native executable?
+
+Нет. `.pyc` хранит cached bytecode, но для его исполнения нужен совместимый Python runtime; это не машинный код для CPU.

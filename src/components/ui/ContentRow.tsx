@@ -1,4 +1,4 @@
-import { CaretRight } from "@phosphor-icons/react";
+import { CaretRight } from "@phosphor-icons/react/dist/csr/CaretRight";
 import { Link } from "react-router-dom";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 

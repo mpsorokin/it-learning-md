@@ -29,6 +29,11 @@ function preserveUnreadable(key: string, raw: string): void {
   }
 }
 
+/** Preserve an unreadable value received from another tab before later writes replace it. */
+export function preserveStoredRaw(key: string, raw: string): void {
+  preserveUnreadable(key, raw);
+}
+
 /**
  * Reads and validates one store. `parse` returns `null` for anything it does not
  * recognise — including a future schema version — which triggers the backup.
@@ -53,11 +58,13 @@ export function readStored<T>(key: string, parse: (value: unknown) => T | null, 
   return fallback();
 }
 
-export function writeStored(key: string, value: unknown): void {
+export function writeStored(key: string, value: unknown): boolean {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch {
     // Private browsing or a full quota must not break the current session.
+    return false;
   }
 }
 

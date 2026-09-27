@@ -1,11 +1,15 @@
-import { ArrowCounterClockwise, Check, Flame, TrendUp, Waveform } from "@phosphor-icons/react";
+import { ArrowCounterClockwise } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
+import { Check } from "@phosphor-icons/react/dist/csr/Check";
+import { Flame } from "@phosphor-icons/react/dist/csr/Flame";
+import { TrendUp } from "@phosphor-icons/react/dist/csr/TrendUp";
+import { Waveform } from "@phosphor-icons/react/dist/csr/Waveform";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
 import { useProgressState } from "@/features/progress/useProgress";
-import { interviewQuestions, interviewQuestionsById } from "@/features/practice/questions";
+import { interviewQuestions, interviewQuestionsById, loadInterviewAnswer } from "@/features/practice/questions";
 import { practiceQueue, practiceSummary } from "@/features/practice/practice.metrics";
 import { usePracticeActions, usePracticeState } from "@/features/practice/usePractice";
 import type { PracticeRating } from "@/features/practice/practice.types";
@@ -28,6 +32,7 @@ export function PracticePage() {
   );
   const [sessionTarget, setSessionTarget] = useState(() => Math.min(practice.dailyGoal, initialQueue.length));
   const [revealed, setRevealed] = useState(false);
+  const [answerState, setAnswerState] = useState<{ questionId: string; answer: string; loading: boolean; failed: boolean } | null>(null);
   const summary = useMemo(
     () => practiceSummary(progress, practice, interviewQuestions),
     [practice, progress],
@@ -46,6 +51,21 @@ export function PracticePage() {
       return rating === "again" && head ? [...rest, head] : rest;
     });
   };
+
+  const reveal = async () => {
+    if (!current) return;
+    const questionId = current.id;
+    setAnswerState({ questionId, answer: "", loading: true, failed: false });
+    try {
+      const answer = await loadInterviewAnswer(questionId);
+      setAnswerState({ questionId, answer, loading: false, failed: false });
+      setRevealed(true);
+    } catch {
+      setAnswerState({ questionId, answer: "", loading: false, failed: true });
+    }
+  };
+
+  const answer = answerState?.questionId === current?.id ? answerState : null;
 
   const restart = () => {
     const next = practiceQueue(progress, practice, interviewQuestions).slice(0, practice.dailyGoal);
@@ -86,23 +106,36 @@ export function PracticePage() {
                   {sectionLabel(current.section)} · {currentFolder ? folderLabel(currentFolder) : current.folder}
                 </p>
                 <h2>{current.prompt}</h2>
+                {current.promptBody && (
+                  <div className="practice-question-card__prompt-body">
+                    <MarkdownViewer body={current.promptBody} />
+                  </div>
+                )}
                 <p className="practice-question-card__hint">{t("practice.answerAloud")}</p>
               </>
             ) : (
               <>
                 <p className="eyebrow">{t("practice.answerLabel")}</p>
                 <h2>{current.prompt}</h2>
+                {current.promptBody && (
+                  <div className="practice-question-card__prompt-body">
+                    <MarkdownViewer body={current.promptBody} />
+                  </div>
+                )}
                 <div className="practice-answer">
-                  <MarkdownViewer body={current.answer} />
+                  <MarkdownViewer body={answer?.answer ?? ""} />
                 </div>
               </>
             )}
           </article>
 
           {!revealed ? (
-            <button className="practice-reveal-button" type="button" onClick={() => setRevealed(true)}>
-              {t("practice.showAnswer")}
-            </button>
+            <>
+              <button className="practice-reveal-button" type="button" onClick={reveal} disabled={answer?.loading}>
+                {answer?.loading ? t("reader.loading") : answer?.failed ? t("practice.retryAnswer") : t("practice.showAnswer")}
+              </button>
+              {answer?.failed && <p className="practice-answer-error" role="alert">{t("reader.loadError")}</p>}
+            </>
           ) : (
             <div className="practice-rating-grid" aria-label={t("practice.rateLabel")}>
               <button type="button" className="practice-rating" onClick={() => rate("again")}>

@@ -1,0 +1,36 @@
+.offline-notice {
+  position: fixed;
+  z-index: 10;
+  right: 16px;
+  bottom: calc(90px + env(safe-area-inset-bottom));
+  left: 16px;
+  max-width: 488px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto;
+  padding: 12px 14px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-app);
+  font-size: 11px;
+}
+
+.offline-notice span {
+  flex: 1;
+}
+
+.offline-notice button {
+  color: var(--color-gold-bright);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.practice-answer-error {
+  margin-top: 9px;
+  color: var(--color-danger);
+  font-size: 11px;
+  text-align: center;
+}

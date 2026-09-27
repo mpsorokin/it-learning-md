@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Check, Copy } from "@phosphor-icons/react";
+import { Check } from "@phosphor-icons/react/dist/csr/Check";
+import { Copy } from "@phosphor-icons/react/dist/csr/Copy";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Markdown, { type Components } from "react-markdown";

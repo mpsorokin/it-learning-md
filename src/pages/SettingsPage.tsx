@@ -1,5 +1,9 @@
 import { useRef } from "react";
-import { DownloadSimple, Globe, Moon, Trash, UploadSimple } from "@phosphor-icons/react";
+import { DownloadSimple } from "@phosphor-icons/react/dist/csr/DownloadSimple";
+import { Globe } from "@phosphor-icons/react/dist/csr/Globe";
+import { Moon } from "@phosphor-icons/react/dist/csr/Moon";
+import { Trash } from "@phosphor-icons/react/dist/csr/Trash";
+import { UploadSimple } from "@phosphor-icons/react/dist/csr/UploadSimple";
 import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/layout/AppShell";
 import {
@@ -10,6 +14,7 @@ import {
 import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
 import { READER_THEMES, type ReaderTheme } from "@/features/reading/readerTheme";
 import { useProgressActions } from "@/features/progress/useProgress";
+import { useStudyActions, useStudyState } from "@/features/study/useStudy";
 import { usePracticeActions, usePracticeState } from "@/features/practice/usePractice";
 import type { PracticeDailyGoal } from "@/features/practice/practice.types";
 import { DEFAULT_LOCALE, isAppLocale, SUPPORTED_LOCALES } from "@/i18n/locale.types";
@@ -18,6 +23,8 @@ export function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useReaderTheme();
   const { getProgressSnapshot, replaceProgress, resetAll } = useProgressActions();
+  const study = useStudyState();
+  const { replaceStudy } = useStudyActions();
   const practice = usePracticeState();
   const { getPracticeSnapshot, replacePractice, resetPractice, setDailyGoal } = usePracticeActions();
   const fileInput = useRef<HTMLInputElement>(null);
@@ -25,7 +32,7 @@ export function SettingsPage() {
   const currentLocale = isAppLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE;
 
   const handleExport = () => {
-    downloadProgressBackup(createProgressBackup(getProgressSnapshot(), getPracticeSnapshot()));
+    downloadProgressBackup(createProgressBackup(getProgressSnapshot(), getPracticeSnapshot(), study));
   };
 
   const handleImport = async (file: File) => {
@@ -43,6 +50,7 @@ export function SettingsPage() {
     if (!window.confirm(t("settings.importConfirm"))) return;
     replaceProgress(backup.progress);
     replacePractice(backup.practice);
+    replaceStudy(backup.study);
     window.alert(t("settings.importDone"));
   };
 

@@ -2,11 +2,26 @@ import { fileURLToPath, URL } from "node:url";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
+import { contentIndexPlugin } from "./build/contentIndexPlugin.ts";
 
 export default defineConfig({
   // Relative, so the build works from any static host subpath (GitHub Pages).
   base: "./",
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    contentIndexPlugin(),
+    react(),
+    tailwindcss(),
+    VitePWA({
+      manifest: false,
+      registerType: "prompt",
+      injectRegister: false,
+      workbox: {
+        globPatterns: ["**/*.{html,js,css,woff2,svg,png,ico,webmanifest}"],
+        maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
+      },
+    }),
+  ],
   resolve: {
     alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
   },

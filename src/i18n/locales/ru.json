@@ -49,9 +49,12 @@
     "emptyEyebrow": "Практика откроется после чтения",
     "emptyTitle": "Вопросов пока нет",
     "emptyDescription": "Завершите урок, чтобы добавить его вопросы с собеседования в очередь практики.",
-    "openLibrary": "Открыть библиотеку"
+    "openLibrary": "Открыть библиотеку",
+    "retryAnswer": "Загрузить ответ ещё раз"
   },
   "library": {
+    "filters": "Разделы библиотеки",
+    "allContent": "Все материалы",
     "folderCount_one": "{{count}} папка",
     "folderCount_few": "{{count}} папки",
     "folderCount_many": "{{count}} папок",
@@ -60,6 +63,30 @@
     "lessonCount_few": "{{count}} урока",
     "lessonCount_many": "{{count}} уроков",
     "lessonCount_other": "{{count}} уроков"
+  },
+  "search": {
+    "title": "Поиск уроков",
+    "open": "Искать уроки",
+    "label": "Поиск по тексту уроков",
+    "placeholder": "Найти в уроках и коде…",
+    "hint": "Поиск по тексту уроков и примерам кода.",
+    "resultCount_one": "Найден {{count}} урок",
+    "resultCount_few": "Найдено {{count}} урока",
+    "resultCount_many": "Найдено {{count}} уроков",
+    "resultCount_other": "Найдено {{count}} уроков",
+    "noResults": "Подходящих уроков нет.",
+    "loadError": "Не удалось загрузить поиск. Проверьте соединение и повторите попытку."
+  },
+  "study": {
+    "addBookmark": "Добавить в закладки",
+    "removeBookmark": "Убрать из закладок",
+    "bookmarks": "Закладки",
+    "noBookmarks": "Сохранённые уроки появятся здесь.",
+    "noteTitle": "Мои заметки",
+    "notePlaceholder": "Добавьте заметку к уроку…",
+    "noteSaved": "Сохранено в этом браузере",
+    "noteSaving": "Сохраняем…",
+    "noteError": "Не удалось сохранить. Освободите место в браузере и попробуйте снова."
   },
   "section": {
     "progress": "Прогресс"
@@ -78,7 +105,10 @@
     "code": "код",
     "copy": "Копировать",
     "copied": "Скопировано",
-    "copyCode": "Скопировать блок кода"
+    "copyCode": "Скопировать блок кода",
+    "loading": "Загружаем урок…",
+    "loadError": "Не удалось загрузить урок.",
+    "retry": "Попробовать ещё раз"
   },
   "profile": {
     "completed": "Уроков пройдено",
@@ -163,6 +193,46 @@
     "appUpdatedDescription": "Во вкладке открыта старая сборка. Перезагрузите страницу.",
     "reload": "Перезагрузить"
   },
+  "offline": {
+    "ready": "Приложение готово к работе без сети.",
+    "updateAvailable": "Доступно обновление приложения.",
+    "installUpdate": "Обновить",
+    "dismiss": "Позже"
+  },
+  "flows": {
+      "progress": "Прогресс маршрута",
+      "subtopicsDoneOfTotal": "Пройдено {{done}} из {{total}} подтем",
+    "topicsDoneOfTotal": "Тем завершено: {{done}} / {{total}}",
+    "continue": "Продолжить",
+    "answer": "Ответ",
+    "answerNotAdded": "Ответ пока не добавлен.",
+    "topicProgress": "Подтемы в этой теме",
+    "topicMeta": "{{subtopics}} подтем · {{questions}} вопросов",
+    "topicCount_one": "{{count}} тема",
+    "topicCount_few": "{{count}} темы",
+    "topicCount_many": "{{count}} тем",
+    "topicCount_other": "{{count}} темы",
+    "questionCount_one": "{{count}} вопрос",
+    "questionCount_few": "{{count}} вопроса",
+    "questionCount_many": "{{count}} вопросов",
+    "questionCount_other": "{{count}} вопросов",
+    "noTopics": "Темы пока недоступны.",
+    "noSubtopics": "Подтемы пока недоступны.",
+      "state": {
+        "notStarted": "Не начато",
+        "inProgress": "В работе",
+        "completed": "Пройдено"
+      },
+    "groups": {
+      "jsTs": "JavaScript и TypeScript",
+      "browser": "Браузер",
+      "react": "React",
+      "next": "Next.js",
+      "backendSecurity": "Backend и безопасность",
+      "dataSystemDesign": "Данные и проектирование систем",
+      "deliverySeniorPractice": "Доставка и практика для senior-разработчика"
+    }
+  },
   "content": {
     "typescript": {
       "title": "TypeScript",
@@ -171,6 +241,57 @@
       "03-generics": { "title": "Дженерики" },
       "04-advanced-types": { "title": "Продвинутые типы" },
       "05-practical": { "title": "TypeScript на практике" }
+    },
+    "python": {
+      "title": "Python",
+      "01-runtime": { "title": "Runtime" },
+      "02-collectiions-and-data-structures": { "title": "Коллекции и структуры данных" },
+      "03-control-flow": { "title": "Управление потоком" }
+    },
+    "fullstack-interview": {
+      "title": "Full-stack собеседование",
+      "01-js-runtime": { "title": "Среда выполнения и модель исполнения JavaScript" },
+      "02-js-objects-prototypes-oop": { "title": "Объекты, прототипы и ООП в JavaScript" },
+      "03-typescript-core": { "title": "Основы TypeScript" },
+      "04-typescript-advanced": { "title": "Продвинутый TypeScript" },
+      "05-typescript-runtime-boundary": { "title": "Граница TypeScript и runtime" },
+      "06-browser-internals": { "title": "Внутреннее устройство браузера" },
+      "07-browser-performance-web-vitals": { "title": "Производительность браузера и Web Vitals" },
+      "08-react-rendering-model": { "title": "Модель рендеринга React" },
+      "09-react-state": { "title": "Состояние в React" },
+      "10-react-effects": { "title": "Эффекты в React" },
+      "11-react-closures": { "title": "Замыкания в React" },
+      "12-react-hooks-mechanics": { "title": "Механика React Hooks" },
+      "13-react-memoization-performance": { "title": "Мемоизация и производительность React" },
+      "14-context": { "title": "React Context" },
+      "15-react-portals": { "title": "React Portals" },
+      "16-react-concurrent-rendering": { "title": "Параллельный рендеринг React" },
+      "17-data-fetching-react": { "title": "Загрузка данных в React" },
+      "18-code-review": { "title": "Ревью кода" },
+      "19-react-application-architecture": { "title": "Архитектура React-приложений" },
+      "20-next-rendering": { "title": "Рендеринг в Next.js" },
+      "21-next-data-fetching-cache": { "title": "Загрузка данных и кэш в Next.js" },
+      "22-next-server-actions": { "title": "Server Actions в Next.js" },
+      "23-next-routing": { "title": "Маршрутизация в Next.js" },
+      "24-nodejs-runtime": { "title": "Среда выполнения Node.js" },
+      "25-nestjs-architecture": { "title": "Архитектура NestJS" },
+      "26-nestjs-request-lifecycle": { "title": "Жизненный цикл запроса в NestJS" },
+      "27-nestjs-authentication-authorization": { "title": "Аутентификация и авторизация в NestJS" },
+      "28-http-rest-api-design": { "title": "Проектирование HTTP и REST API" },
+      "29-websocket-sse": { "title": "WebSocket и SSE" },
+      "30-web-security": { "title": "Безопасность веб-приложений" },
+      "31-databases-sql-postgresql": { "title": "Базы данных, SQL и PostgreSQL" },
+      "32-orm-typeorm": { "title": "ORM и TypeORM" },
+      "33-redis": { "title": "Redis" },
+      "34-ddd": { "title": "Предметно-ориентированное проектирование (DDD)" },
+      "35-cqrs": { "title": "CQRS" },
+      "36-microservices": { "title": "Микросервисы" },
+      "37-system-design": { "title": "Проектирование систем" },
+      "38-docker": { "title": "Docker" },
+      "39-ci-cd": { "title": "CI/CD" },
+      "40-full-stack-machine-coding": { "title": "Практическое full-stack задание" },
+      "41-production-debugging": { "title": "Отладка production" },
+      "42-architecture-engineering-judgment": { "title": "Архитектура и инженерное суждение" }
     }
   }
 }

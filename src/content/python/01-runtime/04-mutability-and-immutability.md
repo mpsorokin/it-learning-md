@@ -1212,3 +1212,13 @@ rebinding
 ```
 
 Особенно при functions, shared references и `+=`.
+
+## Interview questions
+
+### Что означает, что object immutable?
+
+Это означает, что состояние самого object нельзя изменить после создания. Операция, похожая на изменение immutable value, обычно создаёт другой object или приводит к новому binding имени.
+
+### Означает ли immutable tuple, что все его элементы тоже immutable?
+
+Нет. Tuple нельзя изменить структурно, но он может содержать ссылку на mutable object, например list. Поэтому immutability контейнера не гарантирует deep immutability всего object graph.

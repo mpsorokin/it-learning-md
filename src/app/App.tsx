@@ -15,6 +15,9 @@ const ProfilePage = lazy(() => import("@/pages/ProfilePage").then((m) => ({ defa
 const PracticePage = lazy(() => import("@/pages/PracticePage").then((m) => ({ default: m.PracticePage })));
 const StatsPage = lazy(() => import("@/pages/StatsPage").then((m) => ({ default: m.StatsPage })));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage").then((m) => ({ default: m.SettingsPage })));
+const SearchPage = lazy(() => import("@/pages/SearchPage").then((m) => ({ default: m.SearchPage })));
+const FlowPage = lazy(() => import("@/pages/FlowPage").then((m) => ({ default: m.FlowPage })));
+const FlowTopicPage = lazy(() => import("@/pages/FlowTopicPage").then((m) => ({ default: m.FlowTopicPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
 
 /** Hash routing: the app is deployed as static files with no server rewrites. */
@@ -25,6 +28,9 @@ export function App() {
         <Routes>
           <Route path="/" element={<OverviewPage />} />
           <Route path="/library" element={<LibraryPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/flows/:flowId" element={<FlowPage />} />
+          <Route path="/flows/:flowId/:topic" element={<FlowTopicPage />} />
           <Route path="/s/:section" element={<SectionPage />} />
           <Route path="/s/:section/:folder" element={<FolderPage />} />
           <Route path="/s/:section/:folder/:lesson" element={<LessonPage />} />

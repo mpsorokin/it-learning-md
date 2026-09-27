@@ -2,7 +2,7 @@ import { isCompleted } from "@/features/progress/metrics";
 import type { Lesson } from "@/lib/content.types";
 import type { ProgressState } from "@/features/progress/progress.types";
 import type { InterviewQuestion } from "@/features/practice/questions";
-import type { PracticeRating, PracticeState } from "@/features/practice/practice.types";
+import type { PracticeAttempt, PracticeRating, PracticeState } from "@/features/practice/practice.types";
 
 const intervals = [1, 3, 7, 14, 30];
 
@@ -27,6 +27,12 @@ export interface PracticeSummary {
   activity: Array<{ date: string; count: number }>;
 }
 
+export interface PracticeOverviewSummary {
+  today: number;
+  due: number;
+  currentStreak: number;
+}
+
 export const dayKey = (date = new Date()): string => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -41,14 +47,20 @@ export function shiftDay(dateString: string, days: number): string {
   return dayKey(date);
 }
 
-function questionAttempts(state: PracticeState, questionId: string) {
-  return Object.values(state.attempts)
-    .filter((attempt) => attempt.questionId === questionId)
-    .sort((a, b) => a.answeredAt.localeCompare(b.answeredAt) || a.updatedAt.localeCompare(b.updatedAt));
+function indexAttempts(state: PracticeState): Map<string, PracticeAttempt[]> {
+  const byQuestion = new Map<string, PracticeAttempt[]>();
+  for (const attempt of Object.values(state.attempts)) {
+    const attempts = byQuestion.get(attempt.questionId);
+    if (attempts) attempts.push(attempt);
+    else byQuestion.set(attempt.questionId, [attempt]);
+  }
+  for (const attempts of byQuestion.values()) {
+    attempts.sort((a, b) => a.answeredAt.localeCompare(b.answeredAt) || a.updatedAt.localeCompare(b.updatedAt));
+  }
+  return byQuestion;
 }
 
-export function questionStatus(state: PracticeState, questionId: string): QuestionStatus {
-  const attempts = questionAttempts(state, questionId);
+function statusFromAttempts(questionId: string, attempts: PracticeAttempt[] = []): QuestionStatus {
   let stage = 0;
   for (const attempt of attempts) {
     if (attempt.rating === "again") stage = 0;
@@ -69,6 +81,10 @@ export function questionStatus(state: PracticeState, questionId: string): Questi
   };
 }
 
+export function questionStatus(state: PracticeState, questionId: string): QuestionStatus {
+  return statusFromAttempts(questionId, indexAttempts(state).get(questionId));
+}
+
 function completedQuestionIds(progress: ProgressState, questions: InterviewQuestion[]): Set<string> {
   return new Set(
     questions
@@ -86,18 +102,18 @@ export function practiceQueue(
   const today = dayKey(now);
   const completed = completedQuestionIds(progress, questions);
   const available = questions.filter((question) => completed.has(question.id));
+  const attemptsByQuestion = indexAttempts(state);
   const ranked = available.map((question, index) => {
-    const status = questionStatus(state, question.id);
+    const status = statusFromAttempts(question.id, attemptsByQuestion.get(question.id));
     const unseen = status.attempts === 0;
     const due = !unseen && Boolean(status.dueDate && status.dueDate <= today);
-    const weak = status.lastRating === "again" || status.lastRating === "hard";
-    return { question, index, unseen, due, weak, dueDate: status.dueDate ?? "" };
+    return { question, index, unseen, due, dueDate: status.dueDate ?? "" };
   });
 
-  const actionable = ranked.filter((entry) => entry.due || entry.weak || entry.unseen);
+  const actionable = ranked.filter((entry) => entry.due || entry.unseen);
   return actionable
     .sort((a, b) => {
-      const priority = (entry: typeof a) => (entry.due ? 0 : entry.weak ? 1 : entry.unseen ? 2 : 3);
+      const priority = (entry: typeof a) => (entry.due ? 0 : 1);
       return priority(a) - priority(b) || a.dueDate.localeCompare(b.dueDate) || a.index - b.index;
     })
     .map((entry) => entry.question);
@@ -129,14 +145,24 @@ export function practiceSummary(
   const today = dayKey(now);
   const tomorrow = shiftDay(today, 1);
   const available = questions.filter((question) => isCompleted(progress, question.lessonId));
-  const statuses = available.map((question) => ({ question, status: questionStatus(state, question.id) }));
-  const todayAttempts = Object.values(state.attempts).filter((attempt) => attempt.studyDate === today).length;
+  const attempts = Object.values(state.attempts);
+  const attemptsByQuestion = indexAttempts(state);
+  const statuses = available.map((question) => ({
+    question,
+    status: statusFromAttempts(question.id, attemptsByQuestion.get(question.id)),
+  }));
+  const activityCounts = new Map<string, number>();
+  const dates = new Set<string>();
+  for (const attempt of attempts) {
+    activityCounts.set(attempt.studyDate, (activityCounts.get(attempt.studyDate) ?? 0) + 1);
+    dates.add(attempt.studyDate);
+  }
+  const todayAttempts = activityCounts.get(today) ?? 0;
   const due = statuses.filter(({ status }) => status.attempts > 0 && Boolean(status.dueDate && status.dueDate <= today)).length;
   const dueTomorrow = statuses.filter(({ status }) => status.dueDate === tomorrow).length;
-  const dates = new Set(Object.values(state.attempts).map((attempt) => attempt.studyDate));
   const activity = Array.from({ length: 28 }, (_, index) => {
     const date = shiftDay(today, index - 27);
-    return { date, count: Object.values(state.attempts).filter((attempt) => attempt.studyDate === date).length };
+    return { date, count: activityCounts.get(date) ?? 0 };
   });
   const streak = streaks(dates, today);
 
@@ -155,6 +181,36 @@ export function practiceSummary(
       .slice(0, 5),
     activity,
   };
+}
+
+/**
+ * The overview only needs three counters. It derives due question lesson IDs
+ * from the stable `<lessonId>#<questionSlug>` key, so it can show these values
+ * without loading every interview prompt into the first screen's bundle.
+ */
+export function practiceOverviewSummary(
+  progress: ProgressState,
+  state: PracticeState,
+  now = new Date(),
+): PracticeOverviewSummary {
+  const today = dayKey(now);
+  const groupedAttempts = indexAttempts(state);
+  let due = 0;
+  for (const [questionId, attempts] of groupedAttempts) {
+    const separator = questionId.lastIndexOf("#");
+    if (separator < 1 || !isCompleted(progress, questionId.slice(0, separator))) continue;
+    const status = statusFromAttempts(questionId, attempts);
+    if (status.dueDate && status.dueDate <= today) due += 1;
+  }
+
+  const activityCounts = new Map<string, number>();
+  const dates = new Set<string>();
+  for (const attempt of Object.values(state.attempts)) {
+    activityCounts.set(attempt.studyDate, (activityCounts.get(attempt.studyDate) ?? 0) + 1);
+    dates.add(attempt.studyDate);
+  }
+  const streak = streaks(dates, today);
+  return { today: activityCounts.get(today) ?? 0, due, currentStreak: streak.current };
 }
 
 export const lessonDateActivity = (progress: ProgressState, lessons: Lesson[], now = new Date()) => {

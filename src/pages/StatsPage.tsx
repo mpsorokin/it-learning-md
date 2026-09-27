@@ -1,4 +1,9 @@
-import { CalendarBlank, Cards, ChartBar, CheckCircle, Fire, Stack } from "@phosphor-icons/react";
+import { CalendarBlank } from "@phosphor-icons/react/dist/csr/CalendarBlank";
+import { Cards } from "@phosphor-icons/react/dist/csr/Cards";
+import { ChartBar } from "@phosphor-icons/react/dist/csr/ChartBar";
+import { CheckCircle } from "@phosphor-icons/react/dist/csr/CheckCircle";
+import { Fire } from "@phosphor-icons/react/dist/csr/Fire";
+import { Stack } from "@phosphor-icons/react/dist/csr/Stack";
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";

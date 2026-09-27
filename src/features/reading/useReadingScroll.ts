@@ -9,9 +9,12 @@ function scrollRatio(element: HTMLDivElement): number {
   return clamp01(element.scrollTop / max);
 }
 
+export function scrollTopForRatio(scrollHeight: number, clientHeight: number, ratio: number): number {
+  return clamp01(ratio) * Math.max(0, scrollHeight - clientHeight);
+}
+
 function scrollToRatio(element: HTMLDivElement, ratio: number): void {
-  const max = element.scrollHeight - element.clientHeight;
-  element.scrollTop = clamp01(ratio) * max;
+  element.scrollTop = scrollTopForRatio(element.scrollHeight, element.clientHeight, ratio);
 }
 
 interface UseReadingScrollOptions {

@@ -46,7 +46,8 @@
 
   .reader-article,
   .reader-action,
-  .reader-pager {
+  .reader-pager,
+  .reader-notes {
     padding-inline: 24px;
   }
 
@@ -72,7 +73,8 @@
 
   .reader-article,
   .reader-action,
-  .reader-pager {
+  .reader-pager,
+  .reader-notes {
     padding-inline: 17px;
   }
 

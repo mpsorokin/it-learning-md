@@ -1,51 +1,15 @@
-import { resolveOrder, slugFromFilename, titleFromMarkdown } from "@/lib/names";
 import type { Folder, Lesson, Section } from "@/lib/content.types";
+import { lessons as catalog } from "virtual:ittheory/catalog";
 
 /**
- * The whole catalogue is discovered from the filesystem at build time: dropping
- * a `.md` file into `src/content/<section>/<folder>/` is the only step needed to
- * publish a lesson. No index file to update, nothing to regenerate.
- *
- * The glob is eager, so lesson bodies are part of the main bundle. That is the
- * price of the zero-ceremony authoring above and it is fine at this size; past
- * roughly a megabyte of markdown, switch the bodies to a lazy glob.
+ * The Vite plugin indexes small lesson metadata at build time. The bodies stay
+ * in separate chunks and are fetched only by a reader, search or practice view.
  */
-const files = import.meta.glob("../content/**/*.md", {
+const bodyLoaders = import.meta.glob("../content/**/*.md", {
   query: "?raw",
   import: "default",
-  eager: true,
-}) as Record<string, string>;
+}) as Record<string, () => Promise<string>>;
 
-const PATH = /\/content\/([^/]+)\/([^/]+)\/([^/]+)\.md$/;
-
-function buildLessons(): Lesson[] {
-  const lessons: Lesson[] = [];
-
-  for (const [path, source] of Object.entries(files)) {
-    const match = PATH.exec(path);
-    if (!match) {
-      // A markdown file at the wrong depth would otherwise vanish silently.
-      console.warn(`Ignoring "${path}": lessons live at content/<section>/<folder>/<slug>.md`);
-      continue;
-    }
-
-    const [, section, folder, fileSlug] = match;
-    const slug = slugFromFilename(fileSlug);
-    lessons.push({
-      id: `${section}/${folder}/${slug}`,
-      section,
-      folder,
-      slug,
-      title: titleFromMarkdown(source, slug),
-      order: resolveOrder(fileSlug),
-      body: source,
-    });
-  }
-
-  return lessons;
-}
-
-/** Order first, then slug — so files without an order still sort predictably. */
 const byOrder = <T extends { order: number; slug: string }>(a: T, b: T): number =>
   a.order - b.order || a.slug.localeCompare(b.slug);
 
@@ -69,8 +33,6 @@ function buildSections(lessons: Lesson[]): Section[] {
           slug,
           lessons: [...folderLessons].sort(byOrder),
         }))
-        // A folder inherits the order of its first lesson, so `01-…` in the
-        // earliest file is enough to place the folder itself.
         .sort((a, b) => (a.lessons[0]?.order ?? 0) - (b.lessons[0]?.order ?? 0) || a.slug.localeCompare(b.slug));
 
       return { slug: section, folders, lessons: folders.flatMap((folder) => folder.lessons) };
@@ -78,7 +40,7 @@ function buildSections(lessons: Lesson[]): Section[] {
     .sort((a, b) => a.slug.localeCompare(b.slug));
 }
 
-const allLessons: Lesson[] = buildLessons();
+const allLessons = catalog as Lesson[];
 export const sections: Section[] = buildSections(allLessons);
 
 /** Reading order across the whole catalogue, used by "continue" and prev/next. */
@@ -92,6 +54,15 @@ export const findSection = (slug: string): Section | undefined => sectionsBySlug
 export const findFolder = (section: string, folder: string): Folder | undefined => foldersById.get(`${section}/${folder}`);
 export const findLesson = (section: string, folder: string, slug: string): Lesson | undefined =>
   lessonsById.get(`${section}/${folder}/${slug}`);
+export const findLessonById = (id: string): Lesson | undefined => lessonsById.get(id);
+
+export async function loadLessonBody(lessonId: string): Promise<string> {
+  const lesson = lessonsById.get(lessonId);
+  if (!lesson) throw new Error(`Unknown lesson: ${lessonId}`);
+  const loader = bodyLoaders[lesson.sourcePath];
+  if (!loader) throw new Error(`Missing lesson body: ${lesson.sourcePath}`);
+  return loader();
+}
 
 /** `{ section, folder, lesson }` params for the route that renders `lesson`. */
 export const lessonPath = (lesson: Lesson): string =>

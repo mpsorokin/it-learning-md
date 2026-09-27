@@ -10,6 +10,7 @@ import {
   writeProgress,
 } from "@/features/progress/progress.storage";
 import { emptyProgress, type ProgressState } from "@/features/progress/progress.types";
+import { completeLessonProgress, resetLessonProgress } from "@/features/progress/lessonProgressTransitions";
 
 export interface ProgressActions {
   completeLesson: (id: string) => void;
@@ -46,37 +47,15 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     () => ({
       completeLesson: (id) => {
         const now = new Date().toISOString();
-        const existing = ref.current.lessons[id];
         // Re-ticking an already-finished lesson must not move its completedAt:
         // "last completed" would otherwise jump around on a re-read.
-        if (existing?.completedAt) return;
-        commit({
-          ...ref.current,
-          lessons: {
-            ...ref.current.lessons,
-            [id]: {
-              completedAt: now,
-              updatedAt: now,
-              scrollRatio: 1,
-            },
-          },
-        });
+        const next = completeLessonProgress(ref.current, id, now);
+        if (next !== ref.current) commit(next);
       },
       resetLesson: (id) => {
-        const existing = ref.current.lessons[id];
-        if (!existing?.completedAt) return;
         const now = new Date().toISOString();
-        commit({
-          ...ref.current,
-          lessons: {
-            ...ref.current.lessons,
-            [id]: {
-              completedAt: null,
-              updatedAt: now,
-              scrollRatio: existing.scrollRatio,
-            },
-          },
-        });
+        const next = resetLessonProgress(ref.current, id, now);
+        if (next !== ref.current) commit(next);
       },
       setLessonScroll: (id, ratio) => {
         const existing = ref.current.lessons[id];

@@ -1524,3 +1524,13 @@ a or b
 И после JavaScript особенно важно запомнить:
 
 > В Python empty `list`, `dict`, `set` и другие containers falsy, тогда как empty Array/Object в JavaScript truthy.
+
+## Interview questions
+
+### Какие значения обычно считаются falsy в Python?
+
+`False`, `None`, числовой ноль и пустые built-in containers или strings считаются falsy. Остальные обычные объекты truthy, если их поведение не изменено специальными методами.
+
+### Что возвращают `and` и `or`?
+
+Они возвращают один из operands, а не обязательно `bool`, и используют short-circuit evaluation. `and` возвращает первый falsy operand или последний operand, а `or` — первый truthy operand или последний.

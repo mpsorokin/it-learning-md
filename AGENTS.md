@@ -58,3 +58,44 @@ review comment, not a shortcut.
 **Routes.** `HashRouter`, and `base: "./"` in the Vite config — the app is
 deployed as static files with no server rewrites. Neither can change without
 breaking the deploy.
+
+## Agent workflow
+
+Act as the lead engineer and orchestrator.
+
+For non-trivial tasks:
+
+1. First inspect the relevant parts of the repository.
+2. Understand the existing architecture and conventions.
+3. Create an implementation plan before making substantial changes.
+4. Identify independent implementation tasks that can safely be delegated.
+5. Delegate well-scoped implementation, investigation, testing, and mechanical
+   work to subagents.
+6. Avoid having multiple agents edit the same files concurrently.
+7. Keep architectural decisions, cross-cutting decisions, and ambiguous
+   problems in the root agent.
+8. After subagents finish, review their changes and integrate them.
+9. Run the appropriate type checks, linting, tests, and build.
+10. Fix integration problems before finishing.
+
+Prefer delegation when a task is independent and can be executed safely in
+parallel.
+
+Use the root agent for:
+
+- architecture;
+- planning;
+- ambiguous requirements;
+- cross-cutting changes;
+- integration;
+- final review.
+
+Use subagents for:
+
+- isolated feature implementation;
+- UI components;
+- tests;
+- repetitive refactoring;
+- repository investigation;
+- documentation;
+- mechanical code changes.

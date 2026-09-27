@@ -35,6 +35,12 @@
   background: var(--color-surface);
 }
 
+.search-result {
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
 .stat-card {
   display: flex;
   flex-direction: column;

@@ -1448,3 +1448,13 @@ average O(1) membership
 Главный practical критерий:
 
 > Если тебе не нужен positional order, но нужны uniqueness и быстрые membership checks, `set` часто является правильнее `list`.
+
+## Interview questions
+
+### Что требуется от hashable object, используемого как key?
+
+Его hash должен оставаться стабильным, пока object используется как key, и равные objects должны иметь одинаковый hash. Поэтому изменяемые objects обычно не подходят для keys.
+
+### Чем `set` отличается от `frozenset`?
+
+Оба хранят уникальные hashable values и поддерживают set operations. `set` mutable и сам не hashable, а `frozenset` immutable и может быть key в dictionary, если его элементы hashable.

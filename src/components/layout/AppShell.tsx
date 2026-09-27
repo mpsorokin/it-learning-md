@@ -1,4 +1,5 @@
-import { ArrowLeft, Gear } from "@phosphor-icons/react";
+import { ArrowLeft } from "@phosphor-icons/react/dist/csr/ArrowLeft";
+import { Gear } from "@phosphor-icons/react/dist/csr/Gear";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";

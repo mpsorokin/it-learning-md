@@ -1,5 +1,7 @@
-import type { Lesson } from "@/lib/content.types";
-import { orderedLessons } from "@/lib/content";
+import type { InterviewQuestionMeta } from "@/lib/content.types";
+import { loadLessonBody, orderedLessons } from "@/lib/content";
+import { parseInterviewQuestions } from "@/lib/contentParsing";
+import { questions as generatedQuestions } from "virtual:ittheory/questions";
 
 export interface InterviewQuestion {
   id: string;
@@ -7,48 +9,35 @@ export interface InterviewQuestion {
   section: string;
   folder: string;
   prompt: string;
-  answer: string;
+  promptBody?: string;
+  hasAnswer?: boolean;
 }
 
-const interviewHeading = /^##\s+(?:Interview questions|Вопросы на собеседовании)\s*$/im;
-const headingPattern = /^###\s+(.+?)\s*$/gm;
-
-function questionSlug(prompt: string): string {
-  return prompt
-    .replace(/`/g, "")
-    .toLocaleLowerCase()
-    .normalize("NFKD")
-    .replace(/[^\p{L}\p{N}]+/gu, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 90);
+const questionsByLesson = new Map<string, InterviewQuestionMeta[]>();
+for (const question of generatedQuestions as InterviewQuestionMeta[]) {
+  if (!question.hasAnswer) continue;
+  const items = questionsByLesson.get(question.lessonId);
+  if (items) items.push(question);
+  else questionsByLesson.set(question.lessonId, [question]);
 }
-
-export function extractInterviewQuestions(lesson: Lesson): InterviewQuestion[] {
-  const marker = interviewHeading.exec(lesson.body);
-  if (!marker) return [];
-
-  const section = lesson.body.slice(marker.index + marker[0].length);
-  const nextSection = /^##\s+/m.exec(section);
-  const body = nextSection ? section.slice(0, nextSection.index) : section;
-  const headings = [...body.matchAll(headingPattern)];
-
-  return headings.flatMap((heading, index) => {
-    const prompt = heading[1].trim();
-    const answerStart = (heading.index ?? 0) + heading[0].length;
-    const answerEnd = headings[index + 1]?.index ?? body.length;
-    const answer = body.slice(answerStart, answerEnd).trim();
-    if (!prompt || !answer) return [];
-
-    return [{
-      id: `${lesson.id}#${questionSlug(prompt) || index + 1}`,
-      lessonId: lesson.id,
-      section: lesson.section,
-      folder: lesson.folder,
-      prompt,
-      answer,
-    }];
-  });
-}
-
-export const interviewQuestions = orderedLessons.flatMap(extractInterviewQuestions);
+export const interviewQuestions: InterviewQuestion[] = orderedLessons.flatMap(
+  (lesson) => questionsByLesson.get(lesson.id) ?? [],
+);
 export const interviewQuestionsById = new Map(interviewQuestions.map((question) => [question.id, question]));
+
+const bodyPromises = new Map<string, Promise<string>>();
+
+export async function loadInterviewAnswer(questionId: string): Promise<string> {
+  const question = interviewQuestionsById.get(questionId);
+  if (!question) throw new Error(`Unknown interview question: ${questionId}`);
+  let bodyPromise = bodyPromises.get(question.lessonId);
+  if (!bodyPromise) {
+    bodyPromise = loadLessonBody(question.lessonId);
+    bodyPromises.set(question.lessonId, bodyPromise);
+    bodyPromise.catch(() => bodyPromises.delete(question.lessonId));
+  }
+  const body = await bodyPromise;
+  const parsed = parseInterviewQuestions(question.lessonId, body).find((entry) => entry.id === questionId);
+  if (!parsed) throw new Error(`Missing answer for interview question: ${questionId}`);
+  return parsed.answer;
+}

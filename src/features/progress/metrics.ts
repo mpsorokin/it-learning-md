@@ -93,12 +93,20 @@ export function readingHistory(
   return rows.reverse();
 }
 
-/**
- * Where "continue" points: the first unfinished lesson in reading order. Nothing
- * is left over once every lesson is done, so callers hide the entry point.
- */
-export const getNextLesson = (progress: ProgressState, lessons: Lesson[]): Lesson | undefined =>
-  lessons.find((lesson) => !isCompleted(progress, lesson.id));
+/** Resume the most recently visited unfinished lesson, then fall back to order. */
+export const getNextLesson = (progress: ProgressState, lessons: Lesson[]): Lesson | undefined => {
+  let latest: Lesson | undefined;
+  let latestAt = "";
+  for (const lesson of lessons) {
+    const entry = lessonEntry(progress, lesson.id);
+    if (!entry || entry.completedAt || !entry.updatedAt) continue;
+    if (entry.updatedAt > latestAt) {
+      latest = lesson;
+      latestAt = entry.updatedAt;
+    }
+  }
+  return latest ?? lessons.find((lesson) => !isCompleted(progress, lesson.id));
+};
 
 /** The most recently ticked lesson, by `completedAt`. */
 export function getLastCompleted(progress: ProgressState, lessons: Lesson[]): Lesson | undefined {

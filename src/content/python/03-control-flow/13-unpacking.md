@@ -1255,3 +1255,13 @@ Dictionary merge:
 И главное:
 
 > `*` и `**` работают с structure/bindings и references; они не означают automatic deep copy.
+
+## Interview questions
+
+### Что происходит при `first, *middle, last = values`?
+
+Значения распределяются по позиционным targets, а starred target получает list из оставшихся элементов. Такой target может быть только один в одном unpacking assignment.
+
+### Чем отличаются `*args` и `**kwargs` при вызове функции?
+
+`*iterable` разворачивает элементы в positional arguments. `**mapping` передаёт пары mapping как keyword arguments, где keys должны подходить для имён параметров.

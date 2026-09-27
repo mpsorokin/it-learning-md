@@ -1221,3 +1221,13 @@ if condition
 Главное правило:
 
 > comprehension хорош, когда transformation/filtering можно быстро понять глазами. Если logic становится сложной — обычный `for` обычно лучше.
+
+## Interview questions
+
+### В чём разница между filter и conditional expression в comprehension?
+
+Filter `if condition` решает, попадёт ли элемент в результат. Conditional expression `a if condition else b` выбирает значение результата для элемента, поэтому сам по себе не отбрасывает его.
+
+### Является ли list comprehension lazy?
+
+Нет. List comprehension сразу строит весь list в памяти. Для ленивой итерации подходит generator expression, например `(transform(x) for x in values)`.
