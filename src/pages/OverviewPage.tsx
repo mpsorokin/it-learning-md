@@ -1,8 +1,8 @@
-import { ArrowRight } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { ContentRow } from "@/components/ui/ContentRow";
+import { ContinueCard } from "@/components/ui/ContinueCard";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { getNextLesson, overallProgress, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
@@ -46,14 +46,12 @@ export function OverviewPage() {
       </Link>
 
       {next && nextFolder ? (
-        <Link className="continue-card" to={lessonPath(next)}>
-          <p className="eyebrow">{overall.done === 0 ? t("overview.start") : t("overview.continue")}</p>
-          <strong>{lessonLabel(next)}</strong>
-          <span className="continue-card__path">
-            {sectionLabel(next.section)} · {folderLabel(nextFolder)}
-          </span>
-          <ArrowRight className="continue-card__arrow" size={18} aria-hidden="true" />
-        </Link>
+        <ContinueCard
+          to={lessonPath(next)}
+          eyebrow={overall.done === 0 ? t("overview.start") : t("overview.continue")}
+          title={lessonLabel(next)}
+          path={<>{sectionLabel(next.section)} · {folderLabel(nextFolder)}</>}
+        />
       ) : (
         <p className="empty-note">{overall.total === 0 ? t("overview.noContent") : t("overview.allDone")}</p>
       )}

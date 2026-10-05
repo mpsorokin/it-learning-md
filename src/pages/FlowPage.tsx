@@ -1,12 +1,12 @@
-import { ArrowRight } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import { useTranslation } from "react-i18next";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { ContentRow } from "@/components/ui/ContentRow";
+import { ContinueCard } from "@/components/ui/ContinueCard";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { getNextLesson, folderProgress, overallProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
-import { flowTopicPath, fullstackInterviewFlow, orderedFlowLessons, resolveFlow } from "@/features/flows/flow";
+import { flowTopicPath, orderedFlowLessons, resolveFlow } from "@/features/flows/flow";
 import { findFolder, lessonPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
@@ -42,17 +42,20 @@ export function FlowPage() {
       </p>
 
       {next && nextFolder ? (
-        <Link className="continue-card flow-continue-card" to={lessonPath(next)}>
-          <p className="eyebrow">{t("flows.continue")}</p>
-          <strong>{lessonLabel(next)}</strong>
-          <span className="continue-card__path">
-            {folderLabel(nextFolder)} · {t("reader.position", {
-              position: lessons.findIndex((lesson) => lesson.id === next.id) + 1,
-              total: lessons.length,
-            })}
-          </span>
-          <ArrowRight className="continue-card__arrow" size={18} aria-hidden="true" />
-        </Link>
+        <ContinueCard
+          className="flow-continue-card"
+          to={lessonPath(next)}
+          eyebrow={t("flows.continue")}
+          title={lessonLabel(next)}
+          path={
+            <>
+              {folderLabel(nextFolder)} · {t("reader.position", {
+                position: lessons.findIndex((lesson) => lesson.id === next.id) + 1,
+                total: lessons.length,
+              })}
+            </>
+          }
+        />
       ) : (
         <p className="empty-note">
           {lessons.length === 0 ? t("flows.noTopics") : t("overview.allDone")}
@@ -86,6 +89,3 @@ export function FlowPage() {
     </AppShell>
   );
 }
-
-// Keep the route's supported flow ID discoverable to route registration and links.
-export const defaultFlowId = fullstackInterviewFlow.id;

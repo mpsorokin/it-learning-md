@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { IconLink } from "@/components/ui/IconLink";
 
 /** The standard screen: header, scrolling body and the bottom navigation. */
 export function AppShell({
@@ -28,9 +29,9 @@ export function AppShell({
       <div className={`app-shell ${className}`}>
         <header className={`app-header ${title ? "app-header--titled" : ""}`}>
           {backTo ? (
-            <Link className="icon-button" to={backTo} aria-label={t("common.back")}>
+            <IconLink to={backTo} label={t("common.back")}>
               <ArrowLeft size={20} aria-hidden="true" />
-            </Link>
+            </IconLink>
           ) : isHome ? (
             <Link to="/" className="brand-mark">
               <span className="brand-mark__caret">&gt;_</span>
@@ -41,9 +42,9 @@ export function AppShell({
           {title && <h1>{title}</h1>}
           {right ??
             (isHome ? (
-              <Link className="icon-button" to="/settings" aria-label={t("common.settings")}>
+              <IconLink to="/settings" label={t("common.settings")}>
                 <Gear size={20} aria-hidden="true" />
-              </Link>
+              </IconLink>
             ) : (
               <span />
             ))}

@@ -1,9 +1,9 @@
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { ContentRow } from "@/components/ui/ContentRow";
+import { IconLink } from "@/components/ui/IconLink";
 import { LessonRow } from "@/components/ui/LessonRow";
 import { isCompleted, lessonScrollRatio, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
@@ -24,7 +24,7 @@ export function LibraryPage() {
   return (
     <AppShell
       title={t("nav.library")}
-      right={<Link className="icon-button" to="/search" aria-label={t("search.open")}><MagnifyingGlass size={19} aria-hidden="true" /></Link>}
+      right={<IconLink to="/search" label={t("search.open")}><MagnifyingGlass size={19} aria-hidden="true" /></IconLink>}
     >
       <div className="library-filters" role="group" aria-label={t("library.filters")}>
         <button type="button" className={!showSaved ? "active" : ""} aria-pressed={!showSaved} onClick={() => setShowSaved(false)}>{t("library.allContent")}</button>

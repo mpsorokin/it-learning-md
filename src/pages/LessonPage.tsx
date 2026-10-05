@@ -6,6 +6,7 @@ import { Check } from "@phosphor-icons/react/dist/csr/Check";
 import { useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ReaderShell } from "@/components/layout/ReaderShell";
+import { IconLink } from "@/components/ui/IconLink";
 import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
 import { FlowQuestionList } from "@/features/flows/FlowQuestionList";
 import { flowTopicPath, getFlowForLesson, orderedFlowLessons, orderedLessonNeighbours } from "@/features/flows/flow";
@@ -140,9 +141,9 @@ export function LessonPage() {
   return (
     <ReaderShell theme={theme}>
       <header className="reader-header">
-        <Link className="icon-button" to={backTo} aria-label={t("common.back")}>
+        <IconLink to={backTo} label={t("common.back")}>
           <ArrowLeft size={20} aria-hidden="true" />
-        </Link>
+        </IconLink>
         <div className="reader-header__title">
           <p className="eyebrow">
             {folderLabel(parent)} · {t("reader.position", {

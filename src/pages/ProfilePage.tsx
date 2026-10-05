@@ -7,6 +7,7 @@ import { Stack } from "@phosphor-icons/react/dist/csr/Stack";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
+import { IconLink } from "@/components/ui/IconLink";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { TallyRow } from "@/components/ui/TallyCard";
@@ -32,9 +33,9 @@ export function ProfilePage() {
     <AppShell
       title={t("nav.profile")}
       right={
-        <Link className="icon-button" to="/settings" aria-label={t("common.settings")}>
+        <IconLink to="/settings" label={t("common.settings")}>
           <Gear size={20} aria-hidden="true" />
-        </Link>
+        </IconLink>
       }
     >
       <section className="profile-hero">
