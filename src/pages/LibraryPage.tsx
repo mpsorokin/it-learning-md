@@ -17,7 +17,7 @@ export function LibraryPage() {
   const { t } = useTranslation();
   const progress = useProgressState();
   const study = useStudyState();
-  const { sectionLabel } = useContentLabels();
+  const { sectionLabel, lessonLabel } = useContentLabels();
   const [showSaved, setShowSaved] = useState(false);
   const savedLessons = orderedLessons.filter((lesson) => study.lessons[lesson.id]?.bookmarked);
 
@@ -37,11 +37,11 @@ export function LibraryPage() {
               <li key={lesson.id}>
                 <LessonRow
                   to={lessonPath(lesson)}
-                  title={lesson.title}
+                  title={lessonLabel(lesson)}
                   index={index}
                   done={isCompleted(progress, lesson.id)}
                   ratio={lessonScrollRatio(progress, lesson.id)}
-                  progressLabel={t("lesson.readingProgress", { title: lesson.title })}
+                  progressLabel={t("lesson.readingProgress", { title: lessonLabel(lesson) })}
                   completedLabel={t("lesson.completed")}
                 />
               </li>

@@ -5,29 +5,26 @@ import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { IconLink } from "@/components/ui/IconLink";
+import { cx } from "@/lib/cx";
 
-/** The standard screen: header, scrolling body and the bottom navigation. */
-export function AppShell({
-  children,
-  title,
-  backTo,
-  right,
-  className = "",
-}: {
+interface AppShellProps {
   children: ReactNode;
   title?: string;
   /** Renders a back link in the header slot; there is always a route to go to. */
   backTo?: string;
   right?: ReactNode;
   className?: string;
-}) {
+}
+
+/** The standard screen: header, scrolling body and the bottom navigation. */
+export function AppShell({ children, title, backTo, right, className }: AppShellProps) {
   const { t } = useTranslation();
   const isHome = !title && !backTo;
 
   return (
     <div className="app-background">
-      <div className={`app-shell ${className}`}>
-        <header className={`app-header ${title ? "app-header--titled" : ""}`}>
+      <div className={cx("app-shell", className)}>
+        <header className={cx("app-header", title && "app-header--titled")}>
           {backTo ? (
             <IconLink to={backTo} label={t("common.back")}>
               <ArrowLeft size={20} aria-hidden="true" />

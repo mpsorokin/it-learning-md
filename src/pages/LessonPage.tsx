@@ -5,7 +5,7 @@ import { BookmarkSimple } from "@phosphor-icons/react/dist/csr/BookmarkSimple";
 import { Check } from "@phosphor-icons/react/dist/csr/Check";
 import { useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ReaderShell } from "@/components/layout/ReaderShell";
+import { ReaderShell } from "@/features/reading/ReaderShell";
 import { IconLink } from "@/components/ui/IconLink";
 import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
 import { FlowQuestionList } from "@/features/flows/FlowQuestionList";

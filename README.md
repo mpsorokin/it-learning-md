@@ -118,7 +118,7 @@ src/
   features/
     progress/ the store, its metrics, its provider, export / import
     practice/  question metadata, spaced repetition and practice history
-    reading/  markdown viewer, reader theme
+    reading/  markdown viewer, reader shell and theme
     study/    local notes and bookmarks
     content/  full-text search
     offline/  service worker readiness and update prompt

@@ -1,6 +1,7 @@
 import { Check } from "@phosphor-icons/react/dist/csr/Check";
 import { Link } from "react-router-dom";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { cx } from "@/lib/cx";
 
 interface LessonRowProps {
   to: string;
@@ -19,7 +20,7 @@ interface LessonRowProps {
  */
 export function LessonRow({ to, title, index, done, ratio, progressLabel, completedLabel }: LessonRowProps) {
   return (
-    <Link className={`lesson-row ${done ? "lesson-row--done" : ""}`} to={to}>
+    <Link className={cx("lesson-row", done && "lesson-row--done")} to={to}>
       <span className="lesson-row__mark" aria-hidden="true">
         {done ? <Check size={13} weight="bold" /> : String(index + 1).padStart(2, "0")}
       </span>

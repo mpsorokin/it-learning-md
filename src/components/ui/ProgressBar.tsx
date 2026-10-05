@@ -1,3 +1,5 @@
+import { progressSemantics } from "@/components/ui/progressSemantics";
+import { cx } from "@/lib/cx";
 import { clamp01 } from "@/lib/num";
 
 interface ProgressBarProps {
@@ -16,20 +18,12 @@ interface ProgressBarProps {
  * `useTranslation()` in each one would subscribe every bar to language changes
  * just to produce a generic fallback name.
  */
-export function ProgressBar({ value, className = "", label }: ProgressBarProps) {
+export function ProgressBar({ value, className, label }: ProgressBarProps) {
   const normalized = clamp01(value);
-  const semantics = label
-    ? ({
-        role: "progressbar",
-        "aria-valuemin": 0,
-        "aria-valuemax": 100,
-        "aria-valuenow": Math.round(normalized * 100),
-        "aria-label": label,
-      } as const)
-    : ({ "aria-hidden": true } as const);
+  const semantics = label ? progressSemantics(normalized, label) : ({ "aria-hidden": true } as const);
 
   return (
-    <div className={`progress-bar ${className}`} {...semantics}>
+    <div className={cx("progress-bar", className)} {...semantics}>
       <span style={{ width: `${normalized * 100}%` }} />
     </div>
   );
