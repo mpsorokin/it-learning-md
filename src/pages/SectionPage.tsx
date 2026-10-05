@@ -5,7 +5,7 @@ import { ContentRow } from "@/components/ui/ContentRow";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { folderProgress, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
-import { findSection } from "@/lib/content";
+import { findSection, folderPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
 /** The folders inside one section, each with its own done/total. */
@@ -34,7 +34,7 @@ export function SectionPage() {
           return (
             <li key={folder.id}>
               <ContentRow
-                to={`/s/${section.slug}/${folder.slug}`}
+                to={folderPath(folder)}
                 title={folderLabel(folder)}
                 count={t("common.doneOfTotal", { done: folderTally.done, total: folderTally.total })}
                 ratio={folderTally.ratio}

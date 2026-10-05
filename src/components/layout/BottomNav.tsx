@@ -5,11 +5,19 @@ import { UserCircle } from "@phosphor-icons/react/dist/csr/UserCircle";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation } from "react-router-dom";
 
+const LIBRARY_PREFIXES = ["/library", "/search", "/s/", "/flows/"];
+const PROFILE_PATHS = ["/profile", "/settings", "/stats"];
+
+const isOverview = (path: string) => path === "/";
+const isLibrary = (path: string) => LIBRARY_PREFIXES.some((prefix) => path.startsWith(prefix));
+const isPractice = (path: string) => path.startsWith("/practice");
+const isProfile = (path: string) => PROFILE_PATHS.includes(path);
+
 const items = [
-  { to: "/", labelKey: "nav.overview", icon: House, match: (path: string) => path === "/" },
-  { to: "/library", labelKey: "nav.library", icon: Books, match: (path: string) => path.startsWith("/library") || path.startsWith("/search") || path.startsWith("/s/") || path.startsWith("/flows/") },
-  { to: "/practice", labelKey: "nav.practice", icon: Cards, match: (path: string) => path.startsWith("/practice") },
-  { to: "/profile", labelKey: "nav.profile", icon: UserCircle, match: (path: string) => path === "/profile" || path === "/settings" || path === "/stats" },
+  { to: "/", labelKey: "nav.overview", icon: House, match: isOverview },
+  { to: "/library", labelKey: "nav.library", icon: Books, match: isLibrary },
+  { to: "/practice", labelKey: "nav.practice", icon: Cards, match: isPractice },
+  { to: "/profile", labelKey: "nav.profile", icon: UserCircle, match: isProfile },
 ] as const;
 
 export function BottomNav() {

@@ -5,7 +5,7 @@ import { LessonRow } from "@/components/ui/LessonRow";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { folderProgress, isCompleted, lessonScrollRatio } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
-import { findFolder, lessonPath } from "@/lib/content";
+import { findFolder, lessonPath, sectionPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
 /** The lessons inside one folder — one card per lesson with reading progress. */
@@ -21,7 +21,7 @@ export function FolderPage() {
   const tally = folderProgress(progress, folder);
 
   return (
-    <AppShell title={folderLabel(folder)} backTo={`/s/${section}`}>
+    <AppShell title={folderLabel(folder)} backTo={sectionPath(section)}>
       <TallyCard
         label={t("section.progress")}
         value={t("common.doneOfTotal", { done: tally.done, total: tally.total })}

@@ -64,6 +64,10 @@ export async function loadLessonBody(lessonId: string): Promise<string> {
   return loader();
 }
 
+/** Route paths live here so a screen never spells out `/s/...` on its own. */
+export const sectionPath = (section: string): string => `/s/${section}`;
+export const folderPath = (folder: Folder): string => `/s/${folder.section}/${folder.slug}`;
+
 /** `{ section, folder, lesson }` params for the route that renders `lesson`. */
 export const lessonPath = (lesson: Lesson): string =>
   `/s/${lesson.section}/${lesson.folder}/${lesson.slug}`;

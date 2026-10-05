@@ -8,12 +8,12 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ReaderShell } from "@/components/layout/ReaderShell";
 import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
 import { FlowQuestionList } from "@/features/flows/FlowQuestionList";
-import { getFlowForLesson, orderedFlowLessons, orderedLessonNeighbours } from "@/features/flows/flow";
+import { flowTopicPath, getFlowForLesson, orderedFlowLessons, orderedLessonNeighbours } from "@/features/flows/flow";
 import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
 import { useReadingScroll } from "@/features/reading/useReadingScroll";
 import { lessonNeighbours, lessonScrollRatio } from "@/features/progress/metrics";
 import { useProgressActions } from "@/features/progress/useProgress";
-import { findFolder, findLesson, lessonPath, loadLessonBody } from "@/lib/content";
+import { findFolder, findLesson, folderPath, lessonPath, loadLessonBody } from "@/lib/content";
 import { parseInterviewQuestions } from "@/lib/contentParsing";
 import { useStudyActions, useStudyState } from "@/features/study/useStudy";
 import { useContentLabels } from "@/lib/labels";
@@ -107,7 +107,7 @@ export function LessonPage() {
   const previous = flowIndex >= 0 ? flowNeighbours.previous : folderPrevious;
   const next = flowIndex >= 0 ? flowNeighbours.next : folderNext;
   const position = index + 1;
-  const backTo = flow ? `/flows/${flow.id}/${folder}` : `/s/${section}/${folder}`;
+  const backTo = flow ? flowTopicPath(flow.id, folder) : folderPath(parent);
 
   const handleComplete = () => {
     completeLesson(lesson.id);

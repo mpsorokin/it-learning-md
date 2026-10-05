@@ -10,7 +10,7 @@ import { practiceOverviewSummary } from "@/features/practice/practice.metrics";
 import { usePracticeState } from "@/features/practice/usePractice";
 import { findFolder, lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
-import { fullstackInterviewFlow } from "@/features/flows/flow";
+import { sectionEntryPath } from "@/features/flows/flow";
 
 export function OverviewPage() {
   const { t } = useTranslation();
@@ -65,7 +65,7 @@ export function OverviewPage() {
           return (
             <li key={section.slug}>
               <ContentRow
-                to={section.slug === fullstackInterviewFlow.section ? `/flows/${fullstackInterviewFlow.id}` : `/s/${section.slug}`}
+                to={sectionEntryPath(section)}
                 title={sectionLabel(section)}
                 count={t("common.doneOfTotal", { done: tally.done, total: tally.total })}
                 ratio={tally.ratio}

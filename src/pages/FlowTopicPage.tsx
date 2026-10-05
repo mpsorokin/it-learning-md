@@ -5,7 +5,7 @@ import { LessonRow } from "@/components/ui/LessonRow";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { folderProgress, isCompleted, lessonScrollRatio } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
-import { getFlowTopic } from "@/features/flows/flow";
+import { flowPath, getFlowTopic } from "@/features/flows/flow";
 import { lessonPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
@@ -24,7 +24,7 @@ export function FlowTopicPage() {
   const questionCount = folder.lessons.reduce((total, lesson) => total + lesson.questionCount, 0);
 
   return (
-    <AppShell title={folderLabel(folder)} backTo={`/flows/${flowId}`}>
+    <AppShell title={folderLabel(folder)} backTo={flowPath(flowId)}>
       <p className="eyebrow flow-topic-group">{t(topic.group.labelKey)}</p>
       <TallyCard
         label={t("flows.topicProgress")}

@@ -10,7 +10,7 @@ import { useProgressState } from "@/features/progress/useProgress";
 import { useStudyState } from "@/features/study/useStudy";
 import { lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
-import { fullstackInterviewFlow } from "@/features/flows/flow";
+import { fullstackInterviewFlow, sectionEntryPath } from "@/features/flows/flow";
 
 /** Every section, with its folder count and progress. */
 export function LibraryPage() {
@@ -59,7 +59,7 @@ export function LibraryPage() {
             return (
               <li key={section.slug}>
                 <ContentRow
-                  to={section.slug === fullstackInterviewFlow.section ? `/flows/${fullstackInterviewFlow.id}` : `/s/${section.slug}`}
+                  to={sectionEntryPath(section)}
                   title={sectionLabel(section)}
                   count={t("common.doneOfTotal", { done: tally.done, total: tally.total })}
                   ratio={tally.ratio}

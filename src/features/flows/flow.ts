@@ -1,5 +1,5 @@
-import { findFolder, findSection } from "@/lib/content";
-import type { Folder, Lesson } from "@/lib/content.types";
+import { findFolder, findSection, sectionPath } from "@/lib/content";
+import type { Folder, Lesson, Section } from "@/lib/content.types";
 
 export type FlowGroupLabelKey =
   | "flows.groups.jsTs"
@@ -110,6 +110,15 @@ export const fullstackInterviewFlow = {
 export const flowSectionSlug = fullstackInterviewFlow.section;
 
 const flowDefinitions: readonly FlowDefinition[] = [fullstackInterviewFlow];
+
+export const flowPath = (flowId: string): string => `/flows/${flowId}`;
+export const flowTopicPath = (flowId: string, topicSlug: string): string => `/flows/${flowId}/${topicSlug}`;
+
+/** Where a section row leads: a flow section opens its flow, not the plain folder list. */
+export function sectionEntryPath(section: Section): string {
+  const flow = flowDefinitions.find((definition) => definition.section === section.slug);
+  return flow ? flowPath(flow.id) : sectionPath(section.slug);
+}
 
 export function getFlowDefinition(flowId: string): FlowDefinition | undefined {
   return flowDefinitions.find((flow) => flow.id === flowId);

@@ -6,7 +6,7 @@ import { ContentRow } from "@/components/ui/ContentRow";
 import { TallyCard } from "@/components/ui/TallyCard";
 import { getNextLesson, folderProgress, overallProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
-import { fullstackInterviewFlow, orderedFlowLessons, resolveFlow } from "@/features/flows/flow";
+import { flowTopicPath, fullstackInterviewFlow, orderedFlowLessons, resolveFlow } from "@/features/flows/flow";
 import { findFolder, lessonPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
@@ -70,7 +70,7 @@ export function FlowPage() {
                 return (
                   <li key={folder.id}>
                     <ContentRow
-                      to={`/flows/${flow.definition.id}/${folder.slug}`}
+                      to={flowTopicPath(flow.definition.id, folder.slug)}
                       title={folderLabel(folder)}
                       count={t("common.doneOfTotal", { done: topicTally.done, total: topicTally.total })}
                       ratio={topicTally.ratio}

@@ -14,7 +14,7 @@ import { interviewQuestions } from "@/features/practice/questions";
 import { lessonDateActivity, practiceSummary } from "@/features/practice/practice.metrics";
 import { usePracticeState } from "@/features/practice/usePractice";
 import { useProgressState } from "@/features/progress/useProgress";
-import { orderedLessons, sections } from "@/lib/content";
+import { lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
 type StatsTab = "reading" | "practice";
@@ -179,7 +179,7 @@ export function StatsPage() {
           <div className="stats-last">
             <ChartBar size={17} aria-hidden="true" />
             <span>{t("stats.lastCompleted")}</span>
-            {last ? <Link to={`/s/${last.section}/${last.folder}/${last.slug}`}>{lessonLabel(last)}</Link> : <em>{t("common.none")}</em>}
+            {last ? <Link to={lessonPath(last)}>{lessonLabel(last)}</Link> : <em>{t("common.none")}</em>}
           </div>
         </section>
       ) : (
