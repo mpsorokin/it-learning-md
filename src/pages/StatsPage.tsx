@@ -9,10 +9,15 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { getLastCompleted, overallProgress, readingHistory, sectionProgress } from "@/features/progress/metrics";
-import { interviewQuestions } from "@/features/practice/questions";
 import { lessonDateActivity, practiceSummary } from "@/features/practice/practice.metrics";
+import { interviewQuestions } from "@/features/practice/questions";
 import { usePracticeState } from "@/features/practice/usePractice";
+import {
+  getLastCompleted,
+  overallProgress,
+  readingHistory,
+  sectionProgress,
+} from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
 import { lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
@@ -36,7 +41,10 @@ export function StatsPage() {
   const readingTabRef = useRef<HTMLButtonElement>(null);
   const practiceTabRef = useRef<HTMLButtonElement>(null);
   const overall = overallProgress(progress, orderedLessons);
-  const practiceStats = useMemo(() => practiceSummary(progress, practice, interviewQuestions), [practice, progress]);
+  const practiceStats = useMemo(
+    () => practiceSummary(progress, practice, interviewQuestions),
+    [practice, progress],
+  );
   const activity = useMemo(() => lessonDateActivity(progress, orderedLessons), [progress]);
   const readingRows = useMemo(() => readingHistory(progress, orderedLessons), [progress]);
   const activeDays = activity.filter((entry) => entry.count > 0).reverse();
@@ -49,17 +57,33 @@ export function StatsPage() {
   };
 
   const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, tab: StatsTab) => {
-    if (event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === "Home" || event.key === "End") {
+    if (
+      event.key === "ArrowRight" ||
+      event.key === "ArrowLeft" ||
+      event.key === "Home" ||
+      event.key === "End"
+    ) {
       event.preventDefault();
-      const next = event.key === "Home" ? "reading" : event.key === "End" ? "practice" : tab === "reading" ? "practice" : "reading";
+      const next =
+        event.key === "Home"
+          ? "reading"
+          : event.key === "End"
+            ? "practice"
+            : tab === "reading"
+              ? "practice"
+              : "reading";
       focusTab(next);
     }
   };
 
   return (
     <AppShell title={t("stats.title")} backTo="/profile">
-      <p className="eyebrow">{t(activeTab === "reading" ? "stats.eyebrow" : "stats.practiceEyebrow")}</p>
-      <h1 className="page-heading">{t(activeTab === "reading" ? "stats.heading" : "stats.practiceTitle")}</h1>
+      <p className="eyebrow">
+        {t(activeTab === "reading" ? "stats.eyebrow" : "stats.practiceEyebrow")}
+      </p>
+      <h1 className="page-heading">
+        {t(activeTab === "reading" ? "stats.heading" : "stats.practiceTitle")}
+      </h1>
 
       <div className="stats-tabs" role="tablist" aria-label={t("stats.tabsLabel")}>
         <button
@@ -93,7 +117,13 @@ export function StatsPage() {
       </div>
 
       {activeTab === "reading" ? (
-        <section className="stats-tabpanel" role="tabpanel" id="stats-panel-reading" aria-labelledby="stats-tab-reading" tabIndex={0}>
+        <section
+          className="stats-tabpanel"
+          role="tabpanel"
+          id="stats-panel-reading"
+          aria-labelledby="stats-tab-reading"
+          tabIndex={0}
+        >
           <section className="stats-overview">
             <div className="stats-overview__item">
               <CheckCircle size={18} aria-hidden="true" />
@@ -110,8 +140,12 @@ export function StatsPage() {
           <h2 className="section-heading">{t("stats.activityTitle")}</h2>
           <section className="stats-panel">
             <div className="stats-panel__heading">
-              <span><CalendarBlank size={17} aria-hidden="true" /> {t("stats.last28Days")}</span>
-              <strong>{activeDays.reduce((sum, entry) => sum + entry.count, 0)} {t("stats.lessonsShort")}</strong>
+              <span>
+                <CalendarBlank size={17} aria-hidden="true" /> {t("stats.last28Days")}
+              </span>
+              <strong>
+                {activeDays.reduce((sum, entry) => sum + entry.count, 0)} {t("stats.lessonsShort")}
+              </strong>
             </div>
             <div className="reading-activity" aria-label={t("stats.activityLabel")}>
               {activity.map((entry) => (
@@ -148,7 +182,9 @@ export function StatsPage() {
                 <tbody>
                   {readingRows.map((entry) => (
                     <tr key={entry.date}>
-                      <th scope="row"><time dateTime={entry.date}>{readableDate(entry.date, locale)}</time></th>
+                      <th scope="row">
+                        <time dateTime={entry.date}>{readableDate(entry.date, locale)}</time>
+                      </th>
                       <td>{entry.count}</td>
                       <td>{entry.cumulative}</td>
                     </tr>
@@ -168,7 +204,9 @@ export function StatsPage() {
                 <li key={section.slug}>
                   <div className="stats-section-list__row">
                     <span>{sectionLabel(section)}</span>
-                    <strong>{t("common.doneOfTotal", { done: tally.done, total: tally.total })}</strong>
+                    <strong>
+                      {t("common.doneOfTotal", { done: tally.done, total: tally.total })}
+                    </strong>
                   </div>
                   <ProgressBar value={tally.ratio} />
                 </li>
@@ -179,11 +217,21 @@ export function StatsPage() {
           <div className="stats-last">
             <ChartBar size={17} aria-hidden="true" />
             <span>{t("stats.lastCompleted")}</span>
-            {last ? <Link to={lessonPath(last)}>{lessonLabel(last)}</Link> : <em>{t("common.none")}</em>}
+            {last ? (
+              <Link to={lessonPath(last)}>{lessonLabel(last)}</Link>
+            ) : (
+              <em>{t("common.none")}</em>
+            )}
           </div>
         </section>
       ) : (
-        <section className="stats-tabpanel" role="tabpanel" id="stats-panel-practice" aria-labelledby="stats-tab-practice" tabIndex={0}>
+        <section
+          className="stats-tabpanel"
+          role="tabpanel"
+          id="stats-panel-practice"
+          aria-labelledby="stats-tab-practice"
+          tabIndex={0}
+        >
           <section className="stats-overview stats-practice-overview">
             <div className="stats-overview__item">
               <Fire size={18} aria-hidden="true" />
@@ -209,8 +257,12 @@ export function StatsPage() {
 
           <section className="stats-panel">
             <div className="stats-panel__heading">
-              <span><CalendarBlank size={17} aria-hidden="true" /> {t("stats.practiceActivity")}</span>
-              <strong>{practiceStats.today} {t("stats.answersToday")}</strong>
+              <span>
+                <CalendarBlank size={17} aria-hidden="true" /> {t("stats.practiceActivity")}
+              </span>
+              <strong>
+                {practiceStats.today} {t("stats.answersToday")}
+              </strong>
             </div>
             <div className="reading-activity" aria-label={t("stats.practiceActivityLabel")}>
               {practiceStats.activity.map((entry) => (
@@ -227,7 +279,9 @@ export function StatsPage() {
           <h2 className="section-heading">{t("stats.weakTitle")}</h2>
           {practiceStats.weak.length > 0 ? (
             <ul className="stats-weak-list">
-              {practiceStats.weak.map((question) => <li key={question.id}>{question.prompt}</li>)}
+              {practiceStats.weak.map((question) => (
+                <li key={question.id}>{question.prompt}</li>
+              ))}
             </ul>
           ) : (
             <p className="empty-note">{t("stats.noWeak")}</p>

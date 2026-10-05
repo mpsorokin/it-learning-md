@@ -1,4 +1,3 @@
-import { isDate, isRecord, readStored, removeStored, writeStored } from "@/lib/storage";
 import {
   emptyPractice,
   PRACTICE_STORAGE_KEY,
@@ -7,17 +6,20 @@ import {
   type PracticeRating,
   type PracticeState,
 } from "@/features/practice/practice.types";
+import { isDate, isRecord, readStored, removeStored, writeStored } from "@/lib/storage";
 
 const isRating = (value: unknown): value is PracticeRating =>
   value === "again" || value === "hard" || value === "known";
 
-const isDailyGoal = (value: unknown): value is PracticeDailyGoal => value === 3 || value === 5 || value === 10;
+const isDailyGoal = (value: unknown): value is PracticeDailyGoal =>
+  value === 3 || value === 5 || value === 10;
 
 function parseAttempt(value: unknown) {
   if (!isRecord(value)) return null;
   if (typeof value.questionId !== "string" || value.questionId.length === 0) return null;
   if (!isRating(value.rating)) return null;
-  if (!isDate(value.answeredAt) || !isDate(value.studyDate) || !isDate(value.updatedAt)) return null;
+  if (!isDate(value.answeredAt) || !isDate(value.studyDate) || !isDate(value.updatedAt))
+    return null;
   return {
     questionId: value.questionId,
     rating: value.rating,
@@ -29,7 +31,12 @@ function parseAttempt(value: unknown) {
 
 export function parsePracticeState(value: unknown): PracticeState | null {
   if (!isRecord(value)) return null;
-  if (value.version !== PRACTICE_VERSION || !isDailyGoal(value.dailyGoal) || !isRecord(value.attempts)) return null;
+  if (
+    value.version !== PRACTICE_VERSION ||
+    !isDailyGoal(value.dailyGoal) ||
+    !isRecord(value.attempts)
+  )
+    return null;
 
   const attempts: PracticeState["attempts"] = {};
   for (const [id, entry] of Object.entries(value.attempts)) {

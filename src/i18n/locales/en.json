@@ -192,8 +192,8 @@
     "dismiss": "Later"
   },
   "flows": {
-      "progress": "Route progress",
-      "subtopicsDoneOfTotal": "Completed {{done}} of {{total}} subtopics",
+    "progress": "Route progress",
+    "subtopicsDoneOfTotal": "Completed {{done}} of {{total}} subtopics",
     "topicsDoneOfTotal": "Topics completed: {{done}} / {{total}}",
     "continue": "Continue",
     "answer": "Answer",
@@ -206,11 +206,11 @@
     "questionCount_other": "{{count}} questions",
     "noTopics": "No topics are available yet.",
     "noSubtopics": "No subtopics are available yet.",
-      "state": {
-        "notStarted": "Not started",
-        "inProgress": "In progress",
-        "completed": "Completed"
-      },
+    "state": {
+      "notStarted": "Not started",
+      "inProgress": "In progress",
+      "completed": "Completed"
+    },
     "groups": {
       "jsTs": "JavaScript and TypeScript",
       "browser": "Browser",
@@ -264,7 +264,9 @@
       "24-nodejs-runtime": { "title": "Node.js Runtime" },
       "25-nestjs-architecture": { "title": "NestJS Architecture" },
       "26-nestjs-request-lifecycle": { "title": "NestJS Request Lifecycle" },
-      "27-nestjs-authentication-authorization": { "title": "NestJS Authentication and Authorization" },
+      "27-nestjs-authentication-authorization": {
+        "title": "NestJS Authentication and Authorization"
+      },
       "28-http-rest-api-design": { "title": "HTTP and REST API Design" },
       "29-websocket-sse": { "title": "WebSocket and SSE" },
       "30-web-security": { "title": "Web Security" },

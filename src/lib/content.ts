@@ -1,5 +1,5 @@
-import type { Folder, Lesson, Section } from "@/lib/content.types";
 import { lessons as catalog } from "virtual:ittheory/catalog";
+import type { Folder, Lesson, Section } from "@/lib/content.types";
 
 /**
  * The Vite plugin indexes small lesson metadata at build time. The bodies stay
@@ -33,7 +33,10 @@ function buildSections(lessons: Lesson[]): Section[] {
           slug,
           lessons: [...folderLessons].sort(byOrder),
         }))
-        .sort((a, b) => (a.lessons[0]?.order ?? 0) - (b.lessons[0]?.order ?? 0) || a.slug.localeCompare(b.slug));
+        .sort(
+          (a, b) =>
+            (a.lessons[0]?.order ?? 0) - (b.lessons[0]?.order ?? 0) || a.slug.localeCompare(b.slug),
+        );
 
       return { slug: section, folders, lessons: folders.flatMap((folder) => folder.lessons) };
     })
@@ -47,11 +50,14 @@ export const sections: Section[] = buildSections(allLessons);
 export const orderedLessons: Lesson[] = sections.flatMap((section) => section.lessons);
 
 const sectionsBySlug = new Map(sections.map((section) => [section.slug, section]));
-const foldersById = new Map(sections.flatMap((section) => section.folders).map((folder) => [folder.id, folder]));
+const foldersById = new Map(
+  sections.flatMap((section) => section.folders).map((folder) => [folder.id, folder]),
+);
 const lessonsById = new Map(allLessons.map((lesson) => [lesson.id, lesson]));
 
 export const findSection = (slug: string): Section | undefined => sectionsBySlug.get(slug);
-export const findFolder = (section: string, folder: string): Folder | undefined => foldersById.get(`${section}/${folder}`);
+export const findFolder = (section: string, folder: string): Folder | undefined =>
+  foldersById.get(`${section}/${folder}`);
 export const findLesson = (section: string, folder: string, slug: string): Lesson | undefined =>
   lessonsById.get(`${section}/${folder}/${slug}`);
 export const findLessonById = (id: string): Lesson | undefined => lessonsById.get(id);

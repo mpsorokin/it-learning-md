@@ -200,8 +200,8 @@
     "dismiss": "Позже"
   },
   "flows": {
-      "progress": "Прогресс маршрута",
-      "subtopicsDoneOfTotal": "Пройдено {{done}} из {{total}} подтем",
+    "progress": "Прогресс маршрута",
+    "subtopicsDoneOfTotal": "Пройдено {{done}} из {{total}} подтем",
     "topicsDoneOfTotal": "Тем завершено: {{done}} / {{total}}",
     "continue": "Продолжить",
     "answer": "Ответ",
@@ -218,11 +218,11 @@
     "questionCount_other": "{{count}} вопросов",
     "noTopics": "Темы пока недоступны.",
     "noSubtopics": "Подтемы пока недоступны.",
-      "state": {
-        "notStarted": "Не начато",
-        "inProgress": "В работе",
-        "completed": "Пройдено"
-      },
+    "state": {
+      "notStarted": "Не начато",
+      "inProgress": "В работе",
+      "completed": "Пройдено"
+    },
     "groups": {
       "jsTs": "JavaScript и TypeScript",
       "browser": "Браузер",
@@ -276,7 +276,9 @@
       "24-nodejs-runtime": { "title": "Среда выполнения Node.js" },
       "25-nestjs-architecture": { "title": "Архитектура NestJS" },
       "26-nestjs-request-lifecycle": { "title": "Жизненный цикл запроса в NestJS" },
-      "27-nestjs-authentication-authorization": { "title": "Аутентификация и авторизация в NestJS" },
+      "27-nestjs-authentication-authorization": {
+        "title": "Аутентификация и авторизация в NestJS"
+      },
       "28-http-rest-api-design": { "title": "Проектирование HTTP и REST API" },
       "29-websocket-sse": { "title": "WebSocket и SSE" },
       "30-web-security": { "title": "Безопасность веб-приложений" },

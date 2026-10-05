@@ -1,6 +1,10 @@
 import { useContext } from "react";
-import { ProgressActionsContext, ProgressStateContext, type ProgressActions } from "@/features/progress/ProgressProvider";
 import type { ProgressState } from "@/features/progress/progress.types";
+import {
+  ProgressActionsContext,
+  ProgressStateContext,
+  type ProgressActions,
+} from "@/features/progress/ProgressProvider";
 
 export function useProgressState(): ProgressState {
   const state = useContext(ProgressStateContext);

@@ -36,7 +36,10 @@ export function SectionPage() {
               <ContentRow
                 to={folderPath(folder)}
                 title={folderLabel(folder)}
-                count={t("common.doneOfTotal", { done: folderTally.done, total: folderTally.total })}
+                count={t("common.doneOfTotal", {
+                  done: folderTally.done,
+                  total: folderTally.total,
+                })}
                 ratio={folderTally.ratio}
                 meta={t("library.lessonCount", { count: folder.lessons.length })}
               />

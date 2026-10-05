@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { humanizeSlug } from "@/lib/names";
 import type { Folder, Lesson, Section } from "@/lib/content.types";
+import { humanizeSlug } from "@/lib/names";
 
 /**
  * Section and folder names come from the interface locale under
@@ -18,7 +18,8 @@ export function useContentLabels() {
   return useMemo(() => {
     // The typed `t` only accepts literal keys; these are assembled at runtime
     // and guarded by `exists`, so the cast is the whole point.
-    const translate = (key: string) => (i18n.exists(key) ? (t as (key: string) => string)(key) : null);
+    const translate = (key: string) =>
+      i18n.exists(key) ? (t as (key: string) => string)(key) : null;
 
     const sectionLabel = (section: Section | string) => {
       const slug = typeof section === "string" ? section : section.slug;

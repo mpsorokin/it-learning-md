@@ -7,13 +7,17 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
-import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
-import { useProgressState } from "@/features/progress/useProgress";
-import { interviewQuestions, interviewQuestionsById, loadInterviewAnswer } from "@/features/practice/questions";
-import { practiceQueue, practiceSummary } from "@/features/practice/practice.metrics";
-import { usePracticeActions, usePracticeState } from "@/features/practice/usePractice";
-import type { PracticeRating } from "@/features/practice/practice.types";
 import { ProgressRing } from "@/components/ui/ProgressRing";
+import { practiceQueue, practiceSummary } from "@/features/practice/practice.metrics";
+import type { PracticeRating } from "@/features/practice/practice.types";
+import {
+  interviewQuestions,
+  interviewQuestionsById,
+  loadInterviewAnswer,
+} from "@/features/practice/questions";
+import { usePracticeActions, usePracticeState } from "@/features/practice/usePractice";
+import { useProgressState } from "@/features/progress/useProgress";
+import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
 import { findFolder } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
@@ -30,9 +34,16 @@ export function PracticePage() {
   const [sessionIds, setSessionIds] = useState<string[]>(() =>
     initialQueue.slice(0, practice.dailyGoal).map((question) => question.id),
   );
-  const [sessionTarget, setSessionTarget] = useState(() => Math.min(practice.dailyGoal, initialQueue.length));
+  const [sessionTarget, setSessionTarget] = useState(() =>
+    Math.min(practice.dailyGoal, initialQueue.length),
+  );
   const [revealed, setRevealed] = useState(false);
-  const [answerState, setAnswerState] = useState<{ questionId: string; answer: string; loading: boolean; failed: boolean } | null>(null);
+  const [answerState, setAnswerState] = useState<{
+    questionId: string;
+    answer: string;
+    loading: boolean;
+    failed: boolean;
+  } | null>(null);
   const summary = useMemo(
     () => practiceSummary(progress, practice, interviewQuestions),
     [practice, progress],
@@ -91,19 +102,27 @@ export function PracticePage() {
           <div className="practice-session-meta">
             <span>{t("practice.position", { position, total: sessionTarget })}</span>
             <span className="practice-session-meta__streak">
-              <Flame size={14} aria-hidden="true" /> {t("practice.streak", { count: summary.currentStreak })}
+              <Flame size={14} aria-hidden="true" />{" "}
+              {t("practice.streak", { count: summary.currentStreak })}
             </span>
           </div>
           <div className="practice-session-progress" aria-hidden="true">
-            <span style={{ width: `${(Math.max(0, position - 1) / Math.max(1, sessionTarget)) * 100}%` }} />
+            <span
+              style={{
+                width: `${(Math.max(0, position - 1) / Math.max(1, sessionTarget)) * 100}%`,
+              }}
+            />
           </div>
 
-          <article className={`practice-question-card ${revealed ? "practice-question-card--revealed" : ""}`}>
+          <article
+            className={`practice-question-card ${revealed ? "practice-question-card--revealed" : ""}`}
+          >
             {!revealed ? (
               <>
                 <p className="eyebrow">{t("practice.questionLabel")}</p>
                 <p className="practice-question-card__source">
-                  {sectionLabel(current.section)} · {currentFolder ? folderLabel(currentFolder) : current.folder}
+                  {sectionLabel(current.section)} ·{" "}
+                  {currentFolder ? folderLabel(currentFolder) : current.folder}
                 </p>
                 <h2>{current.prompt}</h2>
                 {current.promptBody && (
@@ -131,10 +150,23 @@ export function PracticePage() {
 
           {!revealed ? (
             <>
-              <button className="practice-reveal-button" type="button" onClick={reveal} disabled={answer?.loading}>
-                {answer?.loading ? t("reader.loading") : answer?.failed ? t("practice.retryAnswer") : t("practice.showAnswer")}
+              <button
+                className="practice-reveal-button"
+                type="button"
+                onClick={reveal}
+                disabled={answer?.loading}
+              >
+                {answer?.loading
+                  ? t("reader.loading")
+                  : answer?.failed
+                    ? t("practice.retryAnswer")
+                    : t("practice.showAnswer")}
               </button>
-              {answer?.failed && <p className="practice-answer-error" role="alert">{t("reader.loadError")}</p>}
+              {answer?.failed && (
+                <p className="practice-answer-error" role="alert">
+                  {t("reader.loadError")}
+                </p>
+              )}
             </>
           ) : (
             <div className="practice-rating-grid" aria-label={t("practice.rateLabel")}>
@@ -146,7 +178,11 @@ export function PracticePage() {
                 <Waveform size={22} aria-hidden="true" />
                 <span>{t("practice.hard")}</span>
               </button>
-              <button type="button" className="practice-rating practice-rating--known" onClick={() => rate("known")}>
+              <button
+                type="button"
+                className="practice-rating practice-rating--known"
+                onClick={() => rate("known")}
+              >
                 <Check size={22} weight="bold" aria-hidden="true" />
                 <span>{t("practice.known")}</span>
               </button>
@@ -169,11 +205,15 @@ export function PracticePage() {
         </section>
       ) : (
         <section className="practice-empty">
-          <span className="practice-empty__icon"><Waveform size={24} aria-hidden="true" /></span>
+          <span className="practice-empty__icon">
+            <Waveform size={24} aria-hidden="true" />
+          </span>
           <p className="eyebrow">{t("practice.emptyEyebrow")}</p>
           <h2>{t("practice.emptyTitle")}</h2>
           <p>{t("practice.emptyDescription")}</p>
-          <Link className="primary-button" to="/library">{t("practice.openLibrary")}</Link>
+          <Link className="primary-button" to="/library">
+            {t("practice.openLibrary")}
+          </Link>
         </section>
       )}
       <p className="practice-date-note">

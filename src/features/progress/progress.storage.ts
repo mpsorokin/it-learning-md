@@ -1,6 +1,11 @@
+import {
+  emptyProgress,
+  PROGRESS_VERSION,
+  type LessonProgress,
+  type ProgressState,
+} from "@/features/progress/progress.types";
 import { clamp01 } from "@/lib/num";
 import { isDate, isRecord, readStored, removeStored, writeStored } from "@/lib/storage";
-import { emptyProgress, PROGRESS_VERSION, type LessonProgress, type ProgressState } from "@/features/progress/progress.types";
 
 export const PROGRESS_STORAGE_KEY = "ittheory:progress:v1";
 
@@ -15,7 +20,11 @@ function parseLessonProgress(value: unknown): LessonProgress | null {
   if (!isDate(value.updatedAt)) return null;
 
   const hasCompletedAt = "completedAt" in value;
-  const completedAt = hasCompletedAt ? (isDate(value.completedAt) ? value.completedAt : null) : null;
+  const completedAt = hasCompletedAt
+    ? isDate(value.completedAt)
+      ? value.completedAt
+      : null
+    : null;
   const completed = completedAt !== null;
   const scrollRatio = parseScrollRatio(value.scrollRatio, completed);
 
@@ -45,13 +54,16 @@ export function parseProgressState(value: unknown): ProgressState | null {
  * Cross-tab merge: any `completedAt` is kept (earlier wins, matching re-tick
  * semantics), `scrollRatio` is the max, and a completed lesson is always full.
  */
-export function mergeLessonProgress(local: LessonProgress, incoming: LessonProgress): LessonProgress {
+export function mergeLessonProgress(
+  local: LessonProgress,
+  incoming: LessonProgress,
+): LessonProgress {
   const completedAt =
     local.completedAt && incoming.completedAt
       ? local.completedAt < incoming.completedAt
         ? local.completedAt
         : incoming.completedAt
-      : local.completedAt ?? incoming.completedAt;
+      : (local.completedAt ?? incoming.completedAt);
 
   const scrollRatio = completedAt ? 1 : Math.max(local.scrollRatio, incoming.scrollRatio);
   const updatedAt = local.updatedAt > incoming.updatedAt ? local.updatedAt : incoming.updatedAt;

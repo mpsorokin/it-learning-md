@@ -3,9 +3,9 @@ import { Navigate, useParams } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { LessonRow } from "@/components/ui/LessonRow";
 import { TallyCard } from "@/components/ui/TallyCard";
+import { flowPath, getFlowTopic } from "@/features/flows/flow";
 import { folderProgress, isCompleted, lessonScrollRatio } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
-import { flowPath, getFlowTopic } from "@/features/flows/flow";
 import { lessonPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
@@ -55,7 +55,13 @@ export function FlowTopicPage() {
                 <span className="flow-lesson-list__meta">
                   {t("flows.questionCount", { count: lesson.questionCount })}
                   {" · "}
-                  {t(done ? "flows.state.completed" : started ? "flows.state.inProgress" : "flows.state.notStarted")}
+                  {t(
+                    done
+                      ? "flows.state.completed"
+                      : started
+                        ? "flows.state.inProgress"
+                        : "flows.state.notStarted",
+                  )}
                 </span>
               </li>
             );

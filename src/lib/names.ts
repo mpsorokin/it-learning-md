@@ -1,1 +1,6 @@
-export { humanizeSlug, resolveOrder, slugFromFilename, titleFromMarkdown } from "@/lib/contentParsing";
+export {
+  humanizeSlug,
+  resolveOrder,
+  slugFromFilename,
+  titleFromMarkdown,
+} from "@/lib/contentParsing";

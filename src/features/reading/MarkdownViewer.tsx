@@ -1,14 +1,14 @@
-import { memo, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Check } from "@phosphor-icons/react/dist/csr/Check";
 import { Copy } from "@phosphor-icons/react/dist/csr/Copy";
+import type { Element, ElementContent } from "hast";
+import { memo, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import Markdown, { type Components } from "react-markdown";
-import rehypeHighlight from "@/features/reading/rehypeHighlight";
+import { Link } from "react-router-dom";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import type { Element, ElementContent } from "hast";
 import type { PluggableList } from "unified";
+import rehypeHighlight from "@/features/reading/rehypeHighlight";
 
 /** Flattens a highlighted subtree back to the source the reader would copy. */
 function collectText(node: ElementContent): string {
@@ -18,9 +18,15 @@ function collectText(node: ElementContent): string {
 }
 
 function languageOf(node: Element | undefined): string | null {
-  const code = node?.children.find((child): child is Element => child.type === "element" && child.tagName === "code");
+  const code = node?.children.find(
+    (child): child is Element => child.type === "element" && child.tagName === "code",
+  );
   const classes = code?.properties?.className;
-  const list = Array.isArray(classes) ? classes.map(String) : typeof classes === "string" ? [classes] : [];
+  const list = Array.isArray(classes)
+    ? classes.map(String)
+    : typeof classes === "string"
+      ? [classes]
+      : [];
   const match = list.find((name) => name.startsWith("language-"));
   return match ? match.slice("language-".length) : null;
 }
@@ -62,7 +68,11 @@ function CodeBlock({ node, children }: { node?: Element; children?: ReactNode })
           onClick={copy}
           aria-label={t("reader.copyCode")}
         >
-          {copied ? <Check size={13} weight="bold" aria-hidden="true" /> : <Copy size={13} aria-hidden="true" />}
+          {copied ? (
+            <Check size={13} weight="bold" aria-hidden="true" />
+          ) : (
+            <Copy size={13} aria-hidden="true" />
+          )}
           <span>{copied ? t("reader.copied") : t("reader.copy")}</span>
         </button>
       </figcaption>

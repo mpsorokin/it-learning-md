@@ -79,7 +79,12 @@ export const fullstackInterviewFlow = {
     {
       id: "next",
       labelKey: "flows.groups.next",
-      folderSlugs: ["20-next-rendering", "21-next-data-fetching-cache", "22-next-server-actions", "23-next-routing"],
+      folderSlugs: [
+        "20-next-rendering",
+        "21-next-data-fetching-cache",
+        "22-next-server-actions",
+        "23-next-routing",
+      ],
     },
     {
       id: "backend-security",
@@ -97,12 +102,26 @@ export const fullstackInterviewFlow = {
     {
       id: "data-system-design",
       labelKey: "flows.groups.dataSystemDesign",
-      folderSlugs: ["31-databases-sql-postgresql", "32-orm-typeorm", "33-redis", "34-ddd", "35-cqrs", "36-microservices", "37-system-design"],
+      folderSlugs: [
+        "31-databases-sql-postgresql",
+        "32-orm-typeorm",
+        "33-redis",
+        "34-ddd",
+        "35-cqrs",
+        "36-microservices",
+        "37-system-design",
+      ],
     },
     {
       id: "delivery-senior-practice",
       labelKey: "flows.groups.deliverySeniorPractice",
-      folderSlugs: ["38-docker", "39-ci-cd", "40-full-stack-machine-coding", "41-production-debugging", "42-architecture-engineering-judgment"],
+      folderSlugs: [
+        "38-docker",
+        "39-ci-cd",
+        "40-full-stack-machine-coding",
+        "41-production-debugging",
+        "42-architecture-engineering-judgment",
+      ],
     },
   ],
 } as const satisfies FlowDefinition;
@@ -112,7 +131,8 @@ export const flowSectionSlug = fullstackInterviewFlow.section;
 const flowDefinitions: readonly FlowDefinition[] = [fullstackInterviewFlow];
 
 export const flowPath = (flowId: string): string => `/flows/${flowId}`;
-export const flowTopicPath = (flowId: string, topicSlug: string): string => `/flows/${flowId}/${topicSlug}`;
+export const flowTopicPath = (flowId: string, topicSlug: string): string =>
+  `/flows/${flowId}/${topicSlug}`;
 
 /** Where a section row leads: a flow section opens its flow, not the plain folder list. */
 export function sectionEntryPath(section: Section): string {
@@ -160,7 +180,9 @@ export function orderedLessonNeighbours(
 export function getFlowForLesson(lesson: Lesson | undefined): FlowDefinition | undefined {
   if (!lesson) return undefined;
   return flowDefinitions.find(
-    (flow) => lesson.section === flow.section && flow.groups.some((group) => group.folderSlugs.includes(lesson.folder)),
+    (flow) =>
+      lesson.section === flow.section &&
+      flow.groups.some((group) => group.folderSlugs.includes(lesson.folder)),
   );
 }
 

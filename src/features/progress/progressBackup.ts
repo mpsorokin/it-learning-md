@@ -1,10 +1,10 @@
-import { isRecord } from "@/lib/storage";
-import { parseProgressState } from "@/features/progress/progress.storage";
-import type { ProgressState } from "@/features/progress/progress.types";
 import { parsePracticeState } from "@/features/practice/practice.storage";
 import { emptyPractice, type PracticeState } from "@/features/practice/practice.types";
-import { emptyStudy, type StudyState } from "@/features/study/study.types";
+import { parseProgressState } from "@/features/progress/progress.storage";
+import type { ProgressState } from "@/features/progress/progress.types";
 import { parseStudyState } from "@/features/study/study.storage";
+import { emptyStudy, type StudyState } from "@/features/study/study.types";
+import { isRecord } from "@/lib/storage";
 
 export const PROGRESS_BACKUP_KIND = "ittheory-progress";
 export const PROGRESS_BACKUP_VERSION = 3;
@@ -18,7 +18,11 @@ export interface ProgressBackup {
   study: StudyState;
 }
 
-export function createProgressBackup(progress: ProgressState, practice: PracticeState, study: StudyState): ProgressBackup {
+export function createProgressBackup(
+  progress: ProgressState,
+  practice: PracticeState,
+  study: StudyState,
+): ProgressBackup {
   return {
     kind: PROGRESS_BACKUP_KIND,
     version: PROGRESS_BACKUP_VERSION,
@@ -37,7 +41,8 @@ export function createProgressBackup(progress: ProgressState, practice: Practice
 export function parseProgressBackup(value: unknown): ProgressBackup | null {
   if (!isRecord(value)) return null;
   if (value.kind !== PROGRESS_BACKUP_KIND) return null;
-  if (value.version !== 1 && value.version !== 2 && value.version !== PROGRESS_BACKUP_VERSION) return null;
+  if (value.version !== 1 && value.version !== 2 && value.version !== PROGRESS_BACKUP_VERSION)
+    return null;
   if (typeof value.exportedAt !== "string" || value.exportedAt.length === 0) return null;
 
   const progress = parseProgressState(value.progress);
@@ -45,7 +50,8 @@ export function parseProgressBackup(value: unknown): ProgressBackup | null {
 
   const practice = value.version === 1 ? emptyPractice() : parsePracticeState(value.practice);
   if (!practice) return null;
-  const study = value.version === PROGRESS_BACKUP_VERSION ? parseStudyState(value.study) : emptyStudy();
+  const study =
+    value.version === PROGRESS_BACKUP_VERSION ? parseStudyState(value.study) : emptyStudy();
   if (!study) return null;
 
   return {

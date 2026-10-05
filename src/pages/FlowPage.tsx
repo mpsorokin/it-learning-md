@@ -4,9 +4,9 @@ import { AppShell } from "@/components/layout/AppShell";
 import { ContentRow } from "@/components/ui/ContentRow";
 import { ContinueCard } from "@/components/ui/ContinueCard";
 import { TallyCard } from "@/components/ui/TallyCard";
-import { getNextLesson, folderProgress, overallProgress } from "@/features/progress/metrics";
-import { useProgressState } from "@/features/progress/useProgress";
 import { flowTopicPath, orderedFlowLessons, resolveFlow } from "@/features/flows/flow";
+import { folderProgress, getNextLesson, overallProgress } from "@/features/progress/metrics";
+import { useProgressState } from "@/features/progress/useProgress";
 import { findFolder, lessonPath } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
@@ -28,7 +28,10 @@ export function FlowPage() {
   }).length;
   const next = getNextLesson(progress, lessons);
   const nextFolder = next ? findFolder(next.section, next.folder) : undefined;
-  const configuredTopicCount = flow.definition.groups.reduce((total, group) => total + group.folderSlugs.length, 0);
+  const configuredTopicCount = flow.definition.groups.reduce(
+    (total, group) => total + group.folderSlugs.length,
+    0,
+  );
 
   return (
     <AppShell title={sectionLabel(flow.definition.section)} backTo="/library">
@@ -49,7 +52,8 @@ export function FlowPage() {
           title={lessonLabel(next)}
           path={
             <>
-              {folderLabel(nextFolder)} · {t("reader.position", {
+              {folderLabel(nextFolder)} ·{" "}
+              {t("reader.position", {
                 position: lessons.findIndex((lesson) => lesson.id === next.id) + 1,
                 total: lessons.length,
               })}
@@ -63,28 +67,40 @@ export function FlowPage() {
       )}
 
       <div className="flow-groups">
-        {flow.groups.map(({ definition, topics }) => topics.length > 0 && (
-          <section className="flow-group" key={definition.id}>
-            <h2 className="section-heading">{t(definition.labelKey)}</h2>
-            <ul className="content-list">
-              {topics.map(({ folder }) => {
-                const topicTally = folderProgress(progress, folder);
-                const questionCount = folder.lessons.reduce((total, lesson) => total + lesson.questionCount, 0);
-                return (
-                  <li key={folder.id}>
-                    <ContentRow
-                      to={flowTopicPath(flow.definition.id, folder.slug)}
-                      title={folderLabel(folder)}
-                      count={t("common.doneOfTotal", { done: topicTally.done, total: topicTally.total })}
-                      ratio={topicTally.ratio}
-                      meta={t("flows.topicMeta", { subtopics: folder.lessons.length, questions: questionCount })}
-                    />
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        ))}
+        {flow.groups.map(
+          ({ definition, topics }) =>
+            topics.length > 0 && (
+              <section className="flow-group" key={definition.id}>
+                <h2 className="section-heading">{t(definition.labelKey)}</h2>
+                <ul className="content-list">
+                  {topics.map(({ folder }) => {
+                    const topicTally = folderProgress(progress, folder);
+                    const questionCount = folder.lessons.reduce(
+                      (total, lesson) => total + lesson.questionCount,
+                      0,
+                    );
+                    return (
+                      <li key={folder.id}>
+                        <ContentRow
+                          to={flowTopicPath(flow.definition.id, folder.slug)}
+                          title={folderLabel(folder)}
+                          count={t("common.doneOfTotal", {
+                            done: topicTally.done,
+                            total: topicTally.total,
+                          })}
+                          ratio={topicTally.ratio}
+                          meta={t("flows.topicMeta", {
+                            subtopics: folder.lessons.length,
+                            questions: questionCount,
+                          })}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ),
+        )}
       </div>
     </AppShell>
   );

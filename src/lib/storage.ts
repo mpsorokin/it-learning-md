@@ -13,7 +13,8 @@ export const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** ISO timestamps are only ever compared and re-serialised, so presence is enough. */
-export const isDate = (value: unknown): value is string => typeof value === "string" && value.length > 0;
+export const isDate = (value: unknown): value is string =>
+  typeof value === "string" && value.length > 0;
 
 export const backupKeyFor = (key: string): string => `${key}.bak`;
 
@@ -38,7 +39,11 @@ export function preserveStoredRaw(key: string, raw: string): void {
  * Reads and validates one store. `parse` returns `null` for anything it does not
  * recognise — including a future schema version — which triggers the backup.
  */
-export function readStored<T>(key: string, parse: (value: unknown) => T | null, fallback: () => T): T {
+export function readStored<T>(
+  key: string,
+  parse: (value: unknown) => T | null,
+  fallback: () => T,
+): T {
   let raw: string | null = null;
   try {
     raw = window.localStorage.getItem(key);
@@ -116,7 +121,10 @@ export function mergeRecords<T extends { updatedAt: string }>(
  * Calls `onChange` when another tab rewrites `key`. The `storage` event only
  * fires in *other* tabs, so this never reacts to our own writes.
  */
-export function subscribeToStorage(key: string, onChange: (raw: string | null) => void): () => void {
+export function subscribeToStorage(
+  key: string,
+  onChange: (raw: string | null) => void,
+): () => void {
   const listener = (event: StorageEvent) => {
     if (event.key !== null && event.key !== key) return;
     // `event.key === null` means the whole store was cleared.

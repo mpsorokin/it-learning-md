@@ -1,5 +1,5 @@
-import { readStoredString, writeStoredString } from "@/lib/storage";
 import { DEFAULT_LOCALE, isAppLocale, type AppLocale } from "@/i18n/locale.types";
+import { readStoredString, writeStoredString } from "@/lib/storage";
 
 export const LOCALE_STORAGE_KEY = "ittheory:locale";
 

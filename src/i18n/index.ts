@@ -10,7 +10,9 @@ function syncDocumentLanguage() {
   const locale = isAppLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE;
   document.documentElement.lang = locale;
   document.title = i18n.t("meta.title");
-  document.querySelector('meta[name="description"]')?.setAttribute("content", i18n.t("meta.description"));
+  document
+    .querySelector('meta[name="description"]')
+    ?.setAttribute("content", i18n.t("meta.description"));
 }
 
 void i18n.use(initReactI18next).init({

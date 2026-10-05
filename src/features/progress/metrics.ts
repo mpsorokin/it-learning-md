@@ -1,5 +1,5 @@
-import type { Folder, Lesson, Section } from "@/lib/content.types";
 import type { LessonProgress, ProgressState } from "@/features/progress/progress.types";
+import type { Folder, Lesson, Section } from "@/lib/content.types";
 
 /**
  * Pure functions over `(progress, content)`. Nothing here touches storage or
@@ -38,7 +38,10 @@ const lessonEntry = (progress: ProgressState, lessonId: string): LessonProgress 
   progress.lessons[lessonId];
 
 const tally = (lessons: Lesson[], progress: ProgressState): Tally => {
-  const done = lessons.reduce((count, lesson) => (isCompleted(progress, lesson.id) ? count + 1 : count), 0);
+  const done = lessons.reduce(
+    (count, lesson) => (isCompleted(progress, lesson.id) ? count + 1 : count),
+    0,
+  );
   return { done, total: lessons.length, ratio: lessons.length === 0 ? 1 : done / lessons.length };
 };
 
@@ -52,11 +55,14 @@ export const lessonScrollRatio = (progress: ProgressState, lessonId: string): nu
   return entry.scrollRatio;
 };
 
-export const folderProgress = (progress: ProgressState, folder: Folder): Tally => tally(folder.lessons, progress);
+export const folderProgress = (progress: ProgressState, folder: Folder): Tally =>
+  tally(folder.lessons, progress);
 
-export const sectionProgress = (progress: ProgressState, section: Section): Tally => tally(section.lessons, progress);
+export const sectionProgress = (progress: ProgressState, section: Section): Tally =>
+  tally(section.lessons, progress);
 
-export const overallProgress = (progress: ProgressState, lessons: Lesson[]): Tally => tally(lessons, progress);
+export const overallProgress = (progress: ProgressState, lessons: Lesson[]): Tally =>
+  tally(lessons, progress);
 
 /**
  * Returns active reading days in the last 28 local calendar days, newest first.

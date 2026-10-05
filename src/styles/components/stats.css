@@ -15,7 +15,9 @@
   background: transparent;
   color: var(--color-muted);
   font-size: 11px;
-  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition:
+    background var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .stats-tab[aria-selected="true"] {
@@ -113,10 +115,18 @@
   background: var(--color-track);
 }
 
-.reading-activity__cell--1 { background: color-mix(in srgb, var(--color-gold) 35%, var(--color-track)); }
-.reading-activity__cell--2 { background: color-mix(in srgb, var(--color-gold) 60%, var(--color-track)); }
-.reading-activity__cell--3 { background: color-mix(in srgb, var(--color-gold) 78%, var(--color-track)); }
-.reading-activity__cell--4 { background: var(--color-gold-bright); }
+.reading-activity__cell--1 {
+  background: color-mix(in srgb, var(--color-gold) 35%, var(--color-track));
+}
+.reading-activity__cell--2 {
+  background: color-mix(in srgb, var(--color-gold) 60%, var(--color-track));
+}
+.reading-activity__cell--3 {
+  background: color-mix(in srgb, var(--color-gold) 78%, var(--color-track));
+}
+.reading-activity__cell--4 {
+  background: var(--color-gold-bright);
+}
 
 .reading-activity__legend {
   display: flex;

@@ -18,7 +18,15 @@ interface LessonRowProps {
  * One lesson card on the folder screen. Hook-free for the same reason as
  * `ContentRow` — the caller already has translated strings in hand.
  */
-export function LessonRow({ to, title, index, done, ratio, progressLabel, completedLabel }: LessonRowProps) {
+export function LessonRow({
+  to,
+  title,
+  index,
+  done,
+  ratio,
+  progressLabel,
+  completedLabel,
+}: LessonRowProps) {
   return (
     <Link className={cx("lesson-row", done && "lesson-row--done")} to={to}>
       <span className="lesson-row__mark" aria-hidden="true">

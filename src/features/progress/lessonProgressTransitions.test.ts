@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { completeLessonProgress, resetLessonProgress } from "@/features/progress/lessonProgressTransitions";
+import {
+  completeLessonProgress,
+  resetLessonProgress,
+} from "@/features/progress/lessonProgressTransitions";
 import { isCompleted } from "@/features/progress/metrics";
 import { emptyProgress } from "@/features/progress/progress.types";
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { registerSW } from "virtual:pwa-register";
 import { useTranslation } from "react-i18next";
+import { registerSW } from "virtual:pwa-register";
 
 type OfflineMessage = "ready" | "update";
 
@@ -12,7 +12,7 @@ export function OfflineProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!import.meta.env.PROD || !("serviceWorker" in navigator)) return;
     updateSW.current = registerSW({
-      onOfflineReady: () => setMessage((current) => current === "update" ? current : "ready"),
+      onOfflineReady: () => setMessage((current) => (current === "update" ? current : "ready")),
       onNeedRefresh: () => setMessage("update"),
     });
   }, []);
@@ -23,9 +23,13 @@ export function OfflineProvider({ children }: { children: ReactNode }) {
         <div className="offline-notice" role="status">
           <span>{t(message === "update" ? "offline.updateAvailable" : "offline.ready")}</span>
           {message === "update" && (
-            <button type="button" onClick={() => void updateSW.current?.(true)}>{t("offline.installUpdate")}</button>
+            <button type="button" onClick={() => void updateSW.current?.(true)}>
+              {t("offline.installUpdate")}
+            </button>
           )}
-          <button type="button" aria-label={t("offline.dismiss")} onClick={() => setMessage(null)}>{t("offline.dismiss")}</button>
+          <button type="button" aria-label={t("offline.dismiss")} onClick={() => setMessage(null)}>
+            {t("offline.dismiss")}
+          </button>
         </div>
       )}
       {children}

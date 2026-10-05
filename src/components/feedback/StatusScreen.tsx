@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 
 /** Either a link somewhere useful, or an in-place recovery button. */
-export type StatusScreenAction = { label: string; to: string } | { label: string; onClick: () => void };
+export type StatusScreenAction =
+  { label: string; to: string } | { label: string; onClick: () => void };
 
 interface StatusScreenProps {
   title: string;

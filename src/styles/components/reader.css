@@ -190,7 +190,9 @@
   color: var(--r-muted);
   font-family: var(--font-sans);
   font-size: 12px;
-  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  transition:
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease;
 }
 
 .reader-secondary-button:hover {
@@ -216,7 +218,9 @@
   color: var(--r-muted);
   font-size: 12px;
   line-height: 1.35;
-  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition:
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .reader-pager__link:hover {

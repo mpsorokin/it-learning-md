@@ -20,7 +20,9 @@ interface ProgressBarProps {
  */
 export function ProgressBar({ value, className, label }: ProgressBarProps) {
   const normalized = clamp01(value);
-  const semantics = label ? progressSemantics(normalized, label) : ({ "aria-hidden": true } as const);
+  const semantics = label
+    ? progressSemantics(normalized, label)
+    : ({ "aria-hidden": true } as const);
 
   return (
     <div className={cx("progress-bar", className)} {...semantics}>

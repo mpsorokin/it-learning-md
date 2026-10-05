@@ -1,8 +1,12 @@
-import { isCompleted } from "@/features/progress/metrics";
-import type { Lesson } from "@/lib/content.types";
-import type { ProgressState } from "@/features/progress/progress.types";
+import type {
+  PracticeAttempt,
+  PracticeRating,
+  PracticeState,
+} from "@/features/practice/practice.types";
 import type { InterviewQuestion } from "@/features/practice/questions";
-import type { PracticeAttempt, PracticeRating, PracticeState } from "@/features/practice/practice.types";
+import { isCompleted } from "@/features/progress/metrics";
+import type { ProgressState } from "@/features/progress/progress.types";
+import type { Lesson } from "@/lib/content.types";
 
 const intervals = [1, 3, 7, 14, 30];
 
@@ -55,7 +59,9 @@ function indexAttempts(state: PracticeState): Map<string, PracticeAttempt[]> {
     else byQuestion.set(attempt.questionId, [attempt]);
   }
   for (const attempts of byQuestion.values()) {
-    attempts.sort((a, b) => a.answeredAt.localeCompare(b.answeredAt) || a.updatedAt.localeCompare(b.updatedAt));
+    attempts.sort(
+      (a, b) => a.answeredAt.localeCompare(b.answeredAt) || a.updatedAt.localeCompare(b.updatedAt),
+    );
   }
   return byQuestion;
 }
@@ -70,7 +76,8 @@ function statusFromAttempts(questionId: string, attempts: PracticeAttempt[] = []
   const last = attempts.at(-1);
   if (!last) return { questionId, attempts: 0, stage: 0 };
 
-  const waitDays = last.rating === "again" ? 0 : last.rating === "hard" ? 1 : intervals[Math.max(0, stage - 1)];
+  const waitDays =
+    last.rating === "again" ? 0 : last.rating === "hard" ? 1 : intervals[Math.max(0, stage - 1)];
   return {
     questionId,
     attempts: attempts.length,
@@ -85,7 +92,10 @@ export function questionStatus(state: PracticeState, questionId: string): Questi
   return statusFromAttempts(questionId, indexAttempts(state).get(questionId));
 }
 
-function completedQuestionIds(progress: ProgressState, questions: InterviewQuestion[]): Set<string> {
+function completedQuestionIds(
+  progress: ProgressState,
+  questions: InterviewQuestion[],
+): Set<string> {
   return new Set(
     questions
       .filter((question) => isCompleted(progress, question.lessonId))
@@ -158,7 +168,9 @@ export function practiceSummary(
     dates.add(attempt.studyDate);
   }
   const todayAttempts = activityCounts.get(today) ?? 0;
-  const due = statuses.filter(({ status }) => status.attempts > 0 && Boolean(status.dueDate && status.dueDate <= today)).length;
+  const due = statuses.filter(
+    ({ status }) => status.attempts > 0 && Boolean(status.dueDate && status.dueDate <= today),
+  ).length;
   const dueTomorrow = statuses.filter(({ status }) => status.dueDate === tomorrow).length;
   const activity = Array.from({ length: 28 }, (_, index) => {
     const date = shiftDay(today, index - 27);
@@ -213,7 +225,11 @@ export function practiceOverviewSummary(
   return { today: activityCounts.get(today) ?? 0, due, currentStreak: streak.current };
 }
 
-export const lessonDateActivity = (progress: ProgressState, lessons: Lesson[], now = new Date()) => {
+export const lessonDateActivity = (
+  progress: ProgressState,
+  lessons: Lesson[],
+  now = new Date(),
+) => {
   const today = dayKey(now);
   const counts = new Map<string, number>();
   for (const lesson of lessons) {

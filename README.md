@@ -48,9 +48,11 @@ conditions or code before its answer marker:
 ## Interview questions
 
 ### Что происходит при выполнении JavaScript-файла?
+
 <!-- question-id: js-runtime-q01 -->
 
 #### Ответ
+
 <!-- Add the reference answer here when ready. -->
 ```
 
@@ -92,13 +94,15 @@ link directly to the matching lesson.
 
 ## Scripts
 
-| | |
-|---|---|
-| `npm run dev` | dev server |
-| `npm run build` | production build into `dist/` |
-| `npm run preview` | serve the build |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | focused tests for generated content, search, progress and backups |
+|                        |                                                                   |
+| ---------------------- | ----------------------------------------------------------------- |
+| `npm run dev`          | dev server                                                        |
+| `npm run build`        | production build into `dist/`                                     |
+| `npm run preview`      | serve the build                                                   |
+| `npm run typecheck`    | `tsc --noEmit`                                                    |
+| `npm run format`       | Prettier over everything except the lessons; also sorts imports   |
+| `npm run format:check` | the same, without writing                                         |
+| `npm test`             | focused tests for generated content, search, progress and backups |
 
 ## Installing as an app
 

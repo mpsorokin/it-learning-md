@@ -1,16 +1,23 @@
 import { describe, expect, it } from "vitest";
+import {
+  fullstackInterviewFlow,
+  orderedFlowLessons,
+  orderedLessonNeighbours,
+  resolveFlow,
+} from "@/features/flows/flow";
+import { interviewQuestions } from "@/features/practice/questions";
 import { getNextLesson, overallProgress } from "@/features/progress/metrics";
 import { emptyProgress } from "@/features/progress/progress.types";
-import { fullstackInterviewFlow, orderedFlowLessons, orderedLessonNeighbours, resolveFlow } from "@/features/flows/flow";
-import { interviewQuestions } from "@/features/practice/questions";
+import { scrollTopForRatio } from "@/features/reading/useReadingScroll";
 import { findFolder, loadLessonBody } from "@/lib/content";
 import { parseInterviewQuestions } from "@/lib/contentParsing";
-import { scrollTopForRatio } from "@/features/reading/useReadingScroll";
 
 describe("full-stack interview flow", () => {
   it("exposes every answered flow prompt to the practice queue", () => {
     expect(interviewQuestions.every((question) => question.hasAnswer === true)).toBe(true);
-    expect(interviewQuestions.filter((question) => question.section === fullstackInterviewFlow.section)).toHaveLength(882);
+    expect(
+      interviewQuestions.filter((question) => question.section === fullstackInterviewFlow.section),
+    ).toHaveLength(882);
   });
 
   it("resolves all 42 topics in the configured phase order", () => {
@@ -33,18 +40,28 @@ describe("full-stack interview flow", () => {
       expect(questions).toHaveLength(lesson.questionCount);
       expect(questions.length).toBeGreaterThanOrEqual(1);
       expect(questions.length).toBeLessThanOrEqual(10);
-      expect(questions.every((question) =>
-        question.hasAnswerMarker && question.hasExplicitId && question.hasAnswer && question.answer.trim().length > 0,
-      )).toBe(true);
+      expect(
+        questions.every(
+          (question) =>
+            question.hasAnswerMarker &&
+            question.hasExplicitId &&
+            question.hasAnswer &&
+            question.answer.trim().length > 0,
+        ),
+      ).toBe(true);
       allQuestions.push(...questions);
     }
 
     const ids = allQuestions.map((question) => question.id);
     expect(new Set(ids).size).toBe(ids.length);
-    const stableIds = allQuestions.map((question) => question.id.slice(question.id.lastIndexOf("#") + 1));
+    const stableIds = allQuestions.map((question) =>
+      question.id.slice(question.id.lastIndexOf("#") + 1),
+    );
     expect(new Set(stableIds).size).toBe(stableIds.length);
     const firstTopic = findFolder(fullstackInterviewFlow.section, "01-js-runtime");
-    expect(firstTopic?.lessons.map((lesson) => lesson.questionCount)).toEqual([5, 4, 9, 4, 9, 10, 3, 6, 3, 6, 5]);
+    expect(firstTopic?.lessons.map((lesson) => lesson.questionCount)).toEqual([
+      5, 4, 9, 4, 9, 10, 3, 6, 3, 6, 5,
+    ]);
     expect(allQuestions).toHaveLength(882);
   });
 
@@ -67,12 +84,20 @@ describe("full-stack interview flow", () => {
 
   it("moves to the next topic at a topic boundary", () => {
     const lessons = orderedFlowLessons(fullstackInterviewFlow);
-    const firstTopicLast = [...lessons].reverse().find((lesson) => lesson.folder === "01-js-runtime");
-    const secondTopicFirst = lessons.find((lesson) => lesson.folder === "02-js-objects-prototypes-oop");
+    const firstTopicLast = [...lessons]
+      .reverse()
+      .find((lesson) => lesson.folder === "01-js-runtime");
+    const secondTopicFirst = lessons.find(
+      (lesson) => lesson.folder === "02-js-objects-prototypes-oop",
+    );
     expect(firstTopicLast).toBeDefined();
     expect(secondTopicFirst).toBeDefined();
-    expect(orderedLessonNeighbours(lessons, firstTopicLast!.id).next?.id).toBe(secondTopicFirst!.id);
-    expect(orderedLessonNeighbours(lessons, secondTopicFirst!.id).previous?.id).toBe(firstTopicLast!.id);
+    expect(orderedLessonNeighbours(lessons, firstTopicLast!.id).next?.id).toBe(
+      secondTopicFirst!.id,
+    );
+    expect(orderedLessonNeighbours(lessons, secondTopicFirst!.id).previous?.id).toBe(
+      firstTopicLast!.id,
+    );
   });
 
   it("uses saved scroll ratios to restore the reader position", () => {

@@ -1,22 +1,22 @@
-import { useRef } from "react";
 import { DownloadSimple } from "@phosphor-icons/react/dist/csr/DownloadSimple";
 import { Globe } from "@phosphor-icons/react/dist/csr/Globe";
 import { Moon } from "@phosphor-icons/react/dist/csr/Moon";
 import { Trash } from "@phosphor-icons/react/dist/csr/Trash";
 import { UploadSimple } from "@phosphor-icons/react/dist/csr/UploadSimple";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/layout/AppShell";
+import type { PracticeDailyGoal } from "@/features/practice/practice.types";
+import { usePracticeActions, usePracticeState } from "@/features/practice/usePractice";
 import {
   createProgressBackup,
   downloadProgressBackup,
   parseProgressBackup,
 } from "@/features/progress/progressBackup";
-import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
-import { READER_THEMES, type ReaderTheme } from "@/features/reading/readerTheme";
 import { useProgressActions } from "@/features/progress/useProgress";
+import { READER_THEMES, type ReaderTheme } from "@/features/reading/readerTheme";
+import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
 import { useStudyActions, useStudyState } from "@/features/study/useStudy";
-import { usePracticeActions, usePracticeState } from "@/features/practice/usePractice";
-import type { PracticeDailyGoal } from "@/features/practice/practice.types";
 import { DEFAULT_LOCALE, isAppLocale, SUPPORTED_LOCALES } from "@/i18n/locale.types";
 
 export function SettingsPage() {
@@ -26,13 +26,16 @@ export function SettingsPage() {
   const study = useStudyState();
   const { replaceStudy } = useStudyActions();
   const practice = usePracticeState();
-  const { getPracticeSnapshot, replacePractice, resetPractice, setDailyGoal } = usePracticeActions();
+  const { getPracticeSnapshot, replacePractice, resetPractice, setDailyGoal } =
+    usePracticeActions();
   const fileInput = useRef<HTMLInputElement>(null);
 
   const currentLocale = isAppLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE;
 
   const handleExport = () => {
-    downloadProgressBackup(createProgressBackup(getProgressSnapshot(), getPracticeSnapshot(), study));
+    downloadProgressBackup(
+      createProgressBackup(getProgressSnapshot(), getPracticeSnapshot(), study),
+    );
   };
 
   const handleImport = async (file: File) => {
@@ -109,7 +112,11 @@ export function SettingsPage() {
           <DownloadSimple size={17} aria-hidden="true" />
           {t("settings.exportProgress")}
         </button>
-        <button className="settings-action" type="button" onClick={() => fileInput.current?.click()}>
+        <button
+          className="settings-action"
+          type="button"
+          onClick={() => fileInput.current?.click()}
+        >
           <UploadSimple size={17} aria-hidden="true" />
           {t("settings.importProgress")}
         </button>
@@ -125,7 +132,11 @@ export function SettingsPage() {
             if (file) void handleImport(file);
           }}
         />
-        <button className="settings-action settings-action--danger" type="button" onClick={handleReset}>
+        <button
+          className="settings-action settings-action--danger"
+          type="button"
+          onClick={handleReset}
+        >
           <Trash size={17} aria-hidden="true" />
           {t("settings.resetProgress")}
         </button>

@@ -51,7 +51,9 @@
   background: transparent;
   color: var(--color-muted);
   font-size: 11px;
-  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition:
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .segmented button:hover {

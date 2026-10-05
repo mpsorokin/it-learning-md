@@ -80,7 +80,9 @@
   border-radius: 50%;
   background: transparent;
   color: var(--color-muted);
-  transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
+  transition:
+    color var(--duration-fast) ease,
+    background var(--duration-fast) ease;
 }
 
 .icon-button:hover {
@@ -204,7 +206,9 @@
   background: var(--btn-bg);
   color: var(--btn-fg);
   font-size: 12px;
-  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition:
+    background var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .primary-button:hover:not(:disabled) {

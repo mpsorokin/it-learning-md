@@ -1,7 +1,7 @@
-import type { InterviewQuestionMeta } from "@/lib/content.types";
-import { loadLessonBody, orderedLessons } from "@/lib/content";
-import { parseInterviewQuestions } from "@/lib/contentParsing";
 import { questions as generatedQuestions } from "virtual:ittheory/questions";
+import { loadLessonBody, orderedLessons } from "@/lib/content";
+import type { InterviewQuestionMeta } from "@/lib/content.types";
+import { parseInterviewQuestions } from "@/lib/contentParsing";
 
 export interface InterviewQuestion {
   id: string;
@@ -23,7 +23,9 @@ for (const question of generatedQuestions as InterviewQuestionMeta[]) {
 export const interviewQuestions: InterviewQuestion[] = orderedLessons.flatMap(
   (lesson) => questionsByLesson.get(lesson.id) ?? [],
 );
-export const interviewQuestionsById = new Map(interviewQuestions.map((question) => [question.id, question]));
+export const interviewQuestionsById = new Map(
+  interviewQuestions.map((question) => [question.id, question]),
+);
 
 const bodyPromises = new Map<string, Promise<string>>();
 
@@ -37,7 +39,9 @@ export async function loadInterviewAnswer(questionId: string): Promise<string> {
     bodyPromise.catch(() => bodyPromises.delete(question.lessonId));
   }
   const body = await bodyPromise;
-  const parsed = parseInterviewQuestions(question.lessonId, body).find((entry) => entry.id === questionId);
+  const parsed = parseInterviewQuestions(question.lessonId, body).find(
+    (entry) => entry.id === questionId,
+  );
   if (!parsed) throw new Error(`Missing answer for interview question: ${questionId}`);
   return parsed.answer;
 }

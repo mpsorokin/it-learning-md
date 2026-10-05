@@ -1,7 +1,21 @@
-import { createContext, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { preserveStoredRaw, subscribeToStorage } from "@/lib/storage";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import {
+  MAX_NOTE_LENGTH,
+  mergeStudyLessons,
+  parseStudyState,
+  readStudy,
+  writeStudy,
+} from "@/features/study/study.storage";
 import { emptyStudy, STUDY_STORAGE_KEY, type StudyState } from "@/features/study/study.types";
-import { mergeStudyLessons, parseStudyState, readStudy, writeStudy, MAX_NOTE_LENGTH } from "@/features/study/study.storage";
+import { preserveStoredRaw, subscribeToStorage } from "@/lib/storage";
 
 export interface StudyActions {
   setNote: (lessonId: string, note: string) => boolean;
@@ -22,54 +36,73 @@ export function StudyProvider({ children }: { children: ReactNode }) {
   const ref = useRef(state);
   const writerId = useRef(createWriterId());
 
-  const commitLesson = useCallback((lessonId: string, patch: Partial<Pick<StudyState["lessons"][string], "note" | "bookmarked">>) => {
-    const previous = ref.current.lessons[lessonId];
-    const lesson = {
-      note: patch.note ?? previous?.note ?? "",
-      bookmarked: patch.bookmarked ?? previous?.bookmarked ?? false,
-      updatedAt: new Date().toISOString(),
-      writerId: writerId.current,
-    };
-    const next: StudyState = { version: 1, lessons: { ...ref.current.lessons, [lessonId]: lesson } };
-    ref.current = next;
-    setState(next);
-    return writeStudy(next);
-  }, []);
-
-  const actions = useMemo<StudyActions>(() => ({
-    setNote: (lessonId, note) => {
-      if (note.length > MAX_NOTE_LENGTH) return false;
-      return commitLesson(lessonId, { note });
-    },
-    setBookmarked: (lessonId, bookmarked) => { void commitLesson(lessonId, { bookmarked }); },
-    replaceStudy: (next) => {
+  const commitLesson = useCallback(
+    (
+      lessonId: string,
+      patch: Partial<Pick<StudyState["lessons"][string], "note" | "bookmarked">>,
+    ) => {
+      const previous = ref.current.lessons[lessonId];
+      const lesson = {
+        note: patch.note ?? previous?.note ?? "",
+        bookmarked: patch.bookmarked ?? previous?.bookmarked ?? false,
+        updatedAt: new Date().toISOString(),
+        writerId: writerId.current,
+      };
+      const next: StudyState = {
+        version: 1,
+        lessons: { ...ref.current.lessons, [lessonId]: lesson },
+      };
       ref.current = next;
       setState(next);
-      void writeStudy(next);
+      return writeStudy(next);
     },
-  }), [commitLesson]);
+    [],
+  );
+
+  const actions = useMemo<StudyActions>(
+    () => ({
+      setNote: (lessonId, note) => {
+        if (note.length > MAX_NOTE_LENGTH) return false;
+        return commitLesson(lessonId, { note });
+      },
+      setBookmarked: (lessonId, bookmarked) => {
+        void commitLesson(lessonId, { bookmarked });
+      },
+      replaceStudy: (next) => {
+        ref.current = next;
+        setState(next);
+        void writeStudy(next);
+      },
+    }),
+    [commitLesson],
+  );
 
   useEffect(
-    () => subscribeToStorage(STUDY_STORAGE_KEY, (raw) => {
-      if (raw === null) {
-        ref.current = emptyStudy();
-        setState(ref.current);
-        return;
-      }
-      try {
-        const incoming = parseStudyState(JSON.parse(raw) as unknown);
-        if (!incoming) {
-          preserveStoredRaw(STUDY_STORAGE_KEY, raw);
+    () =>
+      subscribeToStorage(STUDY_STORAGE_KEY, (raw) => {
+        if (raw === null) {
+          ref.current = emptyStudy();
+          setState(ref.current);
           return;
         }
-        const merged: StudyState = { version: 1, lessons: mergeStudyLessons(ref.current.lessons, incoming.lessons) };
-        ref.current = merged;
-        setState(merged);
-        if (JSON.stringify(merged.lessons) !== JSON.stringify(incoming.lessons)) writeStudy(merged);
-      } catch {
-        preserveStoredRaw(STUDY_STORAGE_KEY, raw);
-      }
-    }),
+        try {
+          const incoming = parseStudyState(JSON.parse(raw) as unknown);
+          if (!incoming) {
+            preserveStoredRaw(STUDY_STORAGE_KEY, raw);
+            return;
+          }
+          const merged: StudyState = {
+            version: 1,
+            lessons: mergeStudyLessons(ref.current.lessons, incoming.lessons),
+          };
+          ref.current = merged;
+          setState(merged);
+          if (JSON.stringify(merged.lessons) !== JSON.stringify(incoming.lessons))
+            writeStudy(merged);
+        } catch {
+          preserveStoredRaw(STUDY_STORAGE_KEY, raw);
+        }
+      }),
     [],
   );
 

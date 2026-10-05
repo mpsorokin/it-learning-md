@@ -137,7 +137,9 @@
   color: var(--color-gold-bright);
   font-family: var(--font-serif);
   font-size: 18px;
-  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition:
+    background var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .practice-reveal-button:hover {
@@ -164,7 +166,9 @@
   background: transparent;
   color: var(--color-soft);
   font-size: 12px;
-  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition:
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .practice-rating:hover {

@@ -5,12 +5,12 @@ import { AppShell } from "@/components/layout/AppShell";
 import { ContentRow } from "@/components/ui/ContentRow";
 import { IconLink } from "@/components/ui/IconLink";
 import { LessonRow } from "@/components/ui/LessonRow";
+import { fullstackInterviewFlow, sectionEntryPath } from "@/features/flows/flow";
 import { isCompleted, lessonScrollRatio, sectionProgress } from "@/features/progress/metrics";
 import { useProgressState } from "@/features/progress/useProgress";
 import { useStudyState } from "@/features/study/useStudy";
 import { lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
-import { fullstackInterviewFlow, sectionEntryPath } from "@/features/flows/flow";
 
 /** Every section, with its folder count and progress. */
 export function LibraryPage() {
@@ -24,11 +24,29 @@ export function LibraryPage() {
   return (
     <AppShell
       title={t("nav.library")}
-      right={<IconLink to="/search" label={t("search.open")}><MagnifyingGlass size={19} aria-hidden="true" /></IconLink>}
+      right={
+        <IconLink to="/search" label={t("search.open")}>
+          <MagnifyingGlass size={19} aria-hidden="true" />
+        </IconLink>
+      }
     >
       <div className="library-filters" role="group" aria-label={t("library.filters")}>
-        <button type="button" className={!showSaved ? "active" : ""} aria-pressed={!showSaved} onClick={() => setShowSaved(false)}>{t("library.allContent")}</button>
-        <button type="button" className={showSaved ? "active" : ""} aria-pressed={showSaved} onClick={() => setShowSaved(true)}>{t("study.bookmarks")}</button>
+        <button
+          type="button"
+          className={!showSaved ? "active" : ""}
+          aria-pressed={!showSaved}
+          onClick={() => setShowSaved(false)}
+        >
+          {t("library.allContent")}
+        </button>
+        <button
+          type="button"
+          className={showSaved ? "active" : ""}
+          aria-pressed={showSaved}
+          onClick={() => setShowSaved(true)}
+        >
+          {t("study.bookmarks")}
+        </button>
       </div>
       {showSaved ? (
         savedLessons.length > 0 ? (
@@ -63,9 +81,11 @@ export function LibraryPage() {
                   title={sectionLabel(section)}
                   count={t("common.doneOfTotal", { done: tally.done, total: tally.total })}
                   ratio={tally.ratio}
-                  meta={section.slug === fullstackInterviewFlow.section
-                    ? t("flows.topicCount", { count: section.folders.length })
-                    : t("library.folderCount", { count: section.folders.length })}
+                  meta={
+                    section.slug === fullstackInterviewFlow.section
+                      ? t("flows.topicCount", { count: section.folders.length })
+                      : t("library.folderCount", { count: section.folders.length })
+                  }
                 />
               </li>
             );

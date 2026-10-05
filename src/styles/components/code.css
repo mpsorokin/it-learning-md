@@ -45,7 +45,9 @@
   background: transparent;
   color: var(--color-muted);
   font-size: 11px;
-  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+  transition:
+    background var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .code-block__copy:hover {

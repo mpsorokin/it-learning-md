@@ -7,18 +7,38 @@ import { OverviewPage } from "@/pages/OverviewPage";
  * The overview is the entry point and loads eagerly; everything else is split
  * out, which keeps the markdown renderer out of the first paint.
  */
-const LibraryPage = lazy(() => import("@/pages/LibraryPage").then((m) => ({ default: m.LibraryPage })));
-const SectionPage = lazy(() => import("@/pages/SectionPage").then((m) => ({ default: m.SectionPage })));
-const FolderPage = lazy(() => import("@/pages/FolderPage").then((m) => ({ default: m.FolderPage })));
-const LessonPage = lazy(() => import("@/pages/LessonPage").then((m) => ({ default: m.LessonPage })));
-const ProfilePage = lazy(() => import("@/pages/ProfilePage").then((m) => ({ default: m.ProfilePage })));
-const PracticePage = lazy(() => import("@/pages/PracticePage").then((m) => ({ default: m.PracticePage })));
+const LibraryPage = lazy(() =>
+  import("@/pages/LibraryPage").then((m) => ({ default: m.LibraryPage })),
+);
+const SectionPage = lazy(() =>
+  import("@/pages/SectionPage").then((m) => ({ default: m.SectionPage })),
+);
+const FolderPage = lazy(() =>
+  import("@/pages/FolderPage").then((m) => ({ default: m.FolderPage })),
+);
+const LessonPage = lazy(() =>
+  import("@/pages/LessonPage").then((m) => ({ default: m.LessonPage })),
+);
+const ProfilePage = lazy(() =>
+  import("@/pages/ProfilePage").then((m) => ({ default: m.ProfilePage })),
+);
+const PracticePage = lazy(() =>
+  import("@/pages/PracticePage").then((m) => ({ default: m.PracticePage })),
+);
 const StatsPage = lazy(() => import("@/pages/StatsPage").then((m) => ({ default: m.StatsPage })));
-const SettingsPage = lazy(() => import("@/pages/SettingsPage").then((m) => ({ default: m.SettingsPage })));
-const SearchPage = lazy(() => import("@/pages/SearchPage").then((m) => ({ default: m.SearchPage })));
+const SettingsPage = lazy(() =>
+  import("@/pages/SettingsPage").then((m) => ({ default: m.SettingsPage })),
+);
+const SearchPage = lazy(() =>
+  import("@/pages/SearchPage").then((m) => ({ default: m.SearchPage })),
+);
 const FlowPage = lazy(() => import("@/pages/FlowPage").then((m) => ({ default: m.FlowPage })));
-const FlowTopicPage = lazy(() => import("@/pages/FlowTopicPage").then((m) => ({ default: m.FlowTopicPage })));
-const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
+const FlowTopicPage = lazy(() =>
+  import("@/pages/FlowTopicPage").then((m) => ({ default: m.FlowTopicPage })),
+);
+const NotFoundPage = lazy(() =>
+  import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })),
+);
 
 /** Hash routing: the app is deployed as static files with no server rewrites. */
 export function App() {

@@ -1,6 +1,10 @@
 import { useContext } from "react";
-import { PracticeActionsContext, PracticeStateContext, type PracticeActions } from "@/features/practice/PracticeProvider";
 import type { PracticeState } from "@/features/practice/practice.types";
+import {
+  PracticeActionsContext,
+  PracticeStateContext,
+  type PracticeActions,
+} from "@/features/practice/PracticeProvider";
 
 export function usePracticeState(): PracticeState {
   const state = useContext(PracticeStateContext);

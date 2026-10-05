@@ -1,6 +1,16 @@
-import { createContext, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { clamp01 } from "@/lib/num";
-import { subscribeToStorage } from "@/lib/storage";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import {
+  completeLessonProgress,
+  resetLessonProgress,
+} from "@/features/progress/lessonProgressTransitions";
 import {
   clearProgress,
   mergeProgressLessons,
@@ -10,7 +20,8 @@ import {
   writeProgress,
 } from "@/features/progress/progress.storage";
 import { emptyProgress, type ProgressState } from "@/features/progress/progress.types";
-import { completeLessonProgress, resetLessonProgress } from "@/features/progress/lessonProgressTransitions";
+import { clamp01 } from "@/lib/num";
+import { subscribeToStorage } from "@/lib/storage";
 
 export interface ProgressActions {
   completeLesson: (id: string) => void;

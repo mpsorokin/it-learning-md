@@ -1,22 +1,27 @@
-import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "@phosphor-icons/react/dist/csr/ArrowLeft";
 import { ArrowRight } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import { BookmarkSimple } from "@phosphor-icons/react/dist/csr/BookmarkSimple";
 import { Check } from "@phosphor-icons/react/dist/csr/Check";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ReaderShell } from "@/features/reading/ReaderShell";
 import { IconLink } from "@/components/ui/IconLink";
-import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
+import {
+  flowTopicPath,
+  getFlowForLesson,
+  orderedFlowLessons,
+  orderedLessonNeighbours,
+} from "@/features/flows/flow";
 import { FlowQuestionList } from "@/features/flows/FlowQuestionList";
-import { flowTopicPath, getFlowForLesson, orderedFlowLessons, orderedLessonNeighbours } from "@/features/flows/flow";
-import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
-import { useReadingScroll } from "@/features/reading/useReadingScroll";
 import { lessonNeighbours, lessonScrollRatio } from "@/features/progress/metrics";
 import { useProgressActions } from "@/features/progress/useProgress";
+import { MarkdownViewer } from "@/features/reading/MarkdownViewer";
+import { ReaderShell } from "@/features/reading/ReaderShell";
+import { useReaderTheme } from "@/features/reading/ReaderThemeProvider";
+import { useReadingScroll } from "@/features/reading/useReadingScroll";
+import { useStudyActions, useStudyState } from "@/features/study/useStudy";
 import { findFolder, findLesson, folderPath, lessonPath, loadLessonBody } from "@/lib/content";
 import { parseInterviewQuestions } from "@/lib/contentParsing";
-import { useStudyActions, useStudyState } from "@/features/study/useStudy";
 import { useContentLabels } from "@/lib/labels";
 
 export function LessonPage() {
@@ -24,7 +29,8 @@ export function LessonPage() {
   const { t } = useTranslation();
   const { theme } = useReaderTheme();
   const { lessonLabel, folderLabel } = useContentLabels();
-  const { completeLesson, resetLesson, getProgressSnapshot, setLessonScroll } = useProgressActions();
+  const { completeLesson, resetLesson, getProgressSnapshot, setLessonScroll } =
+    useProgressActions();
   const study = useStudyState();
   const { setBookmarked, setNote } = useStudyActions();
 
@@ -62,10 +68,12 @@ export function LessonPage() {
       (body) => active && setLoadedBody({ lessonId: lesson.id, body }),
       () => active && setLoadError(true),
     );
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [lesson?.id, retry]);
 
-  const storedNote = lesson ? study.lessons[lesson.id]?.note ?? "" : "";
+  const storedNote = lesson ? (study.lessons[lesson.id]?.note ?? "") : "";
 
   useEffect(() => {
     if (noteSave !== "saved" || noteDraftRef.current === storedNote) return;
@@ -96,14 +104,18 @@ export function LessonPage() {
   const body = lesson && loadedBody?.lessonId === lesson.id ? loadedBody.body : null;
 
   useReadingScroll(scroller, {
-    lessonId: body !== null ? lesson?.id ?? "" : "",
+    lessonId: body !== null ? (lesson?.id ?? "") : "",
     scrollRatio: savedRatio,
     setLessonScroll,
   });
 
   if (!lesson || !parent) return <Navigate to="/not-found" replace />;
 
-  const { index: folderIndex, previous: folderPrevious, next: folderNext } = lessonNeighbours(parent, lesson);
+  const {
+    index: folderIndex,
+    previous: folderPrevious,
+    next: folderNext,
+  } = lessonNeighbours(parent, lesson);
   const index = flowIndex >= 0 ? flowIndex : folderIndex;
   const previous = flowIndex >= 0 ? flowNeighbours.previous : folderPrevious;
   const next = flowIndex >= 0 ? flowNeighbours.next : folderNext;
@@ -146,7 +158,8 @@ export function LessonPage() {
         </IconLink>
         <div className="reader-header__title">
           <p className="eyebrow">
-            {folderLabel(parent)} · {t("reader.position", {
+            {folderLabel(parent)} ·{" "}
+            {t("reader.position", {
               position,
               total: flowIndex >= 0 ? flowLessons.length : parent.lessons.length,
             })}
@@ -158,12 +171,22 @@ export function LessonPage() {
             className={`reader-bookmark ${study.lessons[lesson.id]?.bookmarked ? "reader-bookmark--active" : ""}`}
             type="button"
             aria-pressed={Boolean(study.lessons[lesson.id]?.bookmarked)}
-            aria-label={t(study.lessons[lesson.id]?.bookmarked ? "study.removeBookmark" : "study.addBookmark")}
+            aria-label={t(
+              study.lessons[lesson.id]?.bookmarked ? "study.removeBookmark" : "study.addBookmark",
+            )}
             onClick={() => setBookmarked(lesson.id, !study.lessons[lesson.id]?.bookmarked)}
           >
-            <BookmarkSimple size={18} weight={study.lessons[lesson.id]?.bookmarked ? "fill" : "regular"} aria-hidden="true" />
+            <BookmarkSimple
+              size={18}
+              weight={study.lessons[lesson.id]?.bookmarked ? "fill" : "regular"}
+              aria-hidden="true"
+            />
           </button>
-          {completed && <span className="reader-done-mark" aria-label={t("lesson.completed")}><Check size={16} weight="bold" aria-hidden="true" /></span>}
+          {completed && (
+            <span className="reader-done-mark" aria-label={t("lesson.completed")}>
+              <Check size={16} weight="bold" aria-hidden="true" />
+            </span>
+          )}
         </div>
       </header>
 
@@ -179,7 +202,9 @@ export function LessonPage() {
             </article>
 
             <section className="reader-notes" aria-labelledby="reader-notes-heading">
-              <label id="reader-notes-heading" htmlFor="lesson-note">{t("study.noteTitle")}</label>
+              <label id="reader-notes-heading" htmlFor="lesson-note">
+                {t("study.noteTitle")}
+              </label>
               <textarea
                 id="lesson-note"
                 value={noteDraft}
@@ -189,7 +214,11 @@ export function LessonPage() {
                 onBlur={flushNote}
               />
               <div className="reader-notes__footer">
-                <span role="status">{t(`study.note${noteSave === "failed" ? "Error" : noteSave === "pending" ? "Saving" : "Saved"}`)}</span>
+                <span role="status">
+                  {t(
+                    `study.note${noteSave === "failed" ? "Error" : noteSave === "pending" ? "Saving" : "Saved"}`,
+                  )}
+                </span>
                 <span>{noteDraft.length} / 10000</span>
               </div>
             </section>
@@ -197,53 +226,65 @@ export function LessonPage() {
         ) : loadError ? (
           <section className="reader-load-state" role="alert">
             <p>{t("reader.loadError")}</p>
-            <button className="primary-button" type="button" onClick={() => setRetry((value) => value + 1)}>{t("reader.retry")}</button>
+            <button
+              className="primary-button"
+              type="button"
+              onClick={() => setRetry((value) => value + 1)}
+            >
+              {t("reader.retry")}
+            </button>
           </section>
         ) : (
-          <p className="reader-load-state" role="status">{t("reader.loading")}</p>
+          <p className="reader-load-state" role="status">
+            {t("reader.loading")}
+          </p>
         )}
 
-        {body !== null && <div className="reader-action">
-          <button
-            className={`primary-button ${completed ? "primary-button--completed" : ""}`}
-            type="button"
-            onClick={handleComplete}
-            disabled={completed}
-          >
-            {completed && <Check size={16} weight="bold" aria-hidden="true" />}
-            {completed ? t("lesson.completed") : t("lesson.complete")}
-          </button>
-          {completed && (
-            <button className="reader-secondary-button" type="button" onClick={handleReset}>
-              {t("lesson.markUnread")}
+        {body !== null && (
+          <div className="reader-action">
+            <button
+              className={`primary-button ${completed ? "primary-button--completed" : ""}`}
+              type="button"
+              onClick={handleComplete}
+              disabled={completed}
+            >
+              {completed && <Check size={16} weight="bold" aria-hidden="true" />}
+              {completed ? t("lesson.completed") : t("lesson.complete")}
             </button>
-          )}
-        </div>}
+            {completed && (
+              <button className="reader-secondary-button" type="button" onClick={handleReset}>
+                {t("lesson.markUnread")}
+              </button>
+            )}
+          </div>
+        )}
 
-        {body !== null && <nav className="reader-pager" aria-label={t("reader.pager")}>
-          {previous ? (
-            <Link className="reader-pager__link" to={lessonPath(previous)}>
-              <ArrowLeft size={15} aria-hidden="true" />
-              <span>
-                <em>{t("reader.previous")}</em>
-                {lessonLabel(previous)}
-              </span>
-            </Link>
-          ) : (
-            <span />
-          )}
-          {next ? (
-            <Link className="reader-pager__link reader-pager__link--next" to={lessonPath(next)}>
-              <span>
-                <em>{t("reader.next")}</em>
-                {lessonLabel(next)}
-              </span>
-              <ArrowRight size={15} aria-hidden="true" />
-            </Link>
-          ) : (
-            <span />
-          )}
-        </nav>}
+        {body !== null && (
+          <nav className="reader-pager" aria-label={t("reader.pager")}>
+            {previous ? (
+              <Link className="reader-pager__link" to={lessonPath(previous)}>
+                <ArrowLeft size={15} aria-hidden="true" />
+                <span>
+                  <em>{t("reader.previous")}</em>
+                  {lessonLabel(previous)}
+                </span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <Link className="reader-pager__link reader-pager__link--next" to={lessonPath(next)}>
+                <span>
+                  <em>{t("reader.next")}</em>
+                  {lessonLabel(next)}
+                </span>
+                <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )}
       </div>
     </ReaderShell>
   );

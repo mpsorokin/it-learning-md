@@ -6,15 +6,18 @@ the scripts. What follows is only the things that are easy to get wrong.
 ## Before you finish
 
 ```
-npm run typecheck && npm run build
+npm run format && npm run typecheck && npm run build
 ```
 
-There is no linter. `tsc --noEmit` and the production build are the gate.
+There is no linter. Prettier (`npm run format:check` to verify without writing),
+`tsc --noEmit` and the production build are the gate. Prettier also owns import
+order — do not arrange imports by hand — and it skips `src/content`, which stays
+exactly as pasted.
 
 ## Conventions that are load-bearing
 
 **Storage.** Everything persisted goes through `src/lib/storage.ts`. A `parse`
-function returns `null` for anything it does not recognise — including a *newer*
+function returns `null` for anything it does not recognise — including a _newer_
 schema version — which is what triggers the `.bak` copy. Never widen a parser to
 accept an unknown shape, and never write to `localStorage` directly.
 
@@ -30,7 +33,7 @@ Removing UI means removing its keys. Keys assembled at runtime are only
 **Styles.** No CSS modules, no inline style objects for anything themable. Add a
 class in the matching `src/styles/components/*.css` and a token in `theme.css`
 if a new colour is genuinely needed — no raw hex outside `theme.css`. Rules
-shared by several screens live in the file named for the *thing* (`cards.css`),
+shared by several screens live in the file named for the _thing_ (`cards.css`),
 not for the screen that happened to need them first: the card frame is one
 grouped selector there, so a new card is a selector added to it rather than
 three declarations copied again. Radii use `--radius-*`; a value that appears

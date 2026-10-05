@@ -62,7 +62,9 @@ function markdownOutsideFences(source: string): string {
       } else if (
         marker[0] === fenceCharacter &&
         marker.length >= fenceLength &&
-        new RegExp(`^ {0,3}${fenceCharacter === "`" ? "`" : "~"}{${fenceLength},}\\s*$`).test(content)
+        new RegExp(`^ {0,3}${fenceCharacter === "`" ? "`" : "~"}{${fenceLength},}\\s*$`).test(
+          content,
+        )
       ) {
         fenceCharacter = "";
         fenceLength = 0;
@@ -87,11 +89,14 @@ function afterLine(source: string, index: number, length: number): number {
 }
 
 const stableIdComment = /<!--\s*question-id:\s*([a-z0-9][a-z0-9-]*)\s*-->/i;
-const stripStableIdComments = (value: string): string => value.replace(/\s*<!--\s*question-id:\s*[a-z0-9][a-z0-9-]*\s*-->/gi, "").trim();
+const stripStableIdComments = (value: string): string =>
+  value.replace(/\s*<!--\s*question-id:\s*[a-z0-9][a-z0-9-]*\s*-->/gi, "").trim();
 
 export function parseInterviewQuestions(lessonId: string, body: string): ParsedInterviewQuestion[] {
   const markdown = markdownOutsideFences(body);
-  const marker = /^ {0,3}##[ \t]+(?:Interview questions|Вопросы на собеседовании)[ \t]*$/im.exec(markdown);
+  const marker = /^ {0,3}##[ \t]+(?:Interview questions|Вопросы на собеседовании)[ \t]*$/im.exec(
+    markdown,
+  );
   if (!marker) return [];
 
   const sectionStart = afterLine(body, marker.index, marker[0].length);
@@ -104,9 +109,10 @@ export function parseInterviewQuestions(lessonId: string, body: string): ParsedI
     const prompt = heading[1].trim();
     const headingIndex = heading.index ?? 0;
     const contentStart = afterLine(body, sectionStart + headingIndex, heading[0].length);
-    const contentEnd = headings[index + 1]?.index === undefined
-      ? sectionEnd
-      : sectionStart + headings[index + 1].index;
+    const contentEnd =
+      headings[index + 1]?.index === undefined
+        ? sectionEnd
+        : sectionStart + headings[index + 1].index;
     const questionBody = body.slice(contentStart, contentEnd);
     const stableId = stableIdComment.exec(questionBody)?.[1];
     const maskedQuestionBody = markdownOutsideFences(questionBody);
@@ -121,15 +127,17 @@ export function parseInterviewQuestions(lessonId: string, body: string): ParsedI
     const answer = stripStableIdComments(questionBody.slice(answerStart));
     if (!prompt) return [];
 
-    return [{
-      id: `${lessonId}#${stableId ?? (questionSlug(prompt) || index + 1)}`,
-      prompt,
-      promptBody,
-      answer,
-      hasAnswer: answer.length > 0,
-      hasAnswerMarker: Boolean(answerMarker),
-      hasExplicitId: Boolean(stableId),
-    }];
+    return [
+      {
+        id: `${lessonId}#${stableId ?? (questionSlug(prompt) || index + 1)}`,
+        prompt,
+        promptBody,
+        answer,
+        hasAnswer: answer.length > 0,
+        hasAnswerMarker: Boolean(answerMarker),
+        hasExplicitId: Boolean(stableId),
+      },
+    ];
   });
 }
 
@@ -149,5 +157,9 @@ export function searchableTextFromMarkdown(source: string): string {
 }
 
 export function normalizeSearchText(value: string): string {
-  return value.toLocaleLowerCase("ru-RU").replace(/ё/g, "е").normalize("NFKD").replace(/\p{M}/gu, "");
+  return value
+    .toLocaleLowerCase("ru-RU")
+    .replace(/ё/g, "е")
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "");
 }

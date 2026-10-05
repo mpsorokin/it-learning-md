@@ -1,10 +1,10 @@
 import { Suspense, type ReactNode } from "react";
 import { ErrorBoundary } from "@/components/feedback/ErrorBoundary";
-import { ProgressProvider } from "@/features/progress/ProgressProvider";
+import { OfflineProvider } from "@/features/offline/OfflineProvider";
 import { PracticeProvider } from "@/features/practice/PracticeProvider";
+import { ProgressProvider } from "@/features/progress/ProgressProvider";
 import { ReaderThemeProvider } from "@/features/reading/ReaderThemeProvider";
 import { StudyProvider } from "@/features/study/StudyProvider";
-import { OfflineProvider } from "@/features/offline/OfflineProvider";
 
 /** Paints the page colour so a lazy route does not flash the body background. */
 function RouteFallback() {

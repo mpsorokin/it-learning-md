@@ -1,9 +1,9 @@
-import { createLowlight } from "lowlight";
+import type { Element, ElementContent, Root } from "hast";
 import json from "highlight.js/lib/languages/json";
 import plaintext from "highlight.js/lib/languages/plaintext";
 import typescript from "highlight.js/lib/languages/typescript";
+import { createLowlight } from "lowlight";
 import { visit } from "unist-util-visit";
-import type { Element, ElementContent, Root } from "hast";
 
 /**
  * Syntax highlighting for exactly the languages this curriculum writes.

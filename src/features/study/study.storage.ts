@@ -1,12 +1,19 @@
+import {
+  emptyStudy,
+  STUDY_STORAGE_KEY,
+  STUDY_VERSION,
+  type LessonStudyData,
+  type StudyState,
+} from "@/features/study/study.types";
 import { isDate, isRecord, readStored, writeStored } from "@/lib/storage";
-import { emptyStudy, STUDY_STORAGE_KEY, STUDY_VERSION, type LessonStudyData, type StudyState } from "@/features/study/study.types";
 
 export const MAX_NOTE_LENGTH = 10_000;
 
 function parseLessonStudy(value: unknown): LessonStudyData | null {
   if (!isRecord(value)) return null;
   if (typeof value.note !== "string" || value.note.length > MAX_NOTE_LENGTH) return null;
-  if (typeof value.bookmarked !== "boolean" || !isDate(value.updatedAt) || !isDate(value.writerId)) return null;
+  if (typeof value.bookmarked !== "boolean" || !isDate(value.updatedAt) || !isDate(value.writerId))
+    return null;
   return {
     note: value.note,
     bookmarked: value.bookmarked,
@@ -33,7 +40,11 @@ export function mergeStudyLessons(
   const merged: Record<string, LessonStudyData> = { ...incoming };
   for (const [id, entry] of Object.entries(local)) {
     const other = merged[id];
-    if (!other || entry.updatedAt > other.updatedAt || (entry.updatedAt === other.updatedAt && entry.writerId > other.writerId)) {
+    if (
+      !other ||
+      entry.updatedAt > other.updatedAt ||
+      (entry.updatedAt === other.updatedAt && entry.writerId > other.writerId)
+    ) {
       merged[id] = entry;
     }
   }

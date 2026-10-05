@@ -11,11 +11,16 @@ import { IconLink } from "@/components/ui/IconLink";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { TallyRow } from "@/components/ui/TallyCard";
-import { getLastCompleted, isCompleted, overallProgress, sectionProgress } from "@/features/progress/metrics";
-import { useProgressState } from "@/features/progress/useProgress";
-import { interviewQuestions } from "@/features/practice/questions";
 import { practiceSummary } from "@/features/practice/practice.metrics";
+import { interviewQuestions } from "@/features/practice/questions";
 import { usePracticeState } from "@/features/practice/usePractice";
+import {
+  getLastCompleted,
+  isCompleted,
+  overallProgress,
+  sectionProgress,
+} from "@/features/progress/metrics";
+import { useProgressState } from "@/features/progress/useProgress";
 import { lessonPath, orderedLessons, sections } from "@/lib/content";
 import { useContentLabels } from "@/lib/labels";
 
@@ -63,11 +68,21 @@ export function ProfilePage() {
       <h2 className="section-heading">{t("profile.interviewReadiness")}</h2>
       <Link className="practice-profile-card" to="/practice">
         <div className="practice-profile-card__header">
-          <span><Cards size={18} aria-hidden="true" /> {t("profile.questionsLearned")}</span>
-          <strong>{practiceStats.mastered} / {interviewQuestions.filter((question) => isCompleted(progress, question.lessonId)).length}</strong>
+          <span>
+            <Cards size={18} aria-hidden="true" /> {t("profile.questionsLearned")}
+          </span>
+          <strong>
+            {practiceStats.mastered} /{" "}
+            {
+              interviewQuestions.filter((question) => isCompleted(progress, question.lessonId))
+                .length
+            }
+          </strong>
         </div>
         <div className="practice-profile-card__stats">
-          <span><Fire size={16} aria-hidden="true" /> {t("profile.currentStreak")}</span>
+          <span>
+            <Fire size={16} aria-hidden="true" /> {t("profile.currentStreak")}
+          </span>
           <b>{practiceStats.currentStreak}</b>
           <span>{t("profile.bestStreak")}</span>
           <b>{practiceStats.bestStreak}</b>
@@ -96,7 +111,11 @@ export function ProfilePage() {
       <div className="detail-card">
         <div className="detail-card__row">
           <span>{t("profile.lastCompleted")}</span>
-          {last ? <Link to={lessonPath(last)}>{lessonLabel(last)}</Link> : <em>{t("common.none")}</em>}
+          {last ? (
+            <Link to={lessonPath(last)}>{lessonLabel(last)}</Link>
+          ) : (
+            <em>{t("common.none")}</em>
+          )}
         </div>
         <Link className="detail-card__link" to="/stats">
           <ChartBar size={17} aria-hidden="true" />

@@ -58,7 +58,9 @@ function ErrorScreen({ error }: { error: Error }) {
   return (
     <StatusScreen
       title={stale ? t("errors.appUpdated") : t("errors.somethingWrong")}
-      description={stale ? t("errors.appUpdatedDescription") : t("errors.somethingWrongDescription")}
+      description={
+        stale ? t("errors.appUpdatedDescription") : t("errors.somethingWrongDescription")
+      }
       action={{ label: t("errors.reload"), onClick: () => window.location.reload() }}
       detail={!stale && <code className="error-detail">{error.message}</code>}
     />
