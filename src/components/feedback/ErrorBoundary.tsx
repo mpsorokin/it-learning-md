@@ -1,7 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { NotFound } from "@/components/feedback/NotFound";
+import { StatusScreen } from "@/components/feedback/StatusScreen";
 
 /**
  * After a redeploy the hashed chunk names change, so an old open tab asks for a
@@ -56,7 +56,7 @@ function ErrorScreen({ error }: { error: Error }) {
   const stale = isChunkLoadError(error);
 
   return (
-    <NotFound
+    <StatusScreen
       title={stale ? t("errors.appUpdated") : t("errors.somethingWrong")}
       description={stale ? t("errors.appUpdatedDescription") : t("errors.somethingWrongDescription")}
       action={{ label: t("errors.reload"), onClick: () => window.location.reload() }}

@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { NotFound } from "@/components/feedback/NotFound";
+import { StatusScreen } from "@/components/feedback/StatusScreen";
 
 export function NotFoundPage() {
   const { t } = useTranslation();
   return (
-    <NotFound
+    <StatusScreen
       eyebrow={t("errors.notFoundEyebrow")}
       title={t("errors.notFound")}
       description={t("errors.notFoundDescription")}
